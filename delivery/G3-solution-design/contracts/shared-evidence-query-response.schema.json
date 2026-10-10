@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smt.local/contracts/shared-evidence-query-response.schema.json",
+  "title": "SharedEvidenceQueryResponse",
+  "description": "Trust to HR portal. Contains only evidence covered by an active ShareGrant for this recipient. It never reveals how many learners exist but were withheld: there is no total, no omitted count and no reason for omission. DRAFT 0.1.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "request_id", "recipient_id", "as_of", "results", "page", "ledger_head"],
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "request_id": { "type": "string", "format": "uuid" },
+    "recipient_id": { "type": "string", "pattern": "^org_[a-z0-9_]{3,40}$" },
+    "as_of": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Moment grants and estimates were evaluated. Revocations before this are honoured."
+    },
+    "results": {
+      "type": "array",
+      "maxItems": 50,
+      "items": { "$ref": "https://smt.local/contracts/shared-evidence.schema.json" }
+    },
+    "page": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["returned", "next_cursor"],
+      "properties": {
+        "returned": { "type": "integer", "minimum": 0, "maximum": 50 },
+        "next_cursor": {
+          "type": ["string", "null"],
+          "maxLength": 256,
+          "description": "Null when there are no further results. Never encodes a total."
+        }
+      }
+    },
+    "ledger_head": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sequence", "hash"],
+      "properties": {
+        "sequence": { "type": "integer", "minimum": 0 },
+        "hash": { "type": "string", "pattern": "^(genesis|sha256:[a-f0-9]{64})$" }
+      },
+      "description": "Chain head at the time of the query, so receipts can be verified against one known point."
+    }
+  }
+}

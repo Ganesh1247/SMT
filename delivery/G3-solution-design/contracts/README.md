@@ -1,5 +1,5 @@
 <!-- STATUS: DRAFT -->
-# Contracts: EvidenceEvent, ShareGrant, SharedEvidence, RoleRequirement (v0.1)
+# Contracts: EvidenceEvent, ShareGrant, SharedEvidence, RoleRequirement, Query envelope (v0.1)
 
 Owner: principal-architect (Dev 2 owns the folder during build) | Gate: G3 | Date: 2026-10-10 | Reviewer: quality-engineer
 These are the only data shapes shared between the Sandbox, the Trust service and the HR portal. Changes need all three developers.
@@ -11,7 +11,9 @@ These are the only data shapes shared between the Sandbox, the Trust service and
 | EvidenceEvent | Sandbox (and Trust for review decisions) | Trust ledger | `POST /events` |
 | ShareGrant | Learner via Trust | Trust (enforces) | `POST /grants`, `DELETE /grants/{id}` |
 | SharedEvidence | Trust | HR portal | `POST /shared-evidence/query` response |
-| RoleRequirement | HR portal (recruiter) | HR portal; Trust receives only recipient and competency IDs | `POST /shared-evidence/query` request |
+| RoleRequirement | HR portal (recruiter) | HR portal; Trust receives only recipient and competency IDs | used to build the query |
+| SharedEvidenceQueryRequest | HR portal | Trust | `POST /shared-evidence/query` |
+| SharedEvidenceQueryResponse | Trust | HR portal | response; wraps SharedEvidence results |
 
 The HR portal never calls the Sandbox, and never receives anything without an active ShareGrant.
 
@@ -30,6 +32,9 @@ The HR portal never calls the Sandbox, and never receives anything without an ac
 11. **Tamper-evident:** Trust adds `ledger.sequence`, `prev_hash` and `hash`; senders never supply them.
 12. **Requirements are evidence-only:** RoleRequirement can express competency, level, estimate floor, recency, method and understanding. It has no weights, rank, speed, time or personal-attribute fields, and the schema rejects them.
 13. **Gaps, not ranks:** a requirement not met is reported as a gap per competency; there is no combined match score.
+14. **Trust never sees thresholds:** the query carries competency IDs only; scoring rules stay in the HR portal.
+15. **No existence leak:** the response has no total, omitted count or reason. A learner with no grant is indistinguishable from one who does not exist.
+16. **Caller identity:** `recipient_id` must equal the authenticated organisation; a mismatch is rejected.
 
 ## Method labels shown to recruiters
 
@@ -43,6 +48,8 @@ The HR portal never calls the Sandbox, and never receives anything without an ac
 | `share-grant.schema.json` | JSON Schema 2020-12 |
 | `shared-evidence.schema.json` | JSON Schema 2020-12 |
 | `role-requirement.schema.json` | JSON Schema 2020-12 |
+| `shared-evidence-query-request.schema.json` | JSON Schema 2020-12 |
+| `shared-evidence-query-response.schema.json` | JSON Schema 2020-12 (references SharedEvidence by `$id`) |
 | `examples/valid.*` | Must validate |
 | `examples/invalid.*` | Must be rejected |
 | `validate_examples.py` | Checks all examples (`python validate_examples.py`, needs `jsonschema`) |
@@ -53,7 +60,9 @@ The HR portal never calls the Sandbox, and never receives anything without an ac
 
 | # | Item | Owner |
 |---|---|---|
-| 1 | Query envelope fields (pagination, candidate filter) around RoleRequirement | Dev 3 with Dev 2 |
+| 1 | ~~Query envelope~~ drafted (request and response, 21/21 examples pass) | Dev 3 with Dev 2 |
+| 6 | Access log: record which recipient read which learner's evidence and when, and show it to the learner (separate record type, not an EvidenceEvent) | Dev 2 |
+| 7 | Rate limit and result-size caps on the query to blunt enumeration through `candidate_refs` | Dev 2 |
 | 2 | ~~Hash canonicalisation rule~~ drafted: see `hash-canonicalisation.md` (16/16 self-tests pass) | Dev 2 |
 | 3 | `recipient_id` and `candidate_ref` derivation (per-recipient alias) | Dev 2 |
 | 4 | Whether `submission_excerpt` is allowed in the MVP at all | Founder |

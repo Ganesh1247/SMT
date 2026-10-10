@@ -10,6 +10,7 @@ One line per memory. Find with `python platform/scripts/memory.py search <terms>
 - delivery-plan-draft-v01 - Draft G4 delivery plan: 21 slices, walking skeleton first, cut line, risk register; provisional REQ IDs
 - hash-canonicalisation-v1 - Ledger hashing uses explicit versioned field list, not RFC 8785; Trust stores normalised values
 - pathway-part-a-selected - Founder chose Part A (Nyeras/NxtMove Proof-of-Skill Sandbox) of SAMARTHA 02 Innovation in Education; Part B and combined excluded
+- query-envelope-v01 - Query request/response contracts: Trust never sees thresholds; response reveals no totals
 - workspace-architecture - Why the workspace is a gate-stage modular monolith with a main-session orchestrator
 
 ## fact

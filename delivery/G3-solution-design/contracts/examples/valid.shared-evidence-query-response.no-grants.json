@@ -1,0 +1,15 @@
+{
+  "schema_version": "0.1",
+  "request_id": "3f2b8c1e-5d4a-4e6f-9a7b-0c1d2e3f4a5b",
+  "recipient_id": "org_demo_recruiter",
+  "as_of": "2026-10-10T11:05:00Z",
+  "results": [],
+  "page": {
+    "returned": 0,
+    "next_cursor": null
+  },
+  "ledger_head": {
+    "sequence": 5,
+    "hash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+  }
+}

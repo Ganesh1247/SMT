@@ -1,0 +1,14 @@
+{
+  "schema_version": "0.1",
+  "request_id": "3f2b8c1e-5d4a-4e6f-9a7b-0c1d2e3f4a5b",
+  "recipient_id": "org_demo_recruiter",
+  "role_id": "role_junior_data_analyst",
+  "role_version": 1,
+  "competency_ids": [
+    "cmp_data_analysis",
+    "cmp_written_communication"
+  ],
+  "page": {
+    "limit": 500
+  }
+}

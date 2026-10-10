@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smt.local/contracts/shared-evidence-query-request.schema.json",
+  "title": "SharedEvidenceQueryRequest",
+  "description": "HR portal to Trust: POST /shared-evidence/query. Asks for evidence that learners have consented to share with this recipient for the listed competencies. It deliberately carries no thresholds: Trust never sees how a recruiter scores candidates, and the HR portal computes coverage itself. DRAFT 0.1.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "request_id", "recipient_id", "role_id", "role_version", "competency_ids"],
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "request_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Caller-generated. Returned in the response and written to the access log."
+    },
+    "recipient_id": {
+      "type": "string",
+      "pattern": "^org_[a-z0-9_]{3,40}$",
+      "description": "Must equal the authenticated caller's organisation. Trust rejects a mismatch."
+    },
+    "role_id": { "type": "string", "pattern": "^role_[a-z0-9_]{3,40}$" },
+    "role_version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Which version of the role this query served. Recorded for reproducibility only."
+    },
+    "competency_ids": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^cmp_[a-z0-9_]{3,40}$" }
+    },
+    "candidate_refs": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 50,
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^cnd_[a-f0-9]{16}$" },
+      "description": "Optional. Narrow to candidates the recipient has already seen. Refs it does not hold a grant for are silently omitted."
+    },
+    "page": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "limit": { "type": "integer", "minimum": 1, "maximum": 50, "default": 25 },
+        "cursor": { "type": "string", "minLength": 1, "maxLength": 256 }
+      }
+    }
+  }
+}
