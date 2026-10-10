@@ -27,6 +27,18 @@ def main():
     print("Starting server on http://127.0.0.1:8000 ...")
     sys.stdout.flush()
 
+    web_dir = ROOT / "product" / "entrypoints" / "web"
+    web_dist_index = web_dir / "dist" / "index.html"
+    if not web_dist_index.exists():
+        print("Sandbox web distribution not found. Building frontend bundle (npm run build)...")
+        sys.stdout.flush()
+        npm_cmd = "npm.cmd" if sys.platform == "win32" else "npm"
+        try:
+            subprocess.run([npm_cmd, "run", "build"], cwd=str(web_dir), check=True)
+            print("Web frontend build complete.")
+        except Exception as e:
+            print(f"Note: automatic build skipped ({e}). Proceeding...")
+
     serve_py = ROOT / "product" / "entrypoints" / "http-api" / "serve.py"
     subprocess.run([sys.executable, str(serve_py)], check=True)
 
