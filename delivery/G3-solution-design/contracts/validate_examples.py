@@ -14,6 +14,7 @@ SCHEMAS = {
     "evidence-event": HERE / "evidence-event.schema.json",
     "share-grant": HERE / "share-grant.schema.json",
     "shared-evidence": HERE / "shared-evidence.schema.json",
+    "role-requirement": HERE / "role-requirement.schema.json",
 }
 
 

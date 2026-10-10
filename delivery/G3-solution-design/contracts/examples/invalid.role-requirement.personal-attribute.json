@@ -1,0 +1,32 @@
+{
+  "schema_version": "0.1",
+  "role_id": "role_junior_data_analyst",
+  "recipient_id": "org_demo_recruiter",
+  "title": "Junior Data Analyst",
+  "version": 1,
+  "summary": "Entry-level analyst working with sales and operations data.",
+  "competencies": [
+    {
+      "competency_id": "cmp_data_analysis",
+      "priority": "required",
+      "min_levels_passed": 3,
+      "min_estimate_lower": 0.5,
+      "max_evidence_age_days": 180,
+      "require_understanding_confirmed": true,
+      "allowed_methods": [
+        "deterministic_test",
+        "probe",
+        "live_screening",
+        "human_review"
+      ]
+    },
+    {
+      "competency_id": "cmp_written_communication",
+      "priority": "preferred",
+      "min_levels_passed": 2,
+      "max_evidence_age_days": 365
+    }
+  ],
+  "created_at": "2026-10-10T10:30:00Z",
+  "candidate_age": 25
+}

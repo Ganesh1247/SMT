@@ -1,0 +1,10 @@
+{
+  "schema_version": "0.1",
+  "role_id": "role_junior_data_analyst",
+  "recipient_id": "org_demo_recruiter",
+  "title": "Junior Data Analyst",
+  "version": 1,
+  "summary": "Entry-level analyst working with sales and operations data.",
+  "competencies": [],
+  "created_at": "2026-10-10T10:30:00Z"
+}

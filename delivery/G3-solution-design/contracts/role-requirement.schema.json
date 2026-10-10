@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smt.local/contracts/role-requirement.schema.json",
+  "title": "RoleRequirement",
+  "description": "A recruiter's explicit, evidence-based requirements for one role. Owned by the HR portal. Sent to Trust only to choose which consented evidence to return (competencies and recipient); coverage and gaps are computed by the HR portal. It can express competency evidence only: no ranking weights, no speed or time proxies, no personal attributes. DRAFT 0.1.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "role_id",
+    "recipient_id",
+    "title",
+    "version",
+    "competencies",
+    "created_at"
+  ],
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "role_id": { "type": "string", "pattern": "^role_[a-z0-9_]{3,40}$" },
+    "recipient_id": {
+      "type": "string",
+      "pattern": "^org_[a-z0-9_]{3,40}$",
+      "description": "The recruiter organisation. Must match the recipient on any ShareGrant used."
+    },
+    "title": { "type": "string", "minLength": 3, "maxLength": 80 },
+    "version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Increments on every change so past matches stay reproducible."
+    },
+    "summary": { "type": "string", "maxLength": 500 },
+    "competencies": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["competency_id", "priority"],
+        "properties": {
+          "competency_id": { "type": "string", "pattern": "^cmp_[a-z0-9_]{3,40}$" },
+          "priority": {
+            "enum": ["required", "preferred"],
+            "description": "A missing required competency is shown as a gap. It is never turned into a rank."
+          },
+          "min_levels_passed": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 4,
+            "description": "Highest ladder level that must be passed."
+          },
+          "min_estimate_lower": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Threshold applied to the lower edge of the estimate band, so uncertainty counts against the candidate only when evidence is thin."
+          },
+          "max_evidence_age_days": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1825,
+            "description": "Recency window for the most recent evidence."
+          },
+          "require_understanding_confirmed": {
+            "type": "boolean",
+            "default": false
+          },
+          "allowed_methods": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "enum": ["deterministic_test", "probe", "ai_judged", "live_screening", "human_review"]
+            },
+            "description": "Optional. Restricts which evidence methods count toward this competency."
+          }
+        }
+      },
+      "uniqueItems": true
+    },
+    "created_at": { "type": "string", "format": "date-time" }
+  }
+}
