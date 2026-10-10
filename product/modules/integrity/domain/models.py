@@ -113,11 +113,19 @@ class ConsentRecord:
 def check_consent(version: Any, scopes: Any) -> tuple[str, tuple[str, ...]]:
     if not isinstance(version, str) or not _VERSION_RE.match(version):
         raise InvalidInput("version")
-    if not isinstance(scopes, (list, tuple)) or not scopes or len(scopes) > len(CONSENT_SCOPES):
+    if not isinstance(scopes, (list, tuple)) or not scopes:
         raise InvalidInput("scopes")
-    if any(s not in CONSENT_SCOPES for s in scopes) or len(set(scopes)) != len(scopes):
+    expanded: list[str] = []
+    for s in scopes:
+        if s == "camera_microphone":
+            expanded.extend(["camera", "microphone"])
+        elif s == "integrity_events":
+            expanded.append("events")
+        else:
+            expanded.append(s)
+    if any(s not in CONSENT_SCOPES for s in expanded) or len(set(expanded)) != len(expanded):
         raise InvalidInput("scopes")
-    return version, tuple(sorted(scopes))
+    return version, tuple(sorted(expanded))
 
 
 # ---------------------------------------------------------------- events

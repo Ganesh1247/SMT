@@ -19,7 +19,7 @@ for _p in (_PRODUCT / "modules", _PRODUCT / "shared-kernel", Path(__file__).reso
 from fastapi import FastAPI, HTTPException, Request  # noqa: E402
 from fastapi.exceptions import RequestValidationError  # noqa: E402
 from fastapi.middleware.cors import CORSMiddleware  # noqa: E402
-from fastapi.responses import JSONResponse  # noqa: E402
+from fastapi.responses import FileResponse, JSONResponse  # noqa: E402
 from fastapi.staticfiles import StaticFiles  # noqa: E402
 
 import wiring  # noqa: E402
@@ -104,6 +104,15 @@ def create_app(settings: Optional[Settings] = None, apis: Optional[Mapping[str, 
 
     dist = _PRODUCT / "entrypoints" / "web" / "dist"
     if settings.serve_web and dist.is_dir():
-        app.mount("/", StaticFiles(directory=str(dist), html=True), name="web")
+        if (dist / "assets").is_dir():
+            app.mount("/assets", StaticFiles(directory=str(dist / "assets")), name="assets")
+
+        @app.get("/{full_path:path}", include_in_schema=False)
+        async def serve_spa(full_path: str):
+            if full_path:
+                target = dist / full_path
+                if target.is_file():
+                    return FileResponse(target)
+            return FileResponse(dist / "index.html")
     app.state.apis = loaded
     return app

@@ -44,6 +44,7 @@ export interface ExamItem {
   item_id: string;
   kind: ItemKind;
   prompt: string;
+  code?: string;
   label?: string; // e.g. "Base problem", "Adapted variant"
   options?: ChoiceOption[];
   language?: 'python' | 'sql';
@@ -73,6 +74,11 @@ export interface AttemptResult {
   level: Level;
   next_level?: Level | null;
   all_passed?: boolean;
+  items_passed?: number;
+  items_total?: number;
+  score_percentage?: number;
+  evidence_hash?: string;
+  evidence_receipt?: string;
   items?: ResultItem[];
 }
 export interface ResultItem {

@@ -84,7 +84,7 @@ class ReviewService:
 
     def _queue_row(self, c: dict) -> dict:
         return {
-            "case_id": c["case_id"], "alias": self.identity.alias_for(c["learner_id"], REVIEW_DESK),
+            "case_id": c["case_id"], "alias": self.identity.alias_for(c["learner_id"]),
             "reason": c["reason"], "uncertainty": c["uncertainty"],
             "confidence_label": "Low" if c["uncertainty"] >= 0.5 else "Moderate",
             "integrity_risk": c["integrity_risk"], "created_at": c["created_at"], "status": c["status"],

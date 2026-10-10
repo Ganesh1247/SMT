@@ -106,7 +106,7 @@ class AssessmentService:
 
     def _plan_item(self, att: Attempt, item_ref: str) -> dict:
         for p in att.plan:
-            if p["ref"] == item_ref:
+            if p["ref"] == item_ref or p.get("task_uuid") == item_ref or p.get("bank_id") == item_ref:
                 return p
         raise R.NotFound("not found")
 
@@ -166,9 +166,21 @@ class AssessmentService:
 
     def record_consent(self, attempt_id: str, learner_id: str, version: Any, scopes: Any) -> Attempt:
         if version != CONSENT_VERSION or not isinstance(scopes, (list, tuple)) \
-                or any(not isinstance(s, str) for s in scopes) or len(set(scopes)) != len(scopes) \
-                or not set(REQUIRED_SCOPES) <= set(scopes) or not set(scopes) <= set(REQUIRED_SCOPES):
+                or any(not isinstance(s, str) for s in scopes) or len(set(scopes)) != len(scopes):
             raise R.InvalidInput("consent", "consent_incomplete")
+        # Normalize scopes (supporting both compound aliases and atomic scopes)
+        expanded: list[str] = []
+        for s in scopes:
+            if s == "camera_microphone":
+                expanded.extend(["camera", "microphone"])
+            elif s == "integrity_events":
+                expanded.append("events")
+            else:
+                expanded.append(s)
+        expanded_set = set(expanded)
+        if not set(REQUIRED_SCOPES) <= expanded_set or not expanded_set <= set(REQUIRED_SCOPES):
+            raise R.InvalidInput("consent", "consent_incomplete")
+        normalized_scopes = list(sorted(expanded_set))
         with self._lock:
             att = self._owned(attempt_id, learner_id)
             if att.status in R.FINAL_STATUSES:
@@ -176,11 +188,11 @@ class AssessmentService:
             if att.consent is not None:
                 return att
             try:
-                self._integrity.record_consent(att.id, learner_id, version, list(scopes))
+                self._integrity.record_consent(att.id, learner_id, version, normalized_scopes)
             except Exception:
                 log.exception("consent_record_failed")
                 raise R.Unavailable("consent could not be stored")
-            att = att.with_(consent={"version": version, "scopes": sorted(scopes), "at": self._now()},
+            att = att.with_(consent={"version": version, "scopes": normalized_scopes, "at": self._now()},
                             status="ready" if att.status == "created" else att.status)
             self._repo.update(att)
             return att
@@ -226,24 +238,64 @@ class AssessmentService:
             if att.level == 1:
                 variant = ({} if p["variant"] == 0 else it["variants"][p["variant"] - 1])
                 opts = {o["id"]: o for o in variant.get("options", it.get("options", []))}
-                view = {"item_id": p["ref"], "kind": it["kind"], "prompt": variant.get("prompt", it["prompt"]),
-                        "answered": answered}
+                raw_kind = it.get("kind", "single")
+                kind_map = {
+                    "single": "single_choice",
+                    "multi": "multi_choice",
+                    "short": "short_answer",
+                    "single_choice": "single_choice",
+                    "multi_choice": "multi_choice",
+                    "short_answer": "short_answer",
+                }
+                kind = kind_map.get(raw_kind, raw_kind)
+                view = {
+                    "item_id": p["ref"],
+                    "kind": kind,
+                    "prompt": variant.get("prompt", it["prompt"]),
+                    "label": f"Question {len(items) + 1}",
+                    "answered": answered,
+                }
                 code = variant.get("code", it.get("code"))
                 if code is not None:
                     view["code"] = code
-                if it["kind"] in ("single", "multi"):
+                if raw_kind in ("single", "multi", "single_choice", "multi_choice"):
                     view["options"] = [{"id": i, "text": opts[i]["text"]} for i in p["option_order"] if i in opts]
             elif att.level == 2:
-                view = {"item_id": p["ref"], "kind": it["kind"], "title": it["title"], "prompt": it["prompt"],
-                        "broken_code": it["broken_code"], "answered": answered}
+                lang = "python" if it.get("kind") == "python" or att.track == "python" else "sql"
+                view = {
+                    "item_id": p["ref"],
+                    "task_id": p.get("ref"),
+                    "task_uuid": p.get("task_uuid"),
+                    "kind": "code",
+                    "language": lang,
+                    "title": it["title"],
+                    "label": it.get("title", f"Bugfix {len(items) + 1}"),
+                    "prompt": it["prompt"],
+                    "starter_code": it.get("broken_code", ""),
+                    "broken_code": it.get("broken_code", ""),
+                    "requires_explanation": True,
+                    "answered": answered,
+                }
                 if it.get("schema"):
                     view["schema"] = it["schema"]
             else:
                 st = it["stages"][p["stage"]]
                 base_ref = planning.item_ref(p["bank_id"], "base")
-                view = {"item_id": p["ref"], "kind": it["kind"], "title": it["title"], "stage": p["stage"],
-                        "prompt": st["prompt"], "starter_code": st["starter_code"], "answered": answered,
-                        "locked": p["stage"] == "mutated" and base_ref not in answers}
+                lang = "python" if it.get("kind") == "python" or att.track == "python" else "sql"
+                view = {
+                    "item_id": p["ref"],
+                    "task_id": p.get("ref"),
+                    "task_uuid": p.get("task_uuid"),
+                    "kind": "code",
+                    "language": lang,
+                    "title": it["title"],
+                    "label": f"{it.get('title', 'Task')} ({p['stage'].capitalize()})",
+                    "stage": p["stage"],
+                    "prompt": st["prompt"],
+                    "starter_code": st.get("starter_code", ""),
+                    "answered": answered,
+                    "locked": p["stage"] == "mutated" and base_ref not in answers,
+                }
                 if st.get("schema"):
                     view["schema"] = st["schema"]
             items.append(view)
@@ -379,7 +431,7 @@ class AssessmentService:
             for p in att.plan:
                 g = (answers.get(p["ref"]) or {}).get("graded")
                 if att.level == 1:
-                    items.append({"ref": p["ref"], "passed": bool(g and g.get("correct")), "p": 1 if g and g.get("correct") else 0, "t": 1})
+                    items.append({"ref": p["ref"], "bank_id": p["bank_id"], "passed": bool(g and g.get("correct")), "p": 1 if g and g.get("correct") else 0, "t": 1})
                 else:
                     total = g["total"] if g else self._tests_total(att, p)
                     done = g["passed"] if g else 0
@@ -387,10 +439,46 @@ class AssessmentService:
                                   "bank_id": p["bank_id"], "stage": p.get("stage")})
             ok = self._qualify(att, items)
             self._write_events(att, items, answers, ok)
-            result = {"outcome": "passed" if ok else "failed", "items_passed": sum(1 for i in items if i["passed"]),
-                      "items_total": len(items),
-                      "items": [{"item_id": i["ref"], "passed": i["passed"]} for i in items],
-                      "score_update": "not_applicable"}
+
+            result_items = []
+            for i in items:
+                b_item = self._bank_item(att, i["bank_id"]) if "bank_id" in i else None
+                title = b_item.get("title") if b_item else None
+                label = f"Item {i['ref']}" + (f": {title}" if title else "")
+                frac = (i["p"] / i["t"]) if i["t"] else 0.0
+                outcome = "pass" if i["passed"] else ("partial" if i["p"] > 0 else "fail")
+                reason = (f"{i['p']} of {i['t']} automated tests passed." if att.level > 1
+                          else ("Answer matched the correct solution." if i["passed"] else "Answer did not match the key."))
+                event_id = f"{att.id}:{i['ref']}:crit"
+                result_items.append({
+                    "item_id": i["ref"],
+                    "label": label,
+                    "passed": i["passed"],
+                    "outcome": outcome,
+                    "method": "deterministic_test",
+                    "score": frac,
+                    "reason": reason,
+                    "event_id": event_id
+                })
+
+            passed_count = sum(1 for i in items if i["passed"])
+            total_count = len(items)
+            pct = int(round((passed_count / total_count) * 100)) if total_count else 0
+            ev_hash = f"ev_{att.seed[:8]}_{secrets.token_hex(4)}"
+
+            result = {
+                "outcome": "passed" if ok else "not_passed",
+                "level": att.level,
+                "next_level": (att.level + 1) if (ok and att.level < 4) else None,
+                "all_passed": (ok and att.level == 4),
+                "items_passed": passed_count,
+                "items_total": total_count,
+                "score_percentage": pct,
+                "evidence_hash": ev_hash,
+                "evidence_receipt": f"SHA256:{_sha(f'{att.id}:{ev_hash}:{passed_count}')[:32]}",
+                "items": result_items,
+                "score_update": "not_applicable"
+            }
             att = att.with_(status="passed" if ok else "failed", result=result, finished_at=self._now())
             self._repo.update(att)
             log.info("attempt_finished", extra={"event": "attempt_finished", "attempt": att.id,

@@ -54,7 +54,16 @@ function ExamRunner({ attempt }: { attempt: Attempt }) {
   const [idx, setIdx] = useState(0);
   const [answers, setAnswers] = useState<Record<string, Answer>>(() =>
     Object.fromEntries(
-      items.map((i) => [i.item_id, i.saved_answer ?? (i.kind === 'multi_choice' ? [] : i.kind === 'code' ? (i.starter_code ?? '') : '')]),
+      items.map((i) => [
+        i.item_id,
+        i.saved_answer ?? (
+          (i.kind === 'multi_choice' || (i as any).kind === 'multi')
+            ? []
+            : (i.kind === 'code' || (i as any).kind === 'python' || (i as any).kind === 'sql')
+              ? (i.starter_code ?? (i as any).broken_code ?? '')
+              : ''
+        ),
+      ]),
     ),
   );
   const [explanations, setExplanations] = useState<Record<string, string>>(() =>
@@ -83,7 +92,7 @@ function ExamRunner({ attempt }: { attempt: Attempt }) {
   const saveCurrent = async (): Promise<boolean> => {
     if (!current) return true;
     const ans = answers[current.item_id];
-    const empty = Array.isArray(ans) ? ans.length === 0 : ans.trim() === '';
+    const empty = Array.isArray(ans) ? ans.length === 0 : (ans ?? '').trim() === '';
     if (empty) return true;
     try {
       await api.submitItem(attempt.attempt_id, {
@@ -105,10 +114,11 @@ function ExamRunner({ attempt }: { attempt: Attempt }) {
   };
 
   const run = async (item: ExamItem) => {
-    if (!item.task_id) return;
+    const tid = item.task_id || item.item_id;
+    if (!tid) return;
     setRuns((r) => ({ ...r, [item.item_id]: 'running' }));
     try {
-      const res = await api.run(attempt.attempt_id, { task_id: item.task_id, code: String(answers[item.item_id] ?? '') });
+      const res = await api.run(attempt.attempt_id, { task_id: tid, code: String(answers[item.item_id] ?? '') });
       setRuns((r) => ({ ...r, [item.item_id]: res }));
     } catch {
       setRuns((r) => ({ ...r, [item.item_id]: 'error' }));
@@ -195,13 +205,36 @@ function ExamRunner({ attempt }: { attempt: Attempt }) {
                 {current.prompt}
               </div>
 
-              {(current.kind === 'single_choice' || current.kind === 'multi_choice') && current.options ? (
+              {current.code ? (
+                <pre
+                  className="panel mono"
+                  style={{
+                    background: '#0f172a',
+                    color: '#f8fafc',
+                    padding: '1rem',
+                    borderRadius: '0.5rem',
+                    overflowX: 'auto',
+                    border: '1px solid #334155',
+                    fontSize: '0.9rem',
+                    lineHeight: '1.4'
+                  }}
+                >
+                  <code>{current.code}</code>
+                </pre>
+              ) : null}
+
+              {(current.kind === 'single_choice' || (current.kind as string) === 'single' ||
+                current.kind === 'multi_choice' || (current.kind as string) === 'multi') && current.options ? (
                 <fieldset>
-                  <legend>{current.kind === 'multi_choice' ? 'Select all that apply' : 'Select one answer'}</legend>
+                  <legend>
+                    {current.kind === 'multi_choice' || (current.kind as string) === 'multi'
+                      ? 'Select all that apply'
+                      : 'Select one answer'}
+                  </legend>
                   <ul className="options">
                     {current.options.map((o) => {
                       const ans = answers[current.item_id];
-                      const multi = current.kind === 'multi_choice';
+                      const multi = current.kind === 'multi_choice' || (current.kind as string) === 'multi';
                       const checked = multi ? (ans as string[]).includes(o.id) : ans === o.id;
                       return (
                         <li key={o.id}>
@@ -213,7 +246,7 @@ function ExamRunner({ attempt }: { attempt: Attempt }) {
                               onChange={() =>
                                 setAnswers((s) => {
                                   if (!multi) return { ...s, [current.item_id]: o.id };
-                                  const cur = s[current.item_id] as string[];
+                                  const cur = (s[current.item_id] as string[]) || [];
                                   return { ...s, [current.item_id]: checked ? cur.filter((x) => x !== o.id) : [...cur, o.id] };
                                 })
                               }
@@ -227,18 +260,20 @@ function ExamRunner({ attempt }: { attempt: Attempt }) {
                 </fieldset>
               ) : null}
 
-              {current.kind === 'short_answer' || current.kind === 'probe' ? (
+              {current.kind === 'short_answer' || (current.kind as string) === 'short' || current.kind === 'probe' ? (
                 <div className="field">
                   <label htmlFor="short">Your answer</label>
                   <textarea
                     id="short"
+                    rows={4}
+                    placeholder="Type your answer here..."
                     value={String(answers[current.item_id] ?? '')}
                     onChange={(e) => setAnswers((s) => ({ ...s, [current.item_id]: e.target.value }))}
                   />
                 </div>
               ) : null}
 
-              {current.kind === 'code' ? (
+              {current.kind === 'code' || (current.kind as string) === 'python' || (current.kind as string) === 'sql' ? (
                 <>
                   <CodeEditor
                     id={`code-${current.item_id}`}
