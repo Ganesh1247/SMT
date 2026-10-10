@@ -109,7 +109,26 @@ def create_app(settings: Optional[Settings] = None, apis: Optional[Mapping[str, 
     @app.get("/sandbox", include_in_schema=False)
     async def sandbox_entry(track: str = "python"):
         from fastapi.responses import RedirectResponse
-        return RedirectResponse(f"/api/auth/demo-session?track={track}&redirect=/lobby/1?track={track}")
+        return RedirectResponse(f"/api/auth/demo-session?role=learner&track={track}&redirect=/lobby/1?track={track}")
+
+    @app.get("/recruiter", include_in_schema=False)
+    @app.get("/hr", include_in_schema=False)
+    async def recruiter_entry():
+        from fastapi.responses import RedirectResponse
+        return RedirectResponse("/api/auth/demo-session?role=recruiter&redirect=/hr")
+
+    @app.get("/auditor", include_in_schema=False)
+    @app.get("/admitter", include_in_schema=False)
+    @app.get("/audit", include_in_schema=False)
+    async def auditor_entry():
+        from fastapi.responses import RedirectResponse
+        return RedirectResponse("/api/auth/demo-session?role=auditor&redirect=/audit")
+
+    @app.get("/reviewer", include_in_schema=False)
+    @app.get("/review", include_in_schema=False)
+    async def reviewer_entry():
+        from fastapi.responses import RedirectResponse
+        return RedirectResponse("/api/auth/demo-session?role=reviewer&redirect=/review")
 
     dist = _PRODUCT / "entrypoints" / "web" / "dist"
     if settings.serve_web and dist.is_dir():

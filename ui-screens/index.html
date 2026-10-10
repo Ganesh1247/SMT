@@ -1728,18 +1728,47 @@
                 </div>
                 <button className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-indigo-700 font-bold shadow-xs">▶</button>
               </div>
-              <a
-                href="http://localhost:5173"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between hover:bg-slate-100 transition-colors cursor-pointer no-underline"
-              >
-                <div>
-                  <span className="font-bold text-sm text-slate-900 block">Crucible Skills Sandbox</span>
-                  <span className="text-xs text-slate-500 block">Proctored coding assessment, evidence-based skill estimate • opens in a new tab</span>
+              <div className="pt-2 border-t border-slate-100 flex flex-col gap-2">
+                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500">Crucible Proctored Portals</span>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  <a
+                    href="/sandbox"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2.5 rounded-xl bg-indigo-50/70 border border-indigo-100 flex items-center justify-between hover:bg-indigo-100/70 transition-colors cursor-pointer no-underline text-indigo-900"
+                  >
+                    <div>
+                      <span className="font-bold text-xs block">⚡ Learner Sandbox</span>
+                      <span className="text-[10px] text-indigo-600 block">Exams & benchmark tests</span>
+                    </div>
+                    <span className="text-xs font-bold">↗</span>
+                  </a>
+                  <a
+                    href="/recruiter"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between hover:bg-slate-100 transition-colors cursor-pointer no-underline text-slate-900"
+                  >
+                    <div>
+                      <span className="font-bold text-xs block">👔 Recruiter Portal</span>
+                      <span className="text-[10px] text-slate-500 block">Candidate evidence & roles</span>
+                    </div>
+                    <span className="text-xs font-bold">↗</span>
+                  </a>
+                  <a
+                    href="/auditor"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between hover:bg-slate-100 transition-colors cursor-pointer no-underline text-slate-900"
+                  >
+                    <div>
+                      <span className="font-bold text-xs block">🛡️ Auditor / Admitter</span>
+                      <span className="text-[10px] text-slate-500 block">Cryptographic ledger proof</span>
+                    </div>
+                    <span className="text-xs font-bold">↗</span>
+                  </a>
                 </div>
-                <button className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-indigo-700 font-bold shadow-xs">↗</button>
-              </a>
+              </div>
             </div>
           </div>
 
