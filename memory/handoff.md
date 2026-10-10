@@ -1,2 +1,2 @@
 # Handoff (2026-10-10)
-DONE: Round 1 Notion page, curated approach (Crucible), Canva deck v2 with 4-level ladder. NEXT: Founder reviews deck visually, approves approach/role/sandbox, gives team size + deadline + data access; then G0 audit + approval. BLOCKERS: Founder decisions (approach doc section 15); ladder score rule vs PS no-aggregate-score needs a ruling.
+DONE: draft delivery plan (21 slices) at delivery/G4-delivery-plan/delivery-plan.md. NEXT: Founder answers D1-D6 (SQL vs Python, team size, AI provider, L4 mode); approve G0; activate hackathon-24h; draft G1/G2 one-pagers and G3 architecture + ADR-0001; audit. BLOCKERS: Founder decisions; product/ locked.
