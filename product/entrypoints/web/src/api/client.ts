@@ -79,11 +79,24 @@ export const api = {
 
   // learner
   profile: () => request<T.Profile>('GET', '/me/profile'),
-  evidence: () => request<T.EvidenceOverview>('GET', '/me/evidence'),
-  createGrant: (b: T.GrantRequest) => request<T.Grant>('POST', '/me/grants', b),
-  revokeGrant: (grant_id: string) => request<void>('DELETE', '/me/grants', { grant_id }),
+  evidence: async (): Promise<T.EvidenceOverview> => {
+    const [items, grants] = await Promise.all([
+      request<{ items: T.EvidenceItem[] }>('GET', '/me/evidence'),
+      request<{ grants: T.Grant[] }>('GET', '/me/grants'),
+    ]);
+    return { evidence_items: items.items, grants: grants.grants };
+  },
+  createGrant: (b: T.GrantRequest) =>
+    request<T.Grant>('POST', '/me/grants', {
+      recipient_id: b.recipient_id,
+      competencies: b.competencies,
+      expires_at: b.expires_at,
+      consent_text_version: '1.0',
+    }),
+  revokeGrant: (grant_id: string) => request<void>('DELETE', `/me/grants/${enc(grant_id)}`),
   appeals: () => request<{ appeals: T.Appeal[] }>('GET', '/me/appeals'),
-  createAppeal: (b: { event_id?: string; text: string }) => request<T.Appeal>('POST', '/me/appeals', b),
+  createAppeal: (b: { event_id?: string; text: string }) =>
+    request<T.Appeal>('POST', '/me/appeals', { event_id: b.event_id ?? '', reason: b.text }),
 
   // reviewer
   reviewQueue: () => request<{ cases: T.QueueCase[] }>('GET', '/review/queue'),
@@ -99,10 +112,18 @@ export const api = {
   roleResults: (id: string) => request<T.RoleResults>('GET', `/hr/roles/${enc(id)}/results`),
   sharedEvidence: (alias: string, competency: string) =>
     request<T.SharedEvidence>('GET', `/hr/evidence/${enc(alias)}/${enc(competency)}`),
-  verifyReceipt: (receipt_hash: string) => request<T.ReceiptResult>('POST', '/hr/receipts/verify', { receipt_hash }),
+  verifyReceipt: (receipt_hash: string, candidate_ref: string, competency_id: string) =>
+    request<T.ReceiptResult>('POST', '/hr/receipts/verify', { receipt_hash, candidate_ref, competency_id }),
 
   // auditor
-  verifyLedger: () => request<T.LedgerVerify>('GET', '/audit/ledger/verify'),
+  verifyLedger: async (): Promise<T.LedgerVerify> => {
+    const r = await request<{
+      ok: boolean; entries_checked: number; first_failure: number | null;
+      message: string; canonicalisation: string;
+    }>('GET', '/audit/ledger/verify');
+    return { verified: r.ok, entries: r.entries_checked, first_failing_sequence: r.first_failure,
+             message: r.message, canonicalisation: r.canonicalisation };
+  },
 };
 
 // Raw helpers for the speed test (binary bodies, timing is measured by the caller).

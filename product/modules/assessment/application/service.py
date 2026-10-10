@@ -610,7 +610,8 @@ class AssessmentService:
                         "mutated_code": answers[mut_ref]["answer"], "title": it["title"],
                         "language": it["kind"], "track": att.track,
                         "base_prompt": it["stages"]["base"]["prompt"],
-                        "mutated_prompt": it["stages"]["mutated"]["prompt"]}
+                        "mutated_prompt": it["stages"]["mutated"]["prompt"],
+                        "competency_id": "cmp_" + self._competency(att), "seed_id": "sd_" + att.seed}
         return None
 
     # ------------------------------------------------------------------ progress

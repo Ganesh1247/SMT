@@ -1,7 +1,8 @@
 """Public contract of the identity module. Only these names may be used by other modules."""
 from __future__ import annotations
 
-from typing import Optional
+from dataclasses import dataclass
+from typing import Mapping, Optional
 
 from identity.api import runtime
 from identity.api.dto import User
@@ -10,6 +11,23 @@ from identity.domain.model import IdentityError, ROLES, TRACKS
 
 configure = runtime.configure
 reset = runtime.reset
+
+
+@dataclass(frozen=True)
+class Principal:
+    """Shape expected by other modules' IdentityPort (see their application/ports.py)."""
+    user_id: str
+    role: str
+    org_id: Optional[str] = None
+
+
+def authenticate(cookies: Mapping[str, str], headers: Mapping[str, str]) -> Optional[Principal]:
+    """Non-HTTP equivalent of the `current_user` FastAPI dependency, for modules that call
+    identity directly from a plain cookie/header mapping instead of a Request object."""
+    user = runtime.service().user_for_token(cookies.get(runtime.COOKIE_NAME))
+    if user is None:
+        return None
+    return Principal(user_id=user.id, role=user.role)
 
 
 def alias_for(learner_id: str) -> Optional[str]:
@@ -31,5 +49,5 @@ def create_user(email: str, password: str, role: str = "learner",
 
 __all__ = [
     "router", "current_user", "require_role", "alias_for", "learner_for_alias", "create_user",
-    "configure", "reset", "User", "IdentityError", "ROLES", "TRACKS",
+    "configure", "reset", "User", "IdentityError", "ROLES", "TRACKS", "Principal", "authenticate",
 ]

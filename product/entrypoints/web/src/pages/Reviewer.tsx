@@ -11,6 +11,7 @@ import {
   Field,
   Loading,
   PageHeading,
+  StatCards,
   UnderstandingChip,
   fmtDate,
   useAsync,
@@ -53,6 +54,13 @@ export function ReviewQueuePage() {
           <Empty>No cases need review.</Empty>
         ) : (
           <>
+            <StatCards
+              items={[
+                { label: 'Cases in queue', value: q.data.cases.length },
+                { label: 'Low confidence', value: q.data.cases.filter((c) => c.confidence === 'low').length, tone: 'warning' },
+                { label: 'Integrity-flagged', value: q.data.cases.filter((c) => c.reason === 'integrity_risk').length },
+              ]}
+            />
             <Field id="filter" label="Show">
               {(p) => (
                 <select {...p} value={filter} onChange={(e) => setFilter(e.target.value as typeof filter)}>

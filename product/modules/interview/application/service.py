@@ -66,7 +66,7 @@ class InterviewService:
     def state(self, learner_id: str, attempt_id: str) -> dict:
         sess = self.s.get("sessions", attempt_id)
         if sess is None:
-            if self.assessment.l3_solution(attempt_id, learner_id) is None:
+            if self.assessment.l3_solution(learner_id) is None:
                 raise NotFound()
             return {"state": "not_started", "prompt_count": len(sf.CRITERIA)}
         if sess["learner_id"] != learner_id:
@@ -87,7 +87,7 @@ class InterviewService:
         with self._lock(attempt_id):
             sess = self.s.get("sessions", attempt_id)
             if sess is None:
-                sol = self.assessment.l3_solution(attempt_id, learner_id)
+                sol = self.assessment.l3_solution(learner_id)
                 if sol is None:
                     raise NotFound()
                 if answer is not None and answer.strip():
@@ -137,13 +137,14 @@ class InterviewService:
     # ------------------------------------------------------------- finish
     def _finalize(self, sess: dict) -> dict:
         attempt_id, learner_id = sess["attempt_id"], sess["learner_id"]
-        sol = self.assessment.l3_solution(attempt_id, learner_id)
+        sol = self.assessment.l3_solution(learner_id)
         if sol is None:
             raise Unavailable("not_recorded")
         transcript = [{"role": t["role"], "criterion": t["criterion"], "text": t["text"]} for t in sess["turns"]]
         if sess["evaluation"] is None:
             try:
-                sess["evaluation"] = self.intel.evaluate_interview(transcript, sol.get("code", ""), RUBRIC_VERSION)
+                ev_raw = self.intel.evaluate_interview(transcript, sol.get("code", ""), RUBRIC_VERSION)
+                sess["evaluation"] = ev_raw.to_dict() if hasattr(ev_raw, "to_dict") else ev_raw
             except Exception:
                 log.warning("interview_evaluation_failed", extra={"attempt_id": attempt_id})
                 raise Unavailable("not_recorded") from None
@@ -186,7 +187,8 @@ class InterviewService:
                 self.assessment.record_level4_result(attempt_id, {
                     "status": "pending_review" if pending else "final",
                     "passed": None if pending else bool(ev["passed"]), "total": ev["total"],
-                    "criteria": [{"criterion": c["criterion"], "score0to3": c["score0to3"], "confidence": c["confidence"]} for c in crit],
+                    "criteria": [{"criterion": "adapt_constraint" if c["criterion"] == "adapt" else c["criterion"],
+                                  "score0to3": c["score0to3"], "confidence": c["confidence"]} for c in crit],
                     "rubric_version": ev["rubric_version"], "model_ref": ev["model_ref"], "ai_disclosure": True,
                     "case_id": sess["steps"]["case_id"]})
                 sess["steps"]["result"] = True
@@ -240,7 +242,9 @@ class InterviewService:
         for e in todo:
             if e["idempotency_key"] in done:
                 continue
-            self.evidence.append(e)  # idempotent on idempotency_key
+            payload = {k: v for k, v in e.items()
+                       if k not in ("schema_version", "event_type", "learner_id", "idempotency_key")}
+            self.evidence.append(e["event_type"], e["learner_id"], payload, e["idempotency_key"])  # idempotent on idempotency_key
             done.add(e["idempotency_key"])
             sess["steps"]["events"] = sorted(done)
             self.s.put("sessions", sess["attempt_id"], sess)

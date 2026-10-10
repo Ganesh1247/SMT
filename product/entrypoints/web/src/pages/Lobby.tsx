@@ -11,7 +11,7 @@ import { LEVEL_INFO } from './Path';
 
 const STEPS = ['Confirm', 'Consent', 'Network', 'Camera and mic', 'Screen', 'Full screen', 'Rules and start'] as const;
 export const CONSENT_VERSION = '2026-10-v1';
-const SCOPES = ['camera_microphone', 'screen', 'integrity_events'];
+const SCOPES = ['camera', 'microphone', 'screen', 'events'];
 
 export function LobbyPage() {
   const { level: levelParam } = useParams();

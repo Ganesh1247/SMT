@@ -1728,6 +1728,18 @@
                 </div>
                 <button className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-indigo-700 font-bold shadow-xs">▶</button>
               </div>
+              <a
+                href="http://localhost:5173"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between hover:bg-slate-100 transition-colors cursor-pointer no-underline"
+              >
+                <div>
+                  <span className="font-bold text-sm text-slate-900 block">Crucible Skills Sandbox</span>
+                  <span className="text-xs text-slate-500 block">Proctored coding assessment, evidence-based skill estimate • opens in a new tab</span>
+                </div>
+                <button className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-indigo-700 font-bold shadow-xs">↗</button>
+              </a>
             </div>
           </div>
 
@@ -3034,14 +3046,26 @@
       const [resetSent, setResetSent] = useState(false);
       const [verificationSent, setVerificationSent] = useState(false);
 
-      // Google Sign-In via Firebase SDK
+      // Google Sign-In via Firebase SDK. Popups are blocked by many browsers (and always
+      // blocked in automated/embedded contexts) unless opened synchronously from the click,
+      // so fall back to a full-page redirect - the return trip is handled by
+      // handleGoogleRedirectResult() below.
       const handleGoogleSignIn = async () => {
         setLoading(true);
         setError('');
         try {
           if (authInstance) {
             const provider = new firebase.auth.GoogleAuthProvider();
-            const res = await authInstance.signInWithPopup(provider);
+            let res;
+            try {
+              res = await authInstance.signInWithPopup(provider);
+            } catch (popupErr) {
+              if (['auth/popup-blocked', 'auth/popup-closed-by-user', 'auth/cancelled-popup-request'].includes(popupErr.code)) {
+                await authInstance.signInWithRedirect(provider);
+                return; // page is navigating away; nothing left to do here
+              }
+              throw popupErr;
+            }
             const u = res.user;
 
             const userDoc = {
