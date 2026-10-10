@@ -112,20 +112,17 @@ def create_app(settings: Optional[Settings] = None, apis: Optional[Mapping[str, 
         return RedirectResponse(f"/api/auth/demo-session?role=learner&track={track}&redirect=/lobby/1?track={track}")
 
     @app.get("/recruiter", include_in_schema=False)
-    @app.get("/hr", include_in_schema=False)
     async def recruiter_entry():
         from fastapi.responses import RedirectResponse
         return RedirectResponse("/api/auth/demo-session?role=recruiter&redirect=/hr")
 
     @app.get("/auditor", include_in_schema=False)
     @app.get("/admitter", include_in_schema=False)
-    @app.get("/audit", include_in_schema=False)
     async def auditor_entry():
         from fastapi.responses import RedirectResponse
         return RedirectResponse("/api/auth/demo-session?role=auditor&redirect=/audit")
 
     @app.get("/reviewer", include_in_schema=False)
-    @app.get("/review", include_in_schema=False)
     async def reviewer_entry():
         from fastapi.responses import RedirectResponse
         return RedirectResponse("/api/auth/demo-session?role=reviewer&redirect=/review")
