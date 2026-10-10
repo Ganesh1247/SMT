@@ -46,13 +46,15 @@ The HR portal never calls the Sandbox, and never receives anything without an ac
 | `examples/valid.*` | Must validate |
 | `examples/invalid.*` | Must be rejected |
 | `validate_examples.py` | Checks all examples (`python validate_examples.py`, needs `jsonschema`) |
+| `hash-canonicalisation.md` | The byte-exact hashing rule for ledger events |
+| `canonical_hash.py` | Reference implementation and self-test (`python canonical_hash.py`, standard library only) |
 
 ## Open items
 
 | # | Item | Owner |
 |---|---|---|
 | 1 | Query envelope fields (pagination, candidate filter) around RoleRequirement | Dev 3 with Dev 2 |
-| 2 | Hash canonicalisation rule (field order, number format) before the ledger is built | Dev 2 |
+| 2 | ~~Hash canonicalisation rule~~ drafted: see `hash-canonicalisation.md` (16/16 self-tests pass) | Dev 2 |
 | 3 | `recipient_id` and `candidate_ref` derivation (per-recipient alias) | Dev 2 |
 | 4 | Whether `submission_excerpt` is allowed in the MVP at all | Founder |
 | 5 | Competency, task and rubric ID registries | Dev 1 and Dev 2 |

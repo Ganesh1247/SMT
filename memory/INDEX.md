@@ -8,6 +8,7 @@ One line per memory. Find with `python platform/scripts/memory.py search <terms>
 - contracts-v01-drafted - Three draft contract schemas (EvidenceEvent, ShareGrant, SharedEvidence) validated against examples
 - curated-approach-crucible - Proposed curated solution 'Crucible' for Part A: probes + self-auditing assessor + uncertainty band; pending Founder approval
 - delivery-plan-draft-v01 - Draft G4 delivery plan: 21 slices, walking skeleton first, cut line, risk register; provisional REQ IDs
+- hash-canonicalisation-v1 - Ledger hashing uses explicit versioned field list, not RFC 8785; Trust stores normalised values
 - pathway-part-a-selected - Founder chose Part A (Nyeras/NxtMove Proof-of-Skill Sandbox) of SAMARTHA 02 Innovation in Education; Part B and combined excluded
 - workspace-architecture - Why the workspace is a gate-stage modular monolith with a main-session orchestrator
 
