@@ -2088,9 +2088,10 @@
 
       useEffect(() => {
         let isMounted = true;
+        const getApiOrigin = () => window.location.port === '5173' ? 'http://127.0.0.1:8000' : '';
         const checkBackend = async () => {
           try {
-            const res = await fetch('http://127.0.0.1:8000/api/health', { method: 'GET' });
+            const res = await fetch(`${getApiOrigin()}/api/health`, { method: 'GET' });
             if (res.ok) {
               const data = await res.json();
               if (isMounted) setBackendStatus({ state: 'online', details: data });
@@ -2102,13 +2103,14 @@
           }
         };
         checkBackend();
-        const interval = setInterval(checkBackend, 8000);
+        const interval = setInterval(checkBackend, 5000);
         return () => { isMounted = false; clearInterval(interval); };
       }, []);
 
       const launchSandbox = (track) => {
-        const query = track ? `?track=${encodeURIComponent(track)}` : '';
-        window.open(`http://127.0.0.1:8000/lobby/1${query}`, '_blank');
+        const origin = window.location.port === '5173' ? 'http://127.0.0.1:8000' : '';
+        const target = `/lobby/1?track=${encodeURIComponent(track || 'python')}`;
+        window.open(`${origin}/api/auth/demo-session?track=${encodeURIComponent(track || 'python')}&redirect=${encodeURIComponent(target)}`, '_blank');
       };
 
       return (
@@ -2506,7 +2508,8 @@
               <button
                 onClick={() => {
                   onClose();
-                  window.open('http://127.0.0.1:8000/lobby/1', '_blank');
+                  const origin = window.location.port === '5173' ? 'http://127.0.0.1:8000' : '';
+                  window.open(`${origin}/api/auth/demo-session?track=python&redirect=/lobby/1?track=python`, '_blank');
                 }}
                 className="flex-1 py-2.5 bg-indigo-700 hover:bg-indigo-800 text-white rounded-xl text-xs font-bold shadow-xs"
               >
@@ -2917,7 +2920,8 @@
                 <button
                   onClick={() => {
                     onClose();
-                    window.open(`http://127.0.0.1:8000/lobby/1?track=${track}`, '_blank');
+                    const origin = window.location.port === '5173' ? 'http://127.0.0.1:8000' : '';
+                    window.open(`${origin}/api/auth/demo-session?track=${encodeURIComponent(track || 'python')}&redirect=/lobby/1?track=${encodeURIComponent(track || 'python')}`, '_blank');
                   }}
                   className="flex-1 sm:flex-none px-4 py-2.5 bg-slate-900 hover:bg-black text-white rounded-xl text-xs font-bold shadow-xs flex items-center justify-center gap-1.5"
                 >

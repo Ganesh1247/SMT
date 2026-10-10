@@ -123,3 +123,32 @@ def set_track(body: TrackBody, user: User = Depends(current_user)):
         raise _err(403, "forbidden", "Not permitted")
     runtime.service().set_track(user.id, body.track)
     return {"track": body.track}
+
+
+@router.get("/auth/demo-session")
+def demo_session(track: str = "python", redirect: Optional[str] = None):
+    from fastapi.responses import RedirectResponse
+    svc = runtime.service()
+    user = None
+    try:
+        found = svc._users.by_email("demo-learner@crucible.example")
+        if found:
+            user = found[0]
+            if track in ("python", "data_analyst") and user.track != track:
+                svc.set_track(user.id, track)
+                user = svc.get(user.id)
+    except Exception:
+        pass
+    if user is None:
+        try:
+            user = svc.create_user("demo-learner@crucible.example", "DemoPassword123!", role="learner", display_name="Demo Learner", track=track)
+        except Exception:
+            user = svc._users.by_email("demo-learner@crucible.example")[0]
+    token = svc.create_session_for_user(user)
+    target = redirect or f"/lobby/1?track={track}"
+    resp = RedirectResponse(url=target, status_code=303)
+    resp.set_cookie(
+        runtime.COOKIE_NAME, token, max_age=svc.session_ttl_seconds,
+        httponly=True, samesite="lax", secure=runtime.cookie_secure(), path="/",
+    )
+    return resp

@@ -102,6 +102,15 @@ def create_app(settings: Optional[Settings] = None, apis: Optional[Mapping[str, 
                 isolation = "unavailable"
         return {"status": "ok", "modules": sorted(loaded), "runner_isolation": isolation}
 
+    ui_screens = _PRODUCT.parent / "ui-screens"
+    if ui_screens.is_dir():
+        app.mount("/lms", StaticFiles(directory=str(ui_screens), html=True), name="lms")
+
+    @app.get("/sandbox", include_in_schema=False)
+    async def sandbox_entry(track: str = "python"):
+        from fastapi.responses import RedirectResponse
+        return RedirectResponse(f"/api/auth/demo-session?track={track}&redirect=/lobby/1?track={track}")
+
     dist = _PRODUCT / "entrypoints" / "web" / "dist"
     if settings.serve_web and dist.is_dir():
         if (dist / "assets").is_dir():
@@ -113,6 +122,17 @@ def create_app(settings: Optional[Settings] = None, apis: Optional[Mapping[str, 
                 target = dist / full_path
                 if target.is_file():
                     return FileResponse(target)
+                if ui_screens.is_dir():
+                    target_lms = ui_screens / full_path
+                    if target_lms.is_file():
+                        return FileResponse(target_lms)
+
+            # Default to LMS dashboard for root, else Crucible SPA for /lobby, /exam, /path, etc.
+            if not full_path or full_path in ("", "index.html"):
+                if ui_screens.is_dir() and (ui_screens / "index.html").is_file():
+                    return FileResponse(ui_screens / "index.html")
+                return FileResponse(dist / "index.html")
+
             return FileResponse(dist / "index.html")
     app.state.apis = loaded
     return app

@@ -303,7 +303,7 @@ export function LobbyPage() {
             </div>
             <div className="check-row">
               <input id="agree" type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} />
-              <label htmlFor="agree">I understand, agree to be recorded, and will switch on all required device permissions.</label>
+              <label htmlFor="agree">I understand and I agree to be recorded, and will switch on all required device permissions.</label>
             </div>
             <div className="row">
               <Link className="btn quiet" to="/path">

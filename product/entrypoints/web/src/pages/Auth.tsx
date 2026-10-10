@@ -80,6 +80,17 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' }) {
         <button type="submit" className="btn" disabled={busy}>
           {busy ? 'Please wait' : mode === 'login' ? 'Sign in' : 'Create account'}
         </button>
+        {mode === 'login' ? (
+          <div style={{ marginTop: 'var(--space-3)' }}>
+            <a
+              href="/api/auth/demo-session?track=python&redirect=/path"
+              className="btn quiet"
+              style={{ width: '100%', textAlign: 'center', display: 'block', border: '1px dashed #6366f1', color: '#6366f1' }}
+            >
+              ⚡ 1-Click Demo Learner Sign-in
+            </a>
+          </div>
+        ) : null}
       </form>
       <p style={{ marginTop: 'var(--space-4)' }}>
         {mode === 'login' ? (
