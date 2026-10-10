@@ -1,0 +1,638 @@
+<!-- STATUS: DRAFT -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crucible learner dashboard (MOCK-UP)</title>
+<style>
+:root{
+  --color-text:#1A1A1A; --color-text-muted:#4A4A4A; --color-surface:#FFFFFF; --color-surface-alt:#F3F5F8;
+  --color-border:#767676; --color-primary:#0B4F9E; --color-focus:#0B4F9E; --color-success:#1B6E3A;
+  --color-warning-text:#7A4B00; --color-warning-bg:#FFF4D6; --color-error:#B3261E; --color-neutral-chip-bg:#E6EAF0;
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --s7:48px;
+  --radius:4px;
+  --fs-s:.875rem; --fs-b:1rem; --fs-m:1.25rem; --fs-l:1.5rem; --fs-xl:2rem;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{font-size:16px;scroll-padding-block-start:140px}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:var(--fs-b);line-height:1.5;color:var(--color-text);background:var(--color-surface);overflow-wrap:anywhere}
+h1,h2,h3,h4{line-height:1.25;margin:0 0 var(--s3)}
+h1{font-size:var(--fs-xl)} h2{font-size:var(--fs-l)} h3{font-size:var(--fs-m)} h4{font-size:var(--fs-b)}
+p{margin:0 0 var(--s3);max-width:75ch}
+ul{margin:0;padding:0;list-style:none}
+a{color:var(--color-primary);text-decoration:underline}
+code,.mono{font-family:ui-monospace,Consolas,"Courier New",monospace;font-size:var(--fs-s)}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.muted{color:var(--color-text-muted)}
+.small{font-size:var(--fs-s)}
+:focus{outline:none}
+:focus-visible{outline:3px solid var(--color-focus);outline-offset:2px;box-shadow:0 0 0 2px #fff}
+[tabindex="-1"]:focus{outline:none;box-shadow:none}
+.skip{position:absolute;inset-inline-start:var(--s2);inset-block-start:-100px;background:var(--color-primary);color:#fff;padding:var(--s3) var(--s4);z-index:100;min-height:44px;border-radius:var(--radius)}
+.skip:focus{inset-block-start:var(--s2)}
+.ic{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vertical-align:-4px}
+/* mock-up banner */
+.banner{position:sticky;inset-block-start:0;z-index:50;background:var(--color-warning-bg);color:var(--color-warning-text);border-block-end:3px solid var(--color-warning-text);padding:var(--s2) var(--s4);font-weight:700;display:flex;gap:var(--s2);align-items:flex-start}
+.mockctl{border:2px dashed var(--color-text-muted);background:var(--color-surface-alt);padding:var(--s3) var(--s4);margin:var(--s4);border-radius:var(--radius)}
+.mockctl .tag{font-weight:700;margin:0 0 var(--s2);font-size:var(--fs-s)}
+.wrap{max-width:75rem;margin-inline:auto;padding:var(--s4)}
+.site{display:flex;flex-wrap:wrap;gap:var(--s2) var(--s5);align-items:center;justify-content:space-between;padding-block:var(--s3)}
+.site .name{font-size:var(--fs-m);font-weight:700;margin:0}
+nav ul{display:flex;flex-wrap:wrap;gap:var(--s1) var(--s2)}
+nav a{display:inline-flex;align-items:center;min-height:44px;min-width:44px;padding:var(--s2) var(--s3);text-decoration:none;color:var(--color-text);border-block-end:4px solid transparent}
+nav a:hover{background:var(--color-surface-alt)}
+nav a[aria-current="page"]{font-weight:700;border-block-end-color:var(--color-primary);text-decoration:underline;text-decoration-thickness:2px}
+header.top{border-block-end:1px solid var(--color-border)}
+main{display:block;padding-block:var(--s4) var(--s6)}
+footer{border-block-start:1px solid var(--color-border);padding-block:var(--s4);color:var(--color-text-muted);font-size:var(--fs-s)}
+/* components */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--s2);min-height:44px;min-width:44px;padding:var(--s2) var(--s4);font:inherit;font-weight:600;border-radius:var(--radius);border:2px solid var(--color-primary);background:var(--color-surface);color:var(--color-primary);cursor:pointer;text-decoration:none}
+.btn.primary{background:var(--color-primary);color:#fff}
+.btn.danger{background:var(--color-error);border-color:var(--color-error);color:#fff}
+.btn:hover{filter:brightness(.94)}
+.actions{display:flex;flex-wrap:wrap;gap:var(--s3);margin-block-start:var(--s3)}
+.panel{background:var(--color-surface-alt);border:1px solid var(--color-border);border-radius:var(--radius);padding:var(--s4);margin-block-end:var(--s4)}
+.panel.plain{background:var(--color-surface)}
+.notice{display:flex;gap:var(--s2);align-items:flex-start;border:2px solid var(--color-success);color:var(--color-success);background:#fff;padding:var(--s3);border-radius:var(--radius);margin-block-end:var(--s4);font-weight:600}
+.notice:empty{display:none}
+.alert{display:flex;gap:var(--s2);align-items:flex-start;border:2px solid var(--color-error);color:var(--color-error);background:#fff;padding:var(--s4);border-radius:var(--radius);margin-block-end:var(--s4)}
+.alert p{color:var(--color-text)}
+.alert strong{color:var(--color-error)}
+.warn{display:flex;gap:var(--s2);align-items:flex-start;background:var(--color-warning-bg);color:var(--color-warning-text);border:2px solid var(--color-warning-text);padding:var(--s3) var(--s4);border-radius:var(--radius);margin-block-end:var(--s4)}
+.chip{display:inline-flex;align-items:center;gap:6px;min-height:28px;padding:2px 10px;border-radius:14px;border:1px solid currentColor;font-size:var(--fs-s);font-weight:600;background:#fff;vertical-align:middle}
+.chip.success{color:var(--color-success)}
+.chip.info{color:var(--color-primary)}
+.chip.warning{color:var(--color-warning-text);background:var(--color-warning-bg)}
+.chip.neutral{color:var(--color-text);background:var(--color-neutral-chip-bg);border-color:var(--color-border)}
+.chip.error{color:var(--color-error)}
+.method{display:inline-flex;align-items:center;gap:6px;font-weight:600}
+.grid{display:grid;gap:var(--s4);grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr))}
+.card{border:1px solid var(--color-border);border-radius:var(--radius);padding:var(--s4);background:#fff}
+.card h3,.card h4{margin-block-end:var(--s2)}
+dl.kv{display:grid;grid-template-columns:max-content 1fr;gap:var(--s1) var(--s4);margin:var(--s2) 0}
+dl.kv dt{color:var(--color-text-muted)}
+dl.kv dd{margin:0}
+@media (max-width:480px){dl.kv{grid-template-columns:1fr}dl.kv dt{margin-block-start:var(--s2)}}
+.estimate{font-size:var(--fs-l);font-weight:700;line-height:1.25;margin-block-end:var(--s3)}
+.band{position:relative;max-width:36rem;padding-block-start:var(--s2)}
+.band-track{position:relative;height:24px;border:1px solid var(--color-text);background:#fff;border-radius:2px}
+.band-range{position:absolute;inset-block:0;background:repeating-linear-gradient(45deg,var(--color-primary) 0 4px,#9DB8D9 4px 8px);border-inline:2px solid var(--color-primary)}
+.band-est{position:absolute;inset-block:-6px;width:4px;margin-inline-start:-2px;background:var(--color-text)}
+.band-scale{display:flex;justify-content:space-between;font-size:var(--fs-s);color:var(--color-text-muted);margin-block-start:var(--s1)}
+.band-key{font-size:var(--fs-s);color:var(--color-text-muted);margin-block-start:var(--s1)}
+table{border-collapse:collapse;width:100%;max-width:30rem}
+caption{text-align:start;font-weight:600;padding-block-end:var(--s2)}
+th,td{text-align:start;border:1px solid var(--color-border);padding:var(--s2) var(--s3);vertical-align:top}
+th{background:var(--color-neutral-chip-bg)}
+details{margin-block:var(--s3)}
+summary{cursor:pointer;min-height:44px;display:flex;align-items:center;color:var(--color-primary);font-weight:600}
+.field{margin-block-end:var(--s4);max-width:36rem}
+label,.lbl{display:block;font-weight:600;margin-block-end:var(--s1)}
+.hint{color:var(--color-text-muted);font-size:var(--fs-s);margin:0 0 var(--s2)}
+.req{font-weight:400;color:var(--color-text-muted)}
+input[type=text],input[type=date],select,textarea{width:100%;min-height:44px;font:inherit;padding:var(--s2) var(--s3);border:1px solid var(--color-border);border-radius:var(--radius);background:#fff;color:var(--color-text)}
+textarea{min-height:8rem}
+.field.has-error input,.field.has-error select,.field.has-error textarea{border:2px solid var(--color-error)}
+.err{color:var(--color-error);font-weight:600;display:flex;gap:var(--s1);margin-block-start:var(--s1)}
+.check{display:flex;gap:var(--s3);align-items:flex-start;min-height:44px}
+.check input{width:24px;height:24px;margin:10px 0 0;flex:none}
+.check label{margin:0;padding-block:var(--s2)}
+.skel{background:var(--color-neutral-chip-bg);border-radius:var(--radius);height:20px;margin-block-end:var(--s3)}
+.skel.big{height:80px}
+.preview{border-inline-start:6px solid var(--color-primary);background:#fff;padding:var(--s3) var(--s4);margin-block-end:var(--s4);max-width:36rem}
+.preview ul{list-style:disc;padding-inline-start:var(--s5)}
+/* dialog */
+.overlay{position:fixed;inset:0;background:rgba(26,26,26,.7);display:flex;align-items:center;justify-content:center;padding:var(--s4);z-index:200;overflow:auto}
+.dialog{background:#fff;color:var(--color-text);border:2px solid var(--color-text);border-radius:var(--radius);padding:var(--s5);max-width:32rem;width:100%;max-height:100%;overflow:auto}
+@media (min-width:768px){.wrap{padding:var(--s5)}.banner{padding-inline:var(--s5)}}
+@media (prefers-reduced-motion:no-preference){.btn{transition:filter .1s}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-test" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 12l3 3 5-6"/></symbol>
+  <symbol id="i-probe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7"/><path d="M12 17h.01"/></symbol>
+  <symbol id="i-ai" viewBox="0 0 24 24"><path d="M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2z"/></symbol>
+  <symbol id="i-live" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></symbol>
+  <symbol id="i-human" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></symbol>
+  <symbol id="i-dash" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12h8"/></symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18h.01"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M8 2h8l6 6v8l-6 6H8l-6-6V8z"/><path d="M12 7v6M12 16.5h.01"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></symbol>
+  <symbol id="i-inbox" viewBox="0 0 24 24"><path d="M3 13l3-8h12l3 8v6H3z"/><path d="M3 13h5l1 3h6l1-3h5"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5h.01"/></symbol>
+</svg>
+
+<div id="app">
+  <a class="skip" href="#main">Skip to main content</a>
+  <header class="top">
+    <div class="banner" id="banner">
+      <svg class="ic" aria-hidden="true" focusable="false"><use href="#i-warn"/></svg>
+      <span>MOCK-UP · synthetic data · Experimental: not a validated hiring predictor</span>
+    </div>
+    <aside class="mockctl" aria-label="Mock-up controls">
+      <p class="tag">Mock-up control. Not part of the product.</p>
+      <label for="state-sel">Show state</label>
+      <select id="state-sel">
+        <option value="normal">Normal</option>
+        <option value="empty">Empty</option>
+        <option value="loading">Loading</option>
+        <option value="error">Error</option>
+        <option value="low">Low-confidence</option>
+        <option value="probe">Probe-unconfirmed</option>
+      </select>
+    </aside>
+    <div class="wrap">
+      <div class="site">
+        <p class="name">Crucible · Learner</p>
+        <p class="muted small" style="margin:0">Signed in as alias <span class="mono" id="alias"></span></p>
+      </div>
+      <nav aria-label="Main">
+        <ul>
+          <li><a href="#/my-path" data-route="my-path">My path</a></li>
+          <li><a href="#/profile" data-route="profile">Profile</a></li>
+          <li><a href="#/sharing" data-route="sharing">Sharing</a></li>
+          <li><a href="#/appeals" data-route="appeals">Appeals</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <main id="main" class="wrap">
+    <div id="notice" class="notice" role="status"></div>
+    <div id="view"></div>
+  </main>
+  <footer>
+    <div class="wrap">Crucible learner dashboard · mock-up · DRAFT · G3 design artifact. This is a clickable picture of the design, not working software. No data leaves this page.</div>
+  </footer>
+</div>
+
+<script>
+"use strict";
+/* ---------------------------------------------------------------
+   Synthetic data. `profile` mirrors the SharedEvidence contract
+   (shared-evidence.schema.json v0.1) field for field.
+   `ui_extras` holds things NO contract defines yet (see README gaps).
+   --------------------------------------------------------------- */
+const MOCK = {
+  today: "2026-10-10",
+  profile: {
+    schema_version: "0.1",
+    candidate_ref: "cnd_3f9a1c07b2d84e65",
+    grant_id: "6f1c2a9e-5b7d-4c3e-8a10-2d9b7e4f1a01",
+    competency_id: "cmp_data_analysis_sql",
+    proficiency: { estimate: 0.58, lower: 0.45, upper: 0.70, scale: "0-1", as_of: "2026-10-10T09:00:00Z" },
+    levels_passed: [1, 2, 3, 4],
+    method_counts: { deterministic_test: 2, probe: 1, ai_judged: 1, live_screening: 1, human_review: 1 },
+    understanding_status: "confirmed",
+    evidence_items: [
+      { event_id: "a1000000-0000-4000-8000-000000000001", criterion_id: "crt_query_rows", method: "deterministic_test", outcome: "pass", occurred_at: "2026-09-28T10:00:00Z", task_version: "1.2.0", rubric_version: "1.0.0", receipt_hash: "sha256:" + "a1b2c3d4".repeat(8), ai_disclosure: false },
+      { event_id: "a1000000-0000-4000-8000-000000000002", criterion_id: "crt_join_logic", method: "deterministic_test", outcome: "partial", occurred_at: "2026-10-02T11:30:00Z", task_version: "1.2.0", rubric_version: "1.0.0", receipt_hash: "sha256:" + "b2c3d4e5".repeat(8), ai_disclosure: false },
+      { event_id: "a1000000-0000-4000-8000-000000000003", criterion_id: "crt_explains_query", method: "ai_judged", outcome: "pass", occurred_at: "2026-10-05T14:10:00Z", task_version: "1.2.0", rubric_version: "1.1.0", receipt_hash: "sha256:" + "c3d4e5f6".repeat(8), ai_disclosure: true },
+      { event_id: "a1000000-0000-4000-8000-000000000004", criterion_id: "crt_predict_output", method: "probe", outcome: "pass", understanding_status: "confirmed", occurred_at: "2026-10-07T09:45:00Z", task_version: "1.2.0", rubric_version: "1.0.0", receipt_hash: "sha256:" + "d4e5f6a7".repeat(8), ai_disclosure: false },
+      { event_id: "a1000000-0000-4000-8000-000000000005", criterion_id: "crt_follow_up", method: "live_screening", outcome: "pass", occurred_at: "2026-10-09T16:30:00Z", task_version: "1.0.0", rubric_version: "1.0.0", receipt_hash: "sha256:" + "e5f6a7b8".repeat(8), ai_disclosure: true },
+      { event_id: "a1000000-0000-4000-8000-000000000006", criterion_id: "crt_join_logic", method: "human_review", outcome: "pass", occurred_at: "2026-10-09T17:05:00Z", task_version: "1.2.0", rubric_version: "1.0.0", receipt_hash: "sha256:" + "f6a7b8c9".repeat(8), ai_disclosure: false }
+    ],
+    last_evidence_at: "2026-10-09T17:05:00Z",
+    assessor_report_ref: "asr_sql_rubric_100",
+    ledger_proof: { head_hash: "sha256:" + "ab12cd34".repeat(8), head_sequence: 842 },
+    labels: { experimental: true, ai_used: true }
+  },
+  ui_extras: {
+    /* Registry gap: names for competency / criteria are placeholders. */
+    competency_name: "Data analysis (SQL)",
+    criterion_names: {
+      crt_query_rows: "Query returns the expected rows",
+      crt_join_logic: "Tables are joined correctly",
+      crt_explains_query: "Note explains how the query works",
+      crt_predict_output: "Predicts the output on a changed table",
+      crt_follow_up: "Adapts the solution in the text session"
+    },
+    /* Not in any contract: confidence words for AI-assisted items. */
+    confidence: { crt_explains_query: { words: "Medium", number: "0.64" }, crt_follow_up: { words: "Medium", number: "0.61" } },
+    path: {
+      levels: [
+        { n: 1, name: "Read and filter data", attempts: 1 },
+        { n: 2, name: "Join tables", attempts: 2 },
+        { n: 3, name: "Group and count rows", attempts: 1 },
+        { n: 4, name: "Explain and adapt (text session)", attempts: 1 }
+      ]
+    },
+    /* Not in any contract: ShareGrant display fields and recipients. */
+    organisations: ["Northfield Analytics (synthetic)", "Harbour Data Group (synthetic)", "Lumen Works (synthetic)"],
+    grants: [
+      { grant_id: "7b2d0c11-3a4e-4f5a-9c66-0e1d2f3a4b5c", organisation: "Northfield Analytics (synthetic)", scope: "Data analysis (SQL)", include_raw_submission: false, expires_at: "2026-12-31", created_at: "2026-10-06" }
+    ],
+    /* Not in any contract: appeals. */
+    appeals: [
+      { appeal_id: "AP-0002", criterion_id: "crt_explains_query", status: "in_review", submitted_at: "2026-10-10", text: "My note explains the grouping step, but the feedback says it does not.", decision: null },
+      { appeal_id: "AP-0001", criterion_id: "crt_join_logic", status: "decided", submitted_at: "2026-10-08", text: "The join keeps the rows the task asks for. One row was counted as missing.", decision: "Result changed to Passed", reason: "The rubric accepts a left join here. The 3 rows in question are expected.", decided_at: "2026-10-09" }
+    ]
+  }
+};
+
+/* ---------------- helpers ---------------- */
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const fmt = iso => { const p = iso.slice(0, 10).split("-"); return Number(p[2]) + " " + MONTHS[Number(p[1]) - 1] + " " + p[0]; };
+const n2 = n => Number(n).toFixed(2);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const clone = o => JSON.parse(JSON.stringify(o));
+const icon = id => '<svg class="ic" aria-hidden="true" focusable="false"><use href="#i-' + id + '"/></svg>';
+const chip = (kind, ic, text) => '<span class="chip ' + kind + '">' + icon(ic) + "<span>" + esc(text) + "</span></span>";
+
+const METHODS = {
+  deterministic_test: { label: "Automated test", ic: "test" },
+  probe: { label: "Understanding probe", ic: "probe" },
+  ai_judged: { label: "AI-assisted judgement", ic: "ai" },
+  live_screening: { label: "Level 4 text session", ic: "live" },
+  human_review: { label: "Human review", ic: "human" }
+};
+const methodLabel = m => '<span class="method">' + icon(METHODS[m].ic) + "<span>" + METHODS[m].label + "</span></span>";
+
+function outcomeChip(o, method) {
+  if (method === "live_screening") return chip("info", "info", "Evaluated, reviewable");
+  if (o === "pass") return chip("success", "check", "Passed");
+  if (o === "partial") return chip("warning", "warn", "Partly passed");
+  if (o === "inconclusive") return chip("warning", "clock", "Pending review");
+  return chip("neutral", "dash", "Not passed");
+}
+function understandingChip(u) {
+  if (u === "confirmed") return chip("success", "check", "Understanding confirmed");
+  if (u === "unconfirmed") return chip("neutral", "dash", "Output verified, understanding unconfirmed");
+  return chip("neutral", "dash", "Understanding probe not attempted");
+}
+
+/* ---------------- state ---------------- */
+let state = "normal";
+let grants = clone(MOCK.ui_extras.grants);
+let appeals = clone(MOCK.ui_extras.appeals);
+let loadTimer = null;
+const $ = s => document.querySelector(s);
+
+function currentProfile() {
+  if (state === "empty") return null;
+  const p = clone(MOCK.profile);
+  if (state === "low") {
+    p.proficiency = { estimate: 0.50, lower: 0.25, upper: 0.78, scale: "0-1", as_of: "2026-10-10T09:00:00Z" };
+    p.evidence_items.forEach(i => { if (i.method === "ai_judged") i.outcome = "inconclusive"; });
+  }
+  if (state === "probe") {
+    p.understanding_status = "unconfirmed";
+    p.evidence_items.forEach(i => { if (i.method === "probe") i.understanding_status = "unconfirmed"; });
+  }
+  return p;
+}
+function pathStatus() {
+  const passed = state === "empty" ? [] : MOCK.profile.levels_passed;
+  const inProg = state === "empty" ? 1 : 0;
+  return { passed, inProg };
+}
+
+function setNotice(text) {
+  const el = $("#notice");
+  el.innerHTML = "";
+  if (text) { el.innerHTML = icon("check") + "<span>" + esc(text) + "</span>"; }
+}
+function mockAction(what) { setNotice("Mock-up only: " + what + " is not part of this prototype."); }
+
+/* ---------------- views ---------------- */
+function loadingView(title) {
+  return '<h1 tabindex="-1" id="h1">' + esc(title) + "</h1>" +
+    '<div role="status" class="panel plain"><p><strong id="load-msg">Loading your results</strong></p></div>' +
+    '<div aria-hidden="true"><div class="skel big"></div><div class="skel"></div><div class="skel"></div><div class="skel big"></div></div>';
+}
+function errorView(title) {
+  return '<h1 tabindex="-1" id="h1">' + esc(title) + "</h1>" +
+    '<div class="alert" role="alert">' + icon("alert") + "<div><p><strong>We could not load this.</strong> Your work is saved. Try again.</p>" +
+    '<p class="small muted">Error reference: MOCK-4F2A</p>' +
+    '<button type="button" class="btn primary" id="retry">Retry</button></div></div>';
+}
+
+function viewMyPath() {
+  const ps = pathStatus();
+  const lv = MOCK.ui_extras.path.levels;
+  const l123 = [1, 2, 3].every(n => ps.passed.includes(n));
+  const cards = lv.map(l => {
+    const passed = ps.passed.includes(l.n);
+    const locked = l.n === 4 && !l123;
+    const inprog = !passed && !locked && ps.inProg === l.n;
+    const attempts = state === "empty" ? 0 : l.attempts;
+    let status, action = "";
+    if (passed) { status = chip("success", "check", "Passed"); action = '<button type="button" class="btn" data-mock="the task screen">Open<span class="sr-only"> Level ' + l.n + "</span></button>"; }
+    else if (locked) { status = chip("neutral", "lock", "Locked"); }
+    else if (inprog) { status = chip("info", "clock", "In progress"); action = '<button type="button" class="btn primary" data-mock="the task screen">Resume<span class="sr-only"> Level ' + l.n + "</span></button>"; }
+    else { status = chip("neutral", "circle", "Not started"); action = '<button type="button" class="btn primary" data-mock="the task screen">Start<span class="sr-only"> Level ' + l.n + "</span></button>"; }
+    return '<li class="card"><h2 style="font-size:var(--fs-m)">Level ' + l.n + ": " + esc(l.name) + "</h2><p>" + status + "</p>" +
+      (locked ? '<p class="muted">Pass Levels 1 to 3 to open this level.</p>' : '<p class="muted">Attempts: ' + attempts + "</p>") +
+      (action ? '<div class="actions">' + action + "</div>" : "") + "</li>";
+  }).join("");
+  return '<h1 tabindex="-1" id="h1">My path</h1>' +
+    "<p>Four levels. Each level uses your own data. You can leave and come back; your work is saved.</p>" +
+    '<ul class="grid" aria-label="Levels">' + cards + "</ul>" +
+    '<p class="muted" style="margin-block-start:var(--s4)">Passed levels stay recorded. There are no timers on any level.</p>';
+}
+
+function bandBlock(pr) {
+  const t = n2(pr.estimate) + ", likely range " + n2(pr.lower) + " to " + n2(pr.upper) + ", as of " + fmt(pr.as_of);
+  return '<p class="estimate" id="estimate-text">' + esc(t) + "</p>" +
+    '<div class="band" aria-hidden="true"><div class="band-track"><div class="band-range" style="left:' + (pr.lower * 100) + "%;width:" + ((pr.upper - pr.lower) * 100) + '%"></div><div class="band-est" style="left:' + (pr.estimate * 100) + '%"></div></div>' +
+    '<div class="band-scale"><span>0</span><span>1</span></div></div>' +
+    '<p class="band-key">Striped bar: likely range. Dark line: estimate. Scale 0 to 1.</p>' +
+    "<details><summary>Show the same numbers as a table</summary>" +
+    "<table><caption>Estimate band for " + esc(MOCK.ui_extras.competency_name) + "</caption><tbody>" +
+    '<tr><th scope="row">Estimate</th><td>' + n2(pr.estimate) + "</td></tr>" +
+    '<tr><th scope="row">Lowest likely value</th><td>' + n2(pr.lower) + "</td></tr>" +
+    '<tr><th scope="row">Highest likely value</th><td>' + n2(pr.upper) + "</td></tr>" +
+    '<tr><th scope="row">As of</th><td>' + fmt(pr.as_of) + "</td></tr></tbody></table></details>";
+}
+
+function evidenceCard(it) {
+  const name = MOCK.ui_extras.criterion_names[it.criterion_id] || it.criterion_id;
+  const conf = MOCK.ui_extras.confidence[it.criterion_id];
+  let ai = "";
+  if (it.ai_disclosure) {
+    const lowConf = it.outcome === "inconclusive";
+    ai = '<p>' + chip("info", "ai", "AI-assisted feedback") + " <span>Confidence: " + (lowConf ? "Low" : esc(conf ? conf.words : "Medium")) + "</span></p>" +
+      "<details><summary>Show the confidence number</summary><p>" + (lowConf ? "0.38" : esc(conf ? conf.number : "0.60")) + "</p></details>";
+  }
+  const und = it.method === "probe" ? "<p>" + understandingChip(it.understanding_status) + "</p>" : "";
+  return '<li class="card"><h4>' + esc(name) + "</h4>" +
+    "<p>" + methodLabel(it.method) + " " + outcomeChip(it.outcome, it.method) + "</p>" + und + ai +
+    '<dl class="kv"><dt>Evidence from</dt><dd>' + fmt(it.occurred_at) + "</dd>" +
+    "<dt>Task version</dt><dd>" + esc(it.task_version) + "</dd><dt>Rubric version</dt><dd>" + esc(it.rubric_version) + "</dd></dl>" +
+    '<div class="actions"><a class="btn" href="#/appeals?criterion=' + esc(it.criterion_id) + '">Appeal this result<span class="sr-only">: ' + esc(name) + "</span></a></div></li>";
+}
+
+function viewProfile() {
+  const p = currentProfile();
+  const exp = '<div class="panel plain" id="exp-note"><p><strong>Experimental.</strong> This is not a validated predictor of job performance.</p>' +
+    "<p>Some results are AI-assisted. Each one is labelled, and you can appeal any result.</p></div>";
+  if (!p) {
+    return '<h1 tabindex="-1" id="h1">Profile</h1>' + exp +
+      '<div class="panel"><p><strong>No evidence yet.</strong> Complete Level 1 to start your profile.</p><div class="actions"><a class="btn primary" href="#/my-path">Go to My path</a></div></div>';
+  }
+  const pr = p.proficiency;
+  const age = "Newest evidence is from " + fmt(p.last_evidence_at) + ". Older evidence widens the likely range.";
+  const lowNote = state === "low"
+    ? '<div class="warn">' + icon("warn") + "<div><p><strong>We are not sure about this result. A person will check it.</strong></p><p>The range is wide because there is little or older evidence. Result: Pending review. Confidence: Low.</p></div></div>"
+    : "";
+  const lv = p.levels_passed.map(n => "<li>" + chip("success", "check", "Level " + n + " passed") + "</li>").join("");
+  const counts = Object.keys(METHODS).map(k => "<li class=\"card\">" + methodLabel(k) + '<p style="margin:var(--s1) 0 0">Results: ' + p.method_counts[k] + "</p></li>").join("");
+  let undBlock = "<p>" + understandingChip(p.understanding_status) + "</p>";
+  if (p.understanding_status === "unconfirmed") {
+    undBlock += "<p>Your answer to the main task is correct and your score for it is unchanged. We could not confirm you can explain or predict how it works. This is not a finding of misconduct. You can try another probe or ask for a person to look.</p>" +
+      '<div class="actions"><button type="button" class="btn primary" data-mock="the probe">Try another probe</button><a class="btn" href="#/appeals?criterion=crt_predict_output">Appeal</a></div>';
+  }
+  const g = grants[0];
+  const who = grants.length
+    ? "<p>Shared with " + esc(grants.map(x => x.organisation).join(", ")) + " until " + fmt(grants[0].expires_at) + ".</p>"
+    : "<p>Only you can see this.</p>";
+  const items = p.evidence_items.slice().sort((a, b) => b.occurred_at.localeCompare(a.occurred_at)).map(evidenceCard).join("");
+  return '<h1 tabindex="-1" id="h1">Profile</h1>' + exp + lowNote +
+    "<h2>" + esc(MOCK.ui_extras.competency_name) + ' <span class="muted mono" style="font-weight:400">' + esc(p.competency_id) + "</span></h2>" +
+    '<section aria-labelledby="h-est" class="panel"><h3 id="h-est">Estimate</h3>' + bandBlock(pr) +
+    '<p class="small muted">' + (state === "low" ? "" : "Updated just now. ") + esc(age) + "</p>" +
+    '<details><summary>Why does older evidence widen the range?</summary><p>An estimate is less certain when it rests on little evidence or on evidence from a long time ago. The range grows wider until you add new evidence.</p></details></section>' +
+    '<section aria-labelledby="h-lv" class="panel"><h3 id="h-lv">Levels passed</h3><ul style="display:flex;flex-wrap:wrap;gap:var(--s2)">' + lv + "</ul></section>" +
+    '<section aria-labelledby="h-md" class="panel"><h3 id="h-md">How this evidence was produced</h3><ul class="grid">' + counts + "</ul></section>" +
+    '<section aria-labelledby="h-un" class="panel"><h3 id="h-un">Understanding</h3>' + undBlock + "</section>" +
+    '<section aria-labelledby="h-sh" class="panel"><h3 id="h-sh">Who can see this</h3>' + who +
+    '<div class="actions"><a class="btn primary" href="#/sharing">Share</a></div></section>' +
+    '<section aria-labelledby="h-ev"><h3 id="h-ev">Evidence</h3><p class="muted">Newest first. The order is by date only.</p><ul class="grid">' + items + "</ul></section>";
+}
+
+function viewSharing() {
+  const list = grants.length
+    ? '<ul class="grid">' + grants.map(g =>
+      '<li class="card"><h3>' + esc(g.organisation) + "</h3><p>" + chip("success", "check", "Active") + "</p>" +
+      '<dl class="kv"><dt>Scope</dt><dd>' + esc(g.scope) + "</dd><dt>Raw submission</dt><dd>" + (g.include_raw_submission ? "Included" : "Not included") + "</dd>" +
+      "<dt>Expires</dt><dd>" + fmt(g.expires_at) + "</dd></dl>" +
+      '<div class="actions"><button type="button" class="btn danger" data-stop="' + esc(g.grant_id) + '">Stop sharing<span class="sr-only"> with ' + esc(g.organisation) + "</span></button></div></li>").join("") + "</ul>"
+    : '<div class="panel"><p><strong>Nobody can see your evidence.</strong> Sharing is off until you choose to share.</p></div>';
+  const orgs = MOCK.ui_extras.organisations.map(o => "<option>" + esc(o) + "</option>").join("");
+  return '<h1 tabindex="-1" id="h1">Sharing</h1>' +
+    '<p>You decide who can see your evidence, what they see, and for how long. Organisations see an alias, not your name.</p>' +
+    '<section aria-labelledby="h-gl"><h2 id="h-gl">Who can see your evidence</h2>' + list + "</section>" +
+    '<section aria-labelledby="h-nf" style="margin-block-start:var(--s5)"><h2 id="h-nf">Share with an organisation</h2>' +
+    '<div id="form-errors"></div>' +
+    '<form id="share-form" novalidate>' +
+    '<div class="field"><label for="f-org">Organisation <span class="req">(required)</span></label><select id="f-org">' + orgs + "</select></div>" +
+    '<div class="field"><label for="f-scope">What to share <span class="req">(required)</span></label><select id="f-scope"><option>' + esc(MOCK.ui_extras.competency_name) + "</option></select></div>" +
+    '<div class="field"><div class="check"><input type="checkbox" id="f-raw" aria-describedby="f-raw-h"><label for="f-raw">Include my raw submission text</label></div>' +
+    '<p class="hint" id="f-raw-h">Off by default. When off, the organisation sees your estimate and evidence details but not what you typed.</p></div>' +
+    '<div class="field" id="fld-exp"><label for="f-exp">Access ends on <span class="req">(required)</span></label>' +
+    '<p class="hint" id="f-exp-h">Choose a date after ' + fmt(MOCK.today) + ". Access stops on this date.</p>" +
+    '<input type="date" id="f-exp" aria-describedby="f-exp-h" required><div id="f-exp-e"></div></div>' +
+    '<h3>What the organisation will see</h3><div class="preview" id="preview" aria-live="polite"></div>' +
+    '<button type="submit" class="btn primary">Share</button></form></section>';
+}
+
+function previewHtml() {
+  const org = $("#f-org").value, scope = $("#f-scope").value, raw = $("#f-raw").checked, exp = $("#f-exp").value;
+  return "<p><strong>" + esc(org) + "</strong> will see:</p><ul>" +
+    "<li>Your estimate, likely range and as-of date for " + esc(scope) + "</li>" +
+    "<li>Which levels you passed</li>" +
+    "<li>For each result: how it was produced, the outcome, the date, and the task and rubric version</li>" +
+    "<li>A label saying the results are experimental and which ones are AI-assisted</li>" +
+    "<li>An alias, not your name or email</li></ul>" +
+    "<p>" + (raw ? "They will also see the text you submitted." : "They will not see the text you submitted.") + "</p>" +
+    "<p>" + (exp ? "Access ends on " + fmt(exp) + "." : "Access ends on the date you choose.") + " You can stop sharing at any time.</p>";
+}
+
+function appealPill(s) {
+  if (s === "received") return chip("neutral", "inbox", "Received");
+  if (s === "in_review") return chip("info", "clock", "In review");
+  return chip("success", "check", "Decided");
+}
+function viewAppeals() {
+  const names = MOCK.ui_extras.criterion_names;
+  const q = new URLSearchParams((location.hash.split("?")[1] || ""));
+  const pre = q.get("criterion") || "";
+  const list = appeals.length
+    ? '<ul class="grid">' + appeals.map(a =>
+      '<li class="card"><h3>' + esc(names[a.criterion_id] || a.criterion_id) + "</h3><p>" + appealPill(a.status) + "</p>" +
+      '<dl class="kv"><dt>Sent</dt><dd>' + fmt(a.submitted_at) + "</dd></dl>" +
+      "<p>" + esc(a.text) + "</p>" +
+      (a.status === "decided" ? '<div class="panel plain"><p><strong>Decision by a person: ' + esc(a.decision) + "</strong></p><p>" + esc(a.reason) + '</p><p class="small muted">Decided ' + fmt(a.decided_at) + "</p></div>" : "") + "</li>").join("") + "</ul>"
+    : '<div class="panel"><p><strong>You have no appeals.</strong></p></div>';
+  const crit = Object.keys(names).map(k => '<option value="' + k + '"' + (k === pre ? " selected" : "") + ">" + esc(names[k]) + "</option>").join("");
+  return '<h1 tabindex="-1" id="h1">Appeals</h1>' +
+    "<p>If a result looks wrong, you can ask a person to look at it. Your current result stays visible until they decide.</p>" +
+    '<section aria-labelledby="h-al"><h2 id="h-al">Your appeals</h2>' + list + "</section>" +
+    '<section aria-labelledby="h-na" style="margin-block-start:var(--s5)"><h2 id="h-na">New appeal</h2><div id="form-errors"></div>' +
+    '<form id="appeal-form" novalidate>' +
+    '<div class="field"><label for="a-crit">Which result? <span class="req">(required)</span></label><select id="a-crit">' + crit + "</select></div>" +
+    '<div class="panel plain" id="a-current" style="max-width:36rem"></div>' +
+    '<div class="field" id="fld-text"><label for="a-text">What do you think is wrong? <span class="req">(required)</span></label>' +
+    '<p class="hint" id="a-text-h">Plain words are fine. Up to 500 characters. <span id="a-left">500 characters left.</span></p>' +
+    '<textarea id="a-text" maxlength="500" aria-describedby="a-text-h" required></textarea><div id="a-text-e"></div></div>' +
+    '<button type="submit" class="btn primary">Send appeal</button></form></section>';
+}
+
+/* ---------------- dialog ---------------- */
+let dlg = null;
+function openDialog(opts) {
+  const trigger = document.activeElement;
+  const ov = document.createElement("div");
+  ov.className = "overlay";
+  ov.innerHTML = '<div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dlg-t" aria-describedby="dlg-d">' +
+    '<h2 id="dlg-t" style="font-size:var(--fs-l)">' + esc(opts.title) + '</h2><div id="dlg-d">' + opts.body + "</div>" +
+    '<div class="actions"><button type="button" class="btn" id="dlg-cancel">Cancel</button>' +
+    '<button type="button" class="btn ' + (opts.danger ? "danger" : "primary") + '" id="dlg-ok">' + esc(opts.confirm) + "</button></div></div>";
+  document.body.appendChild(ov);
+  $("#app").inert = true;
+  const box = ov.firstChild;
+  const close = restore => { ov.remove(); $("#app").inert = false; document.removeEventListener("keydown", onKey, true); dlg = null; if (restore && trigger && document.contains(trigger)) trigger.focus(); };
+  const onKey = e => {
+    if (e.key === "Escape") { e.preventDefault(); close(true); return; }
+    if (e.key === "Tab") {
+      const f = box.querySelectorAll("button,[href],input,select,textarea,[tabindex]:not([tabindex='-1'])");
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      else if (!box.contains(document.activeElement)) { e.preventDefault(); first.focus(); }
+    }
+  };
+  document.addEventListener("keydown", onKey, true);
+  $("#dlg-cancel").addEventListener("click", () => close(true));
+  $("#dlg-ok").addEventListener("click", () => { close(false); opts.onConfirm(); });
+  $("#dlg-cancel").focus();
+  dlg = { close };
+}
+
+/* ---------------- render and routing ---------------- */
+function routeName() {
+  const n = location.hash.replace(/^#\/?/, "").split("?")[0];
+  return ["my-path", "profile", "sharing", "appeals"].includes(n) ? n : "my-path";
+}
+const TITLES = { "my-path": "My path", profile: "Profile", sharing: "Sharing", appeals: "Appeals" };
+
+function render(opts) {
+  opts = opts || {};
+  clearTimeout(loadTimer);
+  const r = routeName();
+  document.querySelectorAll("nav a").forEach(a => { if (a.dataset.route === r) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
+  document.title = TITLES[r] + " · Crucible learner dashboard (MOCK-UP)";
+  const view = $("#view");
+  if (state === "loading") {
+    view.innerHTML = loadingView(TITLES[r]);
+    loadTimer = setTimeout(() => { const m = $("#load-msg"); if (m) m.textContent = "Still loading. Your work is saved."; }, 5000);
+  } else if (state === "error") {
+    view.innerHTML = errorView(TITLES[r]);
+    $("#retry").addEventListener("click", () => { $("#state-sel").value = "normal"; setState("normal"); setNotice("Loaded. Showing the Normal state."); });
+  } else {
+    view.innerHTML = { "my-path": viewMyPath, profile: viewProfile, sharing: viewSharing, appeals: viewAppeals }[r]();
+    wire(r);
+  }
+  if (opts.focus !== false) { const h = $("#h1"); if (h) h.focus(); window.scrollTo(0, 0); }
+}
+
+function wire(r) {
+  document.querySelectorAll("[data-mock]").forEach(b => b.addEventListener("click", () => mockAction(b.dataset.mock)));
+  if (r === "sharing") {
+    document.querySelectorAll("[data-stop]").forEach(b => b.addEventListener("click", () => {
+      const g = grants.find(x => x.grant_id === b.dataset.stop);
+      openDialog({
+        title: "Stop sharing with " + g.organisation + "?", danger: true, confirm: "Stop sharing",
+        body: "<p>They will no longer be able to see your evidence. Your results stay on your profile.</p>",
+        onConfirm: () => {
+          grants = grants.filter(x => x.grant_id !== g.grant_id);
+          render({ focus: false });
+          setNotice("Access removed. It takes effect on the organisation's next request.");
+          const n = $("#notice"); n.tabIndex = -1; n.focus();
+        }
+      });
+    }));
+    const upd = () => { $("#preview").innerHTML = previewHtml(); };
+    ["f-org", "f-scope", "f-raw", "f-exp"].forEach(id => { $("#" + id).addEventListener("input", upd); $("#" + id).addEventListener("change", upd); });
+    upd();
+    $("#share-form").addEventListener("submit", e => {
+      e.preventDefault();
+      const exp = $("#f-exp").value;
+      $("#form-errors").innerHTML = ""; $("#f-exp-e").innerHTML = ""; $("#fld-exp").classList.remove("has-error"); $("#f-exp").removeAttribute("aria-invalid");
+      let msg = "";
+      if (!exp) msg = "Choose the date your access ends.";
+      else if (exp <= MOCK.today) msg = "Choose a date after " + fmt(MOCK.today) + ".";
+      if (msg) {
+        $("#fld-exp").classList.add("has-error");
+        $("#f-exp").setAttribute("aria-invalid", "true");
+        $("#f-exp").setAttribute("aria-describedby", "f-exp-h f-exp-m");
+        $("#f-exp-e").innerHTML = '<p class="err" id="f-exp-m">' + icon("alert") + "<span>" + esc(msg) + "</span></p>";
+        $("#form-errors").innerHTML = '<div class="alert" role="alert" tabindex="-1" id="err-sum">' + icon("alert") + '<div><p><strong>Please fix this before sharing.</strong></p><p><a href="#f-exp" id="err-link">' + esc(msg) + "</a></p></div></div>";
+        $("#err-link").addEventListener("click", ev => { ev.preventDefault(); $("#f-exp").focus(); });
+        $("#err-sum").focus();
+        return;
+      }
+      const org = $("#f-org").value, scope = $("#f-scope").value, raw = $("#f-raw").checked;
+      openDialog({
+        title: "Share with " + org + "?", confirm: "Share", body: previewHtml(),
+        onConfirm: () => {
+          grants.push({ grant_id: "new-" + Date.now(), organisation: org, scope: scope, include_raw_submission: raw, expires_at: exp, created_at: MOCK.today });
+          render({ focus: false });
+          setNotice("Sharing started. " + org + " can see this until " + fmt(exp) + ". You can stop sharing at any time.");
+          const n = $("#notice"); n.tabIndex = -1; n.focus();
+        }
+      });
+    });
+  }
+  if (r === "appeals") {
+    const names = MOCK.ui_extras.criterion_names;
+    const showCur = () => {
+      const id = $("#a-crit").value;
+      const items = MOCK.profile.evidence_items.filter(i => i.criterion_id === id).sort((a, b) => b.occurred_at.localeCompare(a.occurred_at));
+      const it = items[0];
+      let t = "<p><strong>Current result</strong></p>";
+      if (it && state !== "empty") {
+        let oc = it.outcome;
+        if (state === "low" && it.method === "ai_judged") oc = "inconclusive";
+        t += "<p>" + esc(names[id]) + "</p><p>" + methodLabel(it.method) + " " + outcomeChip(oc, it.method) + '</p><p class="small muted">Evidence from ' + fmt(it.occurred_at) + ". This result stays visible while your appeal is open.</p>";
+      } else t += "<p>" + esc(names[id]) + "</p>";
+      $("#a-current").innerHTML = t;
+    };
+    showCur();
+    $("#a-crit").addEventListener("change", showCur);
+    $("#a-text").addEventListener("input", () => { $("#a-left").textContent = (500 - $("#a-text").value.length) + " characters left."; });
+    $("#appeal-form").addEventListener("submit", e => {
+      e.preventDefault();
+      $("#form-errors").innerHTML = ""; $("#a-text-e").innerHTML = ""; $("#fld-text").classList.remove("has-error");
+      const txt = $("#a-text").value.trim();
+      if (!txt) {
+        $("#fld-text").classList.add("has-error");
+        $("#a-text").setAttribute("aria-invalid", "true");
+        $("#a-text").setAttribute("aria-describedby", "a-text-h a-text-m");
+        $("#a-text-e").innerHTML = '<p class="err" id="a-text-m">' + icon("alert") + "<span>Tell us what you think is wrong.</span></p>";
+        $("#form-errors").innerHTML = '<div class="alert" role="alert" tabindex="-1" id="err-sum">' + icon("alert") + '<div><p><strong>Please fix this before sending.</strong></p><p><a href="#a-text" id="err-link">Tell us what you think is wrong.</a></p></div></div>';
+        $("#err-link").addEventListener("click", ev => { ev.preventDefault(); $("#a-text").focus(); });
+        $("#err-sum").focus();
+        return;
+      }
+      appeals.unshift({ appeal_id: "AP-NEW", criterion_id: $("#a-crit").value, status: "received", submitted_at: MOCK.today, text: txt, decision: null });
+      render({ focus: false });
+      setNotice("Appeal sent. A person will review it. Your current result stays visible until then.");
+      const n = $("#notice"); n.tabIndex = -1; n.focus();
+    });
+  }
+}
+
+function setState(s) {
+  state = s;
+  grants = s === "empty" ? [] : clone(MOCK.ui_extras.grants);
+  appeals = s === "empty" ? [] : clone(MOCK.ui_extras.appeals);
+  setNotice("");
+  render({ focus: false });
+}
+
+$("#alias").textContent = MOCK.profile.candidate_ref;
+$("#state-sel").addEventListener("change", e => {
+  const label = e.target.options[e.target.selectedIndex].text;
+  setState(e.target.value);
+  setNotice("Mock-up state changed to " + label + ".");
+});
+window.addEventListener("hashchange", () => { setNotice(""); render(); });
+render({ focus: false });
+</script>
+</body>
+</html>

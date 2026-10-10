@@ -1,2 +1,2 @@
 # Handoff (2026-10-10)
-DONE: all contracts drafted+validated (5 schemas + query envelope, hash rule v1). NEXT: G3 architecture overview + light threat model (security-engineer); ADR-0002; Founder decisions D1-D4; G0 approval. BLOCKERS: Founder decisions; product/ locked.
+DONE: G1-G4 drafts by 6 parallel authors; independent audit running (delivery/G3-solution-design/audit-draft-consistency.md); Canva deck edits applied in OPEN transaction awaiting Founder approval to save; Notion count fixed. NEXT: Founder decides ADR-0002 A vs B, score gate, AI provider, L4 mode, approves Canva save and contract changes C1-C7; push after audit; G0 approval. BLOCKERS: Founder decisions; product/ locked.
