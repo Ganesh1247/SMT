@@ -21,7 +21,8 @@ export function LobbyPage() {
   const heading = useRef<HTMLHeadingElement>(null);
 
   const [step, setStep] = useState(0);
-  const [track, setTrack] = useState<Track | ''>(me?.track ?? '');
+  const queryTrack = typeof window !== 'undefined' ? (new URLSearchParams(window.location.search).get('track') as Track | null) : null;
+  const [track, setTrack] = useState<Track | ''>(queryTrack || me?.track || '');
   const [attemptId, setAttemptId] = useState<string | null>(null);
   const [consentRequired, setConsentRequired] = useState(true);
   const [agreed, setAgreed] = useState(false);
@@ -278,9 +279,31 @@ export function LobbyPage() {
               Recordings are kept for a limited time and can be seen only by authorised reviewers. If you decline, you
               will not start this level and nothing will be recorded.
             </p>
+            <div className="panel" style={{ marginTop: '1rem', marginBottom: '1rem', borderLeft: '4px solid #6366f1', background: 'rgba(99, 102, 241, 0.08)' }}>
+              <h3 style={{ margin: '0 0 0.5rem', fontSize: '1rem', fontWeight: 600, color: '#f8fafc' }}>
+                ⚠️ System Requirement: Switch ON all permissions
+              </h3>
+              <p style={{ margin: '0 0 0.75rem', fontSize: '0.9rem', color: '#cbd5e1' }}>
+                This proctored assessment requires you to switch on and allow all system permissions in your browser:
+              </p>
+              <ul className="checklist" style={{ marginBottom: 0 }}>
+                <li>
+                  <span aria-hidden="true">📷</span>
+                  <span><strong>Camera & Microphone:</strong> Switch ON access in browser address bar when requested.</span>
+                </li>
+                <li>
+                  <span aria-hidden="true">🖥️</span>
+                  <span><strong>Entire Screen Share:</strong> Switch ON full monitor sharing (select "Entire screen" in picker).</span>
+                </li>
+                <li>
+                  <span aria-hidden="true">⛶</span>
+                  <span><strong>Full Screen Mode:</strong> Keep exam maximized with active focus throughout the session.</span>
+                </li>
+              </ul>
+            </div>
             <div className="check-row">
               <input id="agree" type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} />
-              <label htmlFor="agree">I understand and I agree to be recorded for this level.</label>
+              <label htmlFor="agree">I understand, agree to be recorded, and will switch on all required device permissions.</label>
             </div>
             <div className="row">
               <Link className="btn quiet" to="/path">

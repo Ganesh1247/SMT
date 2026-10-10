@@ -44,16 +44,40 @@ export function ResultPage() {
       {a.data?.result ? (
         <>
           <div className="panel" role="status">
-            <h2>
-              Level {a.data.result.level}: {LEVEL_INFO[a.data.result.level].name}
-            </h2>
-            <p style={{ margin: 0 }}>
-              {a.data.result.outcome === 'passed'
-                ? 'You passed this level. Your progress is saved.'
-                : a.data.result.outcome === 'in_review'
-                  ? 'We are not sure about part of this result. A person will check it. Your current result stays visible until then.'
-                  : 'This level was not passed this time. You can try again with a fresh set. Your earlier attempts are kept.'}
-            </p>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.75rem' }}>
+              <div>
+                <h2>
+                  Level {a.data.result.level}: {LEVEL_INFO[a.data.result.level]?.name ?? 'Benchmark Test'}
+                </h2>
+                <p style={{ margin: 0, marginTop: '0.25rem' }}>
+                  {a.data.result.outcome === 'passed'
+                    ? 'You passed this level. Your verified progress and tamper-evident proof have been permanently recorded.'
+                    : a.data.result.outcome === 'in_review'
+                      ? 'We are not sure about part of this result. A person will check it. Your current result stays visible until then.'
+                      : 'This level was not passed this time. You can try again with a fresh set. Your earlier attempts are kept.'}
+                </p>
+              </div>
+              <div style={{ textAlign: 'right' }}>
+                <span className={`chip ${a.data.result.outcome === 'passed' ? 'success' : 'warning'}`} style={{ fontSize: '0.9rem', fontWeight: 'bold' }}>
+                  {a.data.result.outcome === 'passed' ? '✓ PASSED' : 'NOT PASSED'}
+                </span>
+                <div style={{ fontSize: '1.25rem', fontWeight: 'bold', marginTop: '0.35rem' }}>
+                  Score: {a.data.result.items_passed ?? 0} / {a.data.result.items_total ?? a.data.result.items?.length ?? 0}
+                  {a.data.result.score_percentage !== undefined ? ` (${a.data.result.score_percentage}%)` : ''}
+                </div>
+              </div>
+            </div>
+
+            {a.data.result.evidence_receipt || a.data.result.evidence_hash ? (
+              <div style={{ marginTop: '1rem', padding: '0.75rem', background: 'var(--panel-alt)', borderRadius: '0.375rem', border: '1px solid var(--border)' }}>
+                <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--muted)', fontWeight: 600 }}>
+                  Cryptographic Evidence Proof
+                </div>
+                <div style={{ fontFamily: 'monospace', fontSize: '0.85rem', wordBreak: 'break-all', marginTop: '0.25rem' }}>
+                  {a.data.result.evidence_receipt ?? a.data.result.evidence_hash}
+                </div>
+              </div>
+            ) : null}
           </div>
           {a.data.result.items && a.data.result.items.length > 0 ? (
             <ul className="stack" style={{ listStyle: 'none', padding: 0 }}>

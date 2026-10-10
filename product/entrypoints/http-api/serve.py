@@ -22,6 +22,9 @@ def main() -> int:
     from config import Settings
     from main import create_app
 
+    import os
+    os.environ.setdefault("RUNNER_ALLOW_FALLBACK", "true")
+
     settings = Settings.from_env()
     try:
         app = create_app(settings)
