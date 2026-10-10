@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { api } from '../api/client';
 import type { LedgerVerify } from '../api/types';
-import { Alert, PageHeading, fmtDate } from '../components/ui';
+import { Alert, PageHeading, StatCards } from '../components/ui';
 
 export function AuditPage() {
   const [state, setState] = useState<'idle' | 'running' | 'error'>('idle');
@@ -22,7 +22,7 @@ export function AuditPage() {
   const copy = async () => {
     if (!res) return;
     try {
-      await navigator.clipboard.writeText(`sequence ${res.head_sequence} ${res.head_hash}`);
+      await navigator.clipboard.writeText(res.message);
       setCopied(true);
     } catch {
       setCopied(false);
@@ -68,25 +68,26 @@ export function AuditPage() {
           )
         ) : null}
       </div>
+      {res && state === 'idle' ? (
+        <StatCards
+          items={[
+            { label: 'Entries checked', value: res.entries },
+            { label: 'Tamper detection', value: res.verified ? '100%' : 'FAILED', tone: res.verified ? 'success' : 'error', hint: 'M11: every alteration must be caught' },
+            { label: 'First bad entry', value: res.first_failing_sequence ?? '—', tone: res.first_failing_sequence ? 'error' : 'success' },
+          ]}
+        />
+      ) : null}
       {res ? (
         <section className="panel" aria-labelledby="head">
-          <h2 id="head">Ledger head</h2>
+          <h2 id="head">Details</h2>
           <dl>
-            <dt>Head sequence</dt>
-            <dd>{res.head_sequence}</dd>
-            <dt>Head hash</dt>
-            <dd className="mono" style={{ wordBreak: 'break-all' }}>
-              {res.head_hash}
-            </dd>
-            {res.verified_at ? (
-              <>
-                <dt>Last verified</dt>
-                <dd>{fmtDate(res.verified_at)}</dd>
-              </>
-            ) : null}
+            <dt>Result</dt>
+            <dd>{res.message}</dd>
+            <dt>Canonicalisation rule</dt>
+            <dd className="mono">{res.canonicalisation}</dd>
           </dl>
           <button type="button" className="btn secondary" onClick={() => void copy()}>
-            Copy head hash and sequence
+            Copy result
           </button>
           <span role="status" className="small">
             {copied ? ' Copied.' : ''}

@@ -74,6 +74,25 @@ export function Empty({ children, action }: { children: ReactNode; action?: Reac
   );
 }
 
+export function StatCards({ items }: { items: Array<{ label: string; value: string | number; hint?: string; tone?: 'default' | 'success' | 'warning' | 'error' }> }) {
+  const toneColor: Record<string, string> = {
+    success: 'var(--color-success)', warning: 'var(--color-warning-text)', error: 'var(--color-error)', default: 'var(--color-primary)',
+  };
+  return (
+    <div className="grid-2" style={{ marginBottom: 'var(--space-4)' }}>
+      {items.map((it) => (
+        <div key={it.label} className="panel" style={{ marginBottom: 0 }}>
+          <span className="eyebrow">{it.label}</span>
+          <div style={{ fontFamily: 'var(--font-display)', fontSize: 'var(--text-2xl)', fontWeight: 800, color: toneColor[it.tone ?? 'default'] }}>
+            {it.value}
+          </div>
+          {it.hint ? <p className="small muted" style={{ margin: 'var(--space-1) 0 0' }}>{it.hint}</p> : null}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export function ExperimentalBanner() {
   return (
     <p className="experimental" role="note">

@@ -53,10 +53,16 @@ def list_for_learner(learner_id: str) -> list[LedgerEntry]:
     return [_dto(e) for e in runtime.service().list_for_learner(learner_id)]
 
 
+def head() -> dict:
+    """Global ledger head: {"sequence": int, "hash": str}; sequence 0 / hash "genesis" when empty."""
+    sequence, hash_ = runtime.service().head()
+    return {"sequence": sequence, "hash": hash_}
+
+
 configure = runtime.configure
 reset = runtime.reset
 
 from evidence.api.http import router  # noqa: E402  (after facade definitions)
 
-__all__ = ["router", "append", "verify", "list_for_learner", "configure", "reset",
+__all__ = ["router", "append", "verify", "list_for_learner", "head", "configure", "reset",
            "LedgerEntry", "VerifyResult", "EvidenceValidationError"]

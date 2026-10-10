@@ -13,6 +13,7 @@ import {
   METHOD_LABEL,
   MethodLabel,
   PageHeading,
+  StatCards,
   UnderstandingChip,
   competencyName,
   fmtDate,
@@ -43,6 +44,14 @@ export function RolesPage() {
         r.data.roles.length === 0 ? (
           <Empty>No roles yet. Create a role to see shared evidence against it.</Empty>
         ) : (
+          <>
+            <StatCards
+              items={[
+                { label: 'Roles tracked', value: r.data.roles.length, hint: 'REQ-016: coverage and gaps, no rank' },
+                { label: 'Latest role version', value: Math.max(...r.data.roles.map((x) => x.version)) },
+                { label: 'No-grant visibility', value: '0 fields', tone: 'success', hint: 'Until a learner shares (NFR-003)' },
+              ]}
+            />
           <div className="table-wrap">
             <table>
               <caption className="sr-only">Your roles</caption>
@@ -72,6 +81,7 @@ export function RolesPage() {
               </tbody>
             </table>
           </div>
+          </>
         )
       ) : null}
     </div>
@@ -285,6 +295,21 @@ export function RoleResultsPage() {
           <Empty>No shared evidence yet for this role.</Empty>
         ) : (
           <>
+            {(() => {
+              const rows = r.data.candidates.flatMap((c) => c.competencies);
+              const count = (s: CoverageState) => rows.filter((x) => x.state === s).length;
+              const gaps = rows.filter((x) => x.gap).length;
+              return (
+                <StatCards
+                  items={[
+                    { label: 'Candidates shared', value: r.data.candidates.length, hint: 'By alias, order is not a ranking' },
+                    { label: 'Required gaps', value: gaps, tone: gaps > 0 ? 'warning' : 'success' },
+                    { label: 'Met', value: count('met'), tone: 'success' },
+                    { label: 'No shared evidence', value: count('no_shared_evidence') },
+                  ]}
+                />
+              );
+            })()}
             <Field id="cf" label="Filter by coverage">
               {(p) => (
                 <select {...p} value={filter} onChange={(e) => setFilter(e.target.value as typeof filter)}>
@@ -361,12 +386,12 @@ export function RoleResultsPage() {
   );
 }
 
-function ReceiptButton({ hash, label }: { hash: string; label: string }) {
+function ReceiptButton({ hash, label, candidateRef, competencyId }: { hash: string; label: string; candidateRef: string; competencyId: string }) {
   const [res, setRes] = useState<ReceiptResult | 'running' | 'error' | null>(null);
   const check = async () => {
     setRes('running');
     try {
-      setRes(await api.verifyReceipt(hash));
+      setRes(await api.verifyReceipt(hash, candidateRef, competencyId));
     } catch {
       setRes('error');
     }
@@ -471,7 +496,7 @@ export function EvidencePage() {
                       </pre>
                     </blockquote>
                   ) : null}
-                  <ReceiptButton hash={it.receipt_hash} label={it.event_id} />
+                  <ReceiptButton hash={it.receipt_hash} label={it.event_id} candidateRef={alias} competencyId={competency} />
                 </li>
               ))}
             </ul>

@@ -1,0 +1,94 @@
+<!-- STATUS: DRAFT -->
+<svg xmlns="http://www.w3.org/2000/svg" width="2200" height="1580" viewBox="0 0 2200 1580" role="img" aria-labelledby="title desc">
+<title id="title">Crucible high-level system design and technology stack</title>
+<desc id="desc">System architecture showing four user roles, React and TypeScript web frontends, FastAPI Python backend capability modules, isolated code execution, SQLite module stores, evidence ledger, consent-gated recording and optional AI provider. The current topology is one modular FastAPI process.</desc>
+<defs>
+ <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f5f7ff"/><stop offset="1" stop-color="#edf8f5"/></linearGradient>
+ <linearGradient id="hero" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#263e87"/><stop offset="1" stop-color="#3c63c9"/></linearGradient>
+ <filter id="sh" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#20304d" flood-opacity=".10"/></filter>
+ <marker id="a" markerWidth="11" markerHeight="11" refX="9" refY="5.5" orient="auto"><path d="M1 1L10 5.5 1 10" fill="none" stroke="#8492aa" stroke-width="1.8"/></marker>
+ <marker id="ag" markerWidth="11" markerHeight="11" refX="9" refY="5.5" orient="auto"><path d="M1 1L10 5.5 1 10" fill="none" stroke="#169b83" stroke-width="1.8"/></marker>
+ <style>
+ text{font-family:Inter,'Segoe UI',Arial,sans-serif;fill:#19243a}.title{font-size:44px;font-weight:750;letter-spacing:-.8px}.sub{font-size:18px;fill:#5b6880}.h{font-size:20px;font-weight:750}.t{font-size:16px;font-weight:700}.b{font-size:14px;fill:#485770}.s{font-size:12px;fill:#65738b}.tiny{font-size:11px;fill:#68778d}.card{fill:#fff;stroke:#dbe2ee;stroke-width:1.5;rx:18;filter:url(#sh)}.soft{rx:24;stroke-width:1.5}.line{fill:none;stroke:#8492aa;stroke-width:2.5;marker-end:url(#a)}.green{fill:none;stroke:#169b83;stroke-width:2.8;marker-end:url(#ag)}.dash{stroke-dasharray:8 7}.chip{rx:13}.white{fill:#fff}.light{fill:#dce6ff}.lane{font-size:13px;font-weight:750;letter-spacing:1.4px}
+ </style>
+</defs>
+<rect width="2200" height="1580" fill="url(#bg)"/>
+<text x="80" y="78" class="title">Crucible · High-level system design</text>
+<text x="82" y="112" class="sub">A trustworthy path from learner skill demonstration to evidence a recruiter may inspect—with learner permission.</text>
+<rect x="1640" y="45" width="475" height="43" rx="22" fill="#fff" stroke="#d8dfeb"/><text x="1664" y="72" font-size="13" font-weight="750" fill="#314989">CURRENT IMPLEMENTATION · ONE FASTAPI APP</text>
+
+<!-- actors -->
+<rect x="64" y="178" width="250" height="456" class="soft" fill="#fff" stroke="#dfe5ef"/>
+<text x="90" y="218" class="lane" fill="#66758b">PEOPLE</text>
+<g><rect x="88" y="244" width="202" height="70" class="card"/><circle cx="112" cy="279" r="13" fill="#4967c8"/><text x="136" y="275" class="t">Learner</text><text x="136" y="296" class="s">does tasks · controls sharing</text></g>
+<g><rect x="88" y="330" width="202" height="70" class="card"/><circle cx="112" cy="365" r="13" fill="#169b83"/><text x="136" y="361" class="t">Recruiter</text><text x="136" y="382" class="s">defines role · reviews evidence</text></g>
+<g><rect x="88" y="416" width="202" height="70" class="card"/><circle cx="112" cy="451" r="13" fill="#8056c7"/><text x="136" y="447" class="t">Reviewer</text><text x="136" y="468" class="s">resolves uncertain cases</text></g>
+<g><rect x="88" y="502" width="202" height="70" class="card"/><circle cx="112" cy="537" r="13" fill="#66758b"/><text x="136" y="533" class="t">Auditor</text><text x="136" y="554" class="s">checks ledger and assessor</text></g>
+
+<!-- frontend -->
+<rect x="366" y="178" width="300" height="456" class="soft" fill="#edf1ff" stroke="#d8dff4"/>
+<text x="392" y="218" class="lane" fill="#4967c8">PRESENTATION · BROWSER</text>
+<rect x="394" y="244" width="244" height="196" rx="20" fill="url(#hero)" filter="url(#sh)"/>
+<text x="418" y="283" class="h white">Crucible web app</text><text x="418" y="314" font-size="14" fill="#e5ebff">React 18 · TypeScript</text><text x="418" y="338" font-size="14" fill="#e5ebff">Vite · React Router</text><text x="418" y="374" font-size="13" fill="#e5ebff">Learner · Reviewer</text><text x="418" y="397" font-size="13" fill="#e5ebff">Recruiter · Auditor views</text>
+<rect x="394" y="460" width="244" height="126" class="card"/><text x="418" y="493" class="t">Accessible task workspace</text><text x="418" y="521" class="b">CodeMirror 6 (Python / SQL)</text><text x="418" y="546" class="b">Captions · typed alternative</text><text x="418" y="570" class="s">UI guards help navigation; API authorizes</text>
+
+<!-- API/backend boundary -->
+<rect x="720" y="154" width="1030" height="752" class="soft" fill="#fff" stroke="#cfd8e8" stroke-width="2"/>
+<rect x="748" y="176" width="974" height="75" rx="18" fill="url(#hero)"/>
+<text x="778" y="211" class="h white">Application API · FastAPI + Uvicorn</text><text x="778" y="235" font-size="14" fill="#e5ebff">Python 3.12 · Pydantic at request boundaries · authenticated role from server session</text>
+<text x="752" y="286" class="lane" fill="#68778f">CAPABILITY MODULES · EACH OWNS A BUSINESS JOB · MODULES CALL THROUGH api/ FACADES / PORTS</text>
+<!-- module cards row 1 -->
+<g><rect x="750" y="312" width="286" height="124" class="card"/><text x="774" y="346" class="t">Identity &amp; access</text><text x="774" y="375" class="b">Accounts · scrypt · sessions</text><text x="774" y="399" class="b">Roles · pseudonyms · aliases</text></g>
+<g><rect x="1070" y="312" width="286" height="124" class="card"/><text x="1094" y="346" class="t">Assessment &amp; progression</text><text x="1094" y="375" class="b">Attempts · levels · feedback</text><text x="1094" y="399" class="b">Resume · retry · gated update</text></g>
+<g><rect x="1390" y="312" width="300" height="124" class="card"/><text x="1414" y="346" class="t">Runner · isolated execution</text><text x="1414" y="375" class="b">Closed request · bounded output</text><text x="1414" y="399" class="b">No hidden answer in learner process</text></g>
+<!-- row 2 -->
+<g><rect x="750" y="466" width="286" height="124" class="card"/><text x="774" y="500" class="t">Interview &amp; AI feedback</text><text x="774" y="529" class="b">Provider port · stub / optional AI</text><text x="774" y="553" class="b">Disclosed · structured · reviewable</text></g>
+<g><rect x="1070" y="466" width="286" height="124" class="card"/><text x="1094" y="500" class="t">Integrity &amp; recording</text><text x="1094" y="529" class="b">Consent · event signals · chunks</text><text x="1094" y="553" class="b">Reviewer-only flags; no auto-fail</text></g>
+<g><rect x="1390" y="466" width="300" height="124" class="card"/><text x="1414" y="500" class="t">Evidence &amp; scoring</text><text x="1414" y="529" class="b">Hash-chain · verification</text><text x="1414" y="553" class="b">Estimate range · experimental label</text></g>
+<!-- row 3 -->
+<g><rect x="750" y="620" width="446" height="124" class="card"/><text x="774" y="654" class="t">Review &amp; learner consent</text><text x="774" y="683" class="b">Appeals · human decisions · expiring grants</text><text x="774" y="707" class="b">Grant-filtered evidence query · revoke checked each request</text></g>
+<g><rect x="1230" y="620" width="460" height="124" class="card"/><text x="1254" y="654" class="t">HR portal</text><text x="1254" y="683" class="b">Versioned role criteria · competency coverage / gaps</text><text x="1254" y="707" class="b">Evidence viewer · receipt verification · no candidate ranking</text></g>
+<rect x="750" y="774" width="940" height="88" rx="16" fill="#f4f6fa" stroke="#e1e6ee"/><text x="774" y="808" class="t">Shared boundary language</text><text x="774" y="836" class="b">JSON Schema 2020-12 · validated event, grant, role and evidence payloads · SHA-256 canonical ledger entries</text>
+
+<!-- external runner -->
+<rect x="1810" y="178" width="326" height="262" class="soft" fill="#fff5e9" stroke="#f0d9b8"/>
+<text x="1836" y="218" class="lane" fill="#a06a22">UNTRUSTED WORK ZONE</text>
+<rect x="1836" y="245" width="274" height="108" rx="17" fill="#fff" stroke="#e9d1ad" filter="url(#sh)"/><text x="1860" y="280" class="t">Ephemeral runner</text><text x="1860" y="308" class="b">Docker child or labelled fallback</text><text x="1860" y="332" class="s">Python / SQLite task code</text>
+<text x="1836" y="386" class="s">No network · bounded CPU / memory</text><text x="1836" y="409" class="s">Read-only / no mounts · capped output</text>
+
+<!-- data -->
+<rect x="720" y="956" width="1416" height="291" class="soft" fill="#edf8f4" stroke="#d0eee5"/>
+<text x="752" y="998" class="lane" fill="#168571">DATA OWNERSHIP · SQLITE FILES PER MODULE / CONTEXT IN THE CURRENT DEMO</text>
+<g><rect x="752" y="1023" width="260" height="82" class="card"/><text x="774" y="1056" class="t">Identity store</text><text x="774" y="1082" class="s">identity.db · users / sessions</text></g>
+<g><rect x="1030" y="1023" width="260" height="82" class="card"/><text x="1052" y="1056" class="t">Assessment store</text><text x="1052" y="1082" class="s">assessment.db · attempts / answers</text></g>
+<g><rect x="1308" y="1023" width="260" height="82" class="card"/><text x="1330" y="1056" class="t">Evidence store</text><text x="1330" y="1082" class="s">evidence.db · append-only chain</text></g>
+<g><rect x="1586" y="1023" width="260" height="82" class="card"/><text x="1608" y="1056" class="t">Review / HR stores</text><text x="1608" y="1082" class="s">review.sqlite3 · hr.sqlite3</text></g>
+<g><rect x="1864" y="1023" width="244" height="82" class="card"/><text x="1886" y="1056" class="t">Integrity data</text><text x="1886" y="1082" class="s">consent · chunks · manifests</text></g>
+<rect x="752" y="1132" width="1356" height="77" rx="15" fill="#fff" stroke="#dbe9e4"/><text x="776" y="1165" class="t">Data rule</text><text x="876" y="1165" class="b">Assessment keeps raw work; ledger stores verifiable evidence facts/hashes; recruiter sees only grant-scoped evidence.</text><text x="776" y="1190" class="s">Recording is disclosed and consent-gated. Retention purge is implemented but needs entrypoint scheduling.</text>
+
+<!-- external providers / simulated partners -->
+<rect x="64" y="704" width="602" height="201" class="soft" fill="#fff" stroke="#dfe5ef"/>
+<text x="90" y="745" class="lane" fill="#68778f">OPTIONAL / SIMULATED CONNECTIONS</text>
+<rect x="90" y="772" width="255" height="83" rx="16" fill="#f4f6fa" stroke="#dde4ed"/><text x="112" y="804" class="t">Synthetic Nyeras</text><text x="112" y="830" class="s">course-completion fixture</text>
+<rect x="376" y="772" width="255" height="83" rx="16" fill="#f4f6fa" stroke="#dde4ed"/><text x="398" y="804" class="t">Synthetic NxtMove</text><text x="398" y="830" class="s">sample role / recruiter fixture</text>
+<rect x="1810" y="496" width="326" height="190" class="soft" fill="#f8f2ff" stroke="#e5d8f7"/>
+<text x="1836" y="536" class="lane" fill="#8056c7">OPTIONAL SERVICE</text><rect x="1836" y="555" width="274" height="92" rx="16" class="card"/><text x="1860" y="589" class="t">AI provider</text><text x="1860" y="616" class="b">Stub offline · provider configurable</text><text x="1836" y="669" class="s">Input is untrusted; output schema-checked &amp; disclosed</text>
+
+<!-- connections -->
+<path d="M314 280 H356" class="line"/><path d="M314 365 H356" class="line"/><path d="M314 451 H356" class="line"/><path d="M314 537 H356" class="line"/>
+<path d="M666 408 H710" class="line"/><text x="668" y="393" class="s">HTTPS / JSON</text>
+<path d="M1690 374 H1802" class="line"/><text x="1700" y="358" class="s">fixed run request</text><path d="M1810 413 H1700 V420" class="line"/>
+<path d="M1690 528 H1802" class="line dash"/><text x="1700" y="512" class="s">provider port</text>
+<path d="M524 634 V694" class="line dash"/><path d="M524 704 V685 H700 V220 H712" class="line dash"/>
+<path d="M1200 744 V946" class="line"/><path d="M1460 744 V946" class="line"/><path d="M880 436 V946" class="line"/><path d="M1200 590 V946" class="line"/>
+
+<!-- footer -->
+<rect x="64" y="1282" width="2072" height="230" rx="24" fill="#fff" stroke="#dfe5ef"/>
+<text x="94" y="1325" class="h">Technology stack and status</text>
+<rect x="94" y="1350" width="590" height="62" class="chip" fill="#edf1ff"/><text x="116" y="1377" class="t">Frontend</text><text x="116" y="1399" class="s">React 18 · TypeScript · Vite · React Router · CodeMirror</text>
+<rect x="710" y="1350" width="590" height="62" class="chip" fill="#edf8f4"/><text x="732" y="1377" class="t">Backend</text><text x="732" y="1399" class="s">Python 3.12 · FastAPI · Uvicorn · Pydantic · JSON Schema</text>
+<rect x="1326" y="1350" width="780" height="62" class="chip" fill="#fff5e9"/><text x="1348" y="1377" class="t">Execution &amp; data</text><text x="1348" y="1399" class="s">Docker child runner · Python sqlite3 · SQLite module files · SHA-256 ledger</text>
+<text x="96" y="1458" class="b">ADR-0001 and ADR-0002 are Proposed. SQLAlchemy/Alembic appear in the proposal; current module stores use stdlib sqlite3.</text>
+<text x="96" y="1484" class="s">Architecture image reflects the repository build notes; separate Sandbox / Trust / HR services are not claimed to be deployed.</text>
+<text x="96" y="1537" class="tiny">Demo data are synthetic · estimates are experimental · no candidate ranking or automated hiring recommendation</text>
+</svg>

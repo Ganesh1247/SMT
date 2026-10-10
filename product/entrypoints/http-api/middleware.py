@@ -56,7 +56,8 @@ class BodyLimitMiddleware:
         self.app, self.max_body, self.max_chunk = app, max_body, max_chunk
 
     def _limit(self, path: str) -> int:
-        return self.max_chunk if "/chunks/" in path else self.max_body
+        # Recording chunks and the upload-speed probe both legitimately send large bodies.
+        return self.max_chunk if "/chunks/" in path or path == "/api/precheck/echo" else self.max_body
 
     async def __call__(self, scope, receive, send):
         if scope["type"] != "http" or scope["method"] in SAFE_METHODS:

@@ -1,0 +1,249 @@
+<!-- STATUS: DRAFT -->
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="1700" viewBox="0 0 2400 1700" role="img" aria-labelledby="title desc">
+  <title id="title">Crucible proof-of-skill sandbox — high-level system architecture</title>
+  <desc id="desc">Architecture diagram showing learner, recruiter, reviewer and auditor interfaces; Sandbox, Trust and HR Portal modules; technology stack; contracts; data stores; evidence and consent flows; and unresolved sandbox isolation decisions.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7faff"/><stop offset="1" stop-color="#edf3fa"/></linearGradient>
+    <linearGradient id="hero" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#102e4a"/><stop offset="1" stop-color="#174d69"/></linearGradient>
+    <filter id="shadow" x="-15%" y="-15%" width="130%" height="140%"><feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#17324d" flood-opacity=".12"/></filter>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M1,1 L11,6 L1,11 Z" fill="#47657e"/></marker>
+    <marker id="arrowTeal" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M1,1 L11,6 L1,11 Z" fill="#168a88"/></marker>
+    <marker id="arrowGold" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M1,1 L11,6 L1,11 Z" fill="#bb7a16"/></marker>
+    <style>
+      text{font-family:Inter,'Segoe UI',Arial,sans-serif;fill:#17324d}
+      .title{font-size:48px;font-weight:750;letter-spacing:-1px;fill:#fff}
+      .subtitle{font-size:22px;fill:#c9d9e7}
+      .eyebrow{font-size:14px;font-weight:700;letter-spacing:2px;fill:#9bd6d1}
+      .section{font-size:16px;font-weight:750;letter-spacing:1.2px;fill:#587187}
+      .groupTitle{font-size:22px;font-weight:750;fill:#fff}
+      .groupSub{font-size:14px;fill:#e0edf6}
+      .nodeTitle{font-size:16px;font-weight:750}
+      .nodeBody{font-size:13px;fill:#4d667b}
+      .small{font-size:12px;fill:#60778a}
+      .chip{font-size:12px;font-weight:700}
+      .actorTitle{font-size:17px;font-weight:750}
+      .actorBody{font-size:13px;fill:#587187}
+      .legend{font-size:13px;fill:#435f75}
+      .card{fill:#fff;stroke:#d6e1eb;stroke-width:1.5;rx:14;filter:url(#shadow)}
+      .actor{fill:#fff;stroke:#d3dfeb;stroke-width:1.5;rx:18;filter:url(#shadow)}
+      .module{fill:#fff;stroke:#d8e2eb;stroke-width:1.25;rx:12}
+      .line{fill:none;stroke:#47657e;stroke-width:3;marker-end:url(#arrow)}
+      .lineTeal{fill:none;stroke:#168a88;stroke-width:3;marker-end:url(#arrowTeal)}
+      .lineGold{fill:none;stroke:#bb7a16;stroke-width:3;stroke-dasharray:8 7;marker-end:url(#arrowGold)}
+      .dash{fill:none;stroke:#bb7a16;stroke-width:2;stroke-dasharray:8 6}
+    </style>
+  </defs>
+  <rect width="2400" height="1700" fill="url(#bg)"/>
+
+  <!-- Header -->
+  <rect x="0" y="0" width="2400" height="150" fill="url(#hero)"/>
+  <text x="72" y="42" class="eyebrow">SAMARTHA HACKATHON · PART A · ROUND 2 ARCHITECTURE</text>
+  <text x="72" y="98" class="title">Crucible · Proof-of-Skill Sandbox</text>
+  <text x="74" y="130" class="subtitle">How learner work becomes transparent, consent-controlled evidence — and which technologies power each module</text>
+  <rect x="1920" y="42" width="398" height="68" rx="18" fill="#fff" opacity=".12"/>
+  <text x="1945" y="70" font-size="14" font-weight="700" fill="#fff">DESIGN STATUS</text>
+  <text x="1945" y="94" font-size="19" font-weight="750" fill="#ffe2a3">DRAFT · PROPOSED STACK</text>
+
+  <!-- Actors -->
+  <text x="70" y="190" class="section">1 · PEOPLE AND ENTRY POINTS</text>
+  <g>
+    <rect x="70" y="210" width="650" height="92" class="actor"/>
+    <circle cx="116" cy="256" r="25" fill="#e4f3f1"/><text x="116" y="262" text-anchor="middle" font-size="18" font-weight="750" fill="#147c79">L</text>
+    <text x="156" y="246" class="actorTitle">LEARNER · Nyeras experience</text>
+    <text x="156" y="271" class="actorBody">Chooses a skill path · completes a task · controls sharing</text>
+
+    <rect x="875" y="210" width="650" height="92" class="actor"/>
+    <circle cx="921" cy="256" r="25" fill="#eaf0fb"/><text x="921" y="262" text-anchor="middle" font-size="18" font-weight="750" fill="#4166a8">R</text>
+    <text x="961" y="246" class="actorTitle">RECRUITER · simulated NxtMove</text>
+    <text x="961" y="271" class="actorBody">Defines role needs · reviews only learner-shared evidence</text>
+
+    <rect x="1680" y="210" width="650" height="92" class="actor"/>
+    <circle cx="1726" cy="256" r="25" fill="#fff2dc"/><text x="1726" y="262" text-anchor="middle" font-size="17" font-weight="750" fill="#a86a12">H</text>
+    <text x="1766" y="246" class="actorTitle">REVIEWER + AUDITOR</text>
+    <text x="1766" y="271" class="actorBody">People handle appeals, uncertainty, and evidence verification</text>
+  </g>
+
+  <!-- User interfaces -->
+  <text x="70" y="344" class="section">2 · USER INTERFACES</text>
+  <g>
+    <rect x="70" y="362" width="650" height="104" class="card"/>
+    <rect x="70" y="362" width="8" height="104" rx="4" fill="#168a88"/>
+    <text x="98" y="393" class="nodeTitle">Learner Web App</text>
+    <text x="98" y="420" class="nodeBody">React + TypeScript + Vite</text>
+    <text x="98" y="444" class="small">Task workspace · SQL editor · feedback · profile · consent · appeals</text>
+    <rect x="556" y="382" width="135" height="28" rx="14" fill="#e9f5f4"/><text x="623" y="401" text-anchor="middle" class="chip" fill="#147c79">BROWSER UI</text>
+
+    <rect x="875" y="362" width="650" height="104" class="card"/>
+    <rect x="875" y="362" width="8" height="104" rx="4" fill="#5578bb"/>
+    <text x="903" y="393" class="nodeTitle">Recruiter Web App</text>
+    <text x="903" y="420" class="nodeBody">React + TypeScript + Vite</text>
+    <text x="903" y="444" class="small">Role blueprint · coverage/gaps · evidence detail · receipt check</text>
+    <rect x="1361" y="382" width="135" height="28" rx="14" fill="#eef2fa"/><text x="1428" y="401" text-anchor="middle" class="chip" fill="#4166a8">BROWSER UI</text>
+
+    <rect x="1680" y="362" width="650" height="104" class="card"/>
+    <rect x="1680" y="362" width="8" height="104" rx="4" fill="#c48a37"/>
+    <text x="1708" y="393" class="nodeTitle">Trust Review / Audit Views</text>
+    <text x="1708" y="420" class="nodeBody">Role-protected web screens</text>
+    <text x="1708" y="444" class="small">Appeal queue · assessor health · ledger verification</text>
+    <rect x="2166" y="382" width="135" height="28" rx="14" fill="#fff4e3"/><text x="2233" y="401" text-anchor="middle" class="chip" fill="#a86a12">STAFF UI</text>
+  </g>
+
+  <!-- Connector from actors to UIs -->
+  <path d="M395 302 V352" class="lineTeal"/><path d="M1200 302 V352" class="line"/><path d="M2005 302 V352" class="lineGold"/>
+
+  <!-- Main system group backgrounds -->
+  <text x="70" y="510" class="section">3 · APPLICATION MODULES AND RELATIONSHIPS</text>
+  <rect x="55" y="530" width="1010" height="660" rx="24" fill="#e5f3f2" stroke="#b4d9d5" stroke-width="2"/>
+  <rect x="1085" y="530" width="725" height="660" rx="24" fill="#eaf0f8" stroke="#c5d2e6" stroke-width="2"/>
+  <rect x="1830" y="530" width="515" height="660" rx="24" fill="#f1edf9" stroke="#d4cae8" stroke-width="2"/>
+
+  <!-- Group headings -->
+  <rect x="55" y="530" width="1010" height="82" rx="24" fill="#167e7b"/>
+  <path d="M55 585 H1065 V612 H55Z" fill="#167e7b"/>
+  <text x="84" y="565" class="groupTitle">SANDBOX</text><text x="84" y="590" class="groupSub">Learner assessment · Python 3.12 + FastAPI · proposed modular monolith group</text>
+  <rect x="1085" y="530" width="725" height="82" rx="24" fill="#42679b"/>
+  <path d="M1085 585 H1810 V612 H1085Z" fill="#42679b"/>
+  <text x="1114" y="565" class="groupTitle">TRUST</text><text x="1114" y="590" class="groupSub">Evidence system of record · contract-enforced module API</text>
+  <rect x="1830" y="530" width="515" height="82" rx="24" fill="#705a9a"/>
+  <path d="M1830 585 H2345 V612 H1830Z" fill="#705a9a"/>
+  <text x="1859" y="565" class="groupTitle">HR PORTAL</text><text x="1859" y="590" class="groupSub">Recruiter role and evidence view</text>
+
+  <!-- Sandbox modules -->
+  <g>
+    <rect x="78" y="632" width="435" height="87" class="module"/>
+    <text x="99" y="660" class="nodeTitle">Competency + Rubric</text><text x="99" y="684" class="nodeBody">Versioned role skills, levels, criteria</text><text x="99" y="704" class="small">Python domain module · stable IDs</text>
+
+    <rect x="544" y="632" width="493" height="87" class="module"/>
+    <text x="565" y="660" class="nodeTitle">Tasks + Seed Service</text><text x="565" y="684" class="nodeBody">Task versions · synthetic per-learner dataset</text><text x="565" y="704" class="small">Hidden checks kept outside learner data</text>
+
+    <rect x="78" y="743" width="435" height="105" class="module"/>
+    <text x="99" y="773" class="nodeTitle">Constrained QueryRunner</text><text x="99" y="798" class="nodeBody">Python sqlite3 · fresh in-memory SQLite</text><text x="99" y="822" class="small">Read-only SQL subset · resource bounds</text>
+    <rect x="357" y="755" width="138" height="24" rx="12" fill="#fff1d9"/><text x="426" y="772" text-anchor="middle" class="chip" fill="#9d6513">ISOLATION TBD</text>
+
+    <rect x="544" y="743" width="493" height="105" class="module"/>
+    <text x="565" y="773" class="nodeTitle">Assessment Core</text><text x="565" y="798" class="nodeBody">Deterministic SQL checks · criterion results</text><text x="565" y="822" class="small">Method, rationale, confidence, rubric version</text>
+
+    <rect x="78" y="872" width="435" height="105" class="module"/>
+    <text x="99" y="902" class="nodeTitle">Understanding Probe</text><text x="99" y="927" class="nodeBody">Reuses same runner on changed data</text><text x="99" y="951" class="small">Output result and understanding stay separate</text>
+
+    <rect x="544" y="872" width="493" height="105" class="module"/>
+    <text x="565" y="902" class="nodeTitle">AI Feedback Adapter</text><text x="565" y="927" class="nodeBody">FeedbackProvider port · stub offline by default</text><text x="565" y="951" class="small">Optional provider for written rubric criteria only</text>
+
+    <rect x="78" y="1001" width="435" height="105" class="module"/>
+    <text x="99" y="1031" class="nodeTitle">Progression · Level 4 · Integrity</text><text x="99" y="1056" class="nodeBody">L1–L4 state · scripted session · retry history</text><text x="99" y="1080" class="small">Review flags never change an outcome automatically</text>
+
+    <rect x="544" y="1001" width="493" height="105" class="module"/>
+    <text x="565" y="1031" class="nodeTitle">Trust Client / Outbox</text><text x="565" y="1056" class="nodeBody">Builds and validates EvidenceEvents</text><text x="565" y="1080" class="small">Idempotent retry · pending state if Trust is down</text>
+  </g>
+
+  <!-- Sandbox links -->
+  <path d="M513 675 H538" class="line"/>
+  <path d="M300 719 V736" class="lineTeal"/>
+  <path d="M762 719 V736" class="line"/>
+  <path d="M513 795 H538" class="line"/>
+  <path d="M296 848 V865" class="lineTeal"/>
+  <path d="M762 848 V865" class="lineGold"/>
+  <path d="M296 977 V994" class="line"/>
+  <path d="M762 977 V994" class="line"/>
+  <text x="285" y="861" class="small">same runner</text>
+  <text x="776" y="861" class="small">written response only</text>
+
+  <!-- Trust modules -->
+  <g>
+    <rect x="1108" y="632" width="313" height="105" class="module"/>
+    <text x="1128" y="663" class="nodeTitle">Identity + Access</text><text x="1128" y="688" class="nodeBody">Sessions · pseudonymous IDs</text><text x="1128" y="712" class="small">Role + organization authorization</text>
+    <rect x="1437" y="632" width="350" height="105" class="module"/>
+    <text x="1457" y="663" class="nodeTitle">Evidence Ledger</text><text x="1457" y="688" class="nodeBody">Append-only events · SHA-256 chain</text><text x="1457" y="712" class="small">Trust assigns sequence and hashes</text>
+
+    <rect x="1108" y="762" width="313" height="105" class="module"/>
+    <text x="1128" y="793" class="nodeTitle">Estimates + Profile API</text><text x="1128" y="818" class="nodeBody">Per-skill projection from evidence</text><text x="1128" y="842" class="small">Range · confidence · recency · experimental</text>
+    <rect x="1437" y="762" width="350" height="105" class="module"/>
+    <text x="1457" y="793" class="nodeTitle">Consent + Shared Evidence</text><text x="1457" y="818" class="nodeBody">Grant scope · expiry · revoke</text><text x="1457" y="842" class="small">No active grant → no evidence returned</text>
+
+    <rect x="1108" y="892" width="679" height="105" class="module"/>
+    <text x="1128" y="923" class="nodeTitle">Review + Assessor Audit</text><text x="1128" y="948" class="nodeBody">Human appeals · uncertainty queue · rubric health reports</text><text x="1128" y="972" class="small">Reviewer-only flags · synthetic perturbation tests · no automatic penalty</text>
+
+    <rect x="1108" y="1022" width="679" height="84" rx="12" fill="#f8fbff" stroke="#9fb4ca" stroke-width="1.5" stroke-dasharray="7 5"/>
+    <text x="1128" y="1053" class="nodeTitle">Trust boundary</text><text x="1128" y="1078" class="nodeBody">Trust owns accepted events, grants, profile projections, appeals, and audit reports.</text>
+  </g>
+  <path d="M1421 684 H1430" class="line"/>
+  <path d="M1585 737 V755" class="line"/>
+  <path d="M1421 814 H1430" class="lineTeal"/>
+  <path d="M1612 867 V885" class="lineGold"/>
+
+  <!-- HR modules -->
+  <g>
+    <rect x="1853" y="632" width="469" height="105" class="module"/>
+    <text x="1873" y="663" class="nodeTitle">Role Requirements</text><text x="1873" y="688" class="nodeBody">Versioned recruiter-authored criteria</text><text x="1873" y="712" class="small">No personal attributes, speed, or ranking weights</text>
+    <rect x="1853" y="762" width="469" height="105" class="module"/>
+    <text x="1873" y="793" class="nodeTitle">Coverage + Gaps</text><text x="1873" y="818" class="nodeBody">Checks shared evidence by competency</text><text x="1873" y="842" class="small">Met · partly met · not met · no evidence</text>
+    <rect x="1853" y="892" width="469" height="105" class="module"/>
+    <text x="1873" y="923" class="nodeTitle">Evidence Viewer</text><text x="1873" y="948" class="nodeBody">Pseudonymous candidate alias · provenance</text><text x="1873" y="972" class="small">Verify receipt · assessor report link</text>
+    <rect x="1853" y="1022" width="469" height="84" rx="12" fill="#faf8fd" stroke="#b9acd4" stroke-width="1.5" stroke-dasharray="7 5"/>
+    <text x="1873" y="1053" class="nodeTitle">Important boundary</text><text x="1873" y="1078" class="nodeBody">HR Portal asks Trust; it never reads Sandbox directly.</text>
+  </g>
+  <path d="M2087 737 V755" class="line"/>
+  <path d="M2087 867 V885" class="line"/>
+
+  <!-- Frontend to module connectors -->
+  <path d="M395 466 V522 H300 V625" class="lineTeal"/>
+  <path d="M1200 466 V520 H2087 V625" class="line"/>
+  <path d="M2005 466 V520 H1585 V625" class="lineGold"/>
+  <text x="116" y="505" class="small">Learner session-bound API</text>
+  <text x="1644" y="505" class="small">staff role access</text>
+
+  <!-- Cross-context relationships -->
+  <path d="M1037 1053 H1076 V685 H1430" class="lineTeal"/>
+  <rect x="1044" y="1008" width="78" height="25" rx="12" fill="#fff" stroke="#b4d9d5"/><text x="1083" y="1025" text-anchor="middle" class="chip" fill="#147c79">EVENT</text>
+  <path d="M1787 814 H1821 V814 H1845" class="line"/>
+  <rect x="1784" y="778" width="75" height="24" rx="12" fill="#fff" stroke="#c5d2e6"/><text x="1822" y="795" text-anchor="middle" class="chip" fill="#4166a8">GRANT</text>
+  <path d="M513 1053 H1059 V944 H1100" class="lineGold"/>
+  <text x="809" y="963" class="small">review flag / appeal signal</text>
+
+  <!-- Storage and shared contracts -->
+  <text x="70" y="1232" class="section">4 · DATA OWNERSHIP, SHARED CONTRACTS, AND OPTIONAL SERVICES</text>
+  <g>
+    <rect x="70" y="1253" width="700" height="126" rx="18" fill="#fff" stroke="#bad9d5" stroke-width="1.5" filter="url(#shadow)"/>
+    <text x="96" y="1286" class="nodeTitle">Sandbox Store + Attempt-Local Data</text>
+    <text x="96" y="1312" class="nodeBody">SQLite via SQLAlchemy/Alembic for owned app data; sqlite3 in-memory DB per query attempt.</text>
+    <text x="96" y="1340" class="small">Raw learner work stays in Sandbox storage; evidence event carries a reference/hash, not the work.</text>
+
+    <rect x="795" y="1253" width="700" height="126" rx="18" fill="#fff" stroke="#c5d2e6" stroke-width="1.5" filter="url(#shadow)"/>
+    <text x="821" y="1286" class="nodeTitle">Trust Store</text>
+    <text x="821" y="1312" class="nodeBody">SQLite per context · append-only ledger · separate profile projection.</text>
+    <text x="821" y="1340" class="small">Ledger is tamper-evident; it does not prove the submission is true or prevent whole-chain rewrite.</text>
+
+    <rect x="1520" y="1253" width="394" height="126" rx="18" fill="#fff" stroke="#d4cae8" stroke-width="1.5" filter="url(#shadow)"/>
+    <text x="1546" y="1286" class="nodeTitle">HR Portal Store</text>
+    <text x="1546" y="1312" class="nodeBody">SQLite · role requirements</text>
+    <text x="1546" y="1340" class="small">Evidence is not cached as a candidate rank.</text>
+
+    <rect x="1939" y="1253" width="391" height="126" rx="18" fill="#fff8e9" stroke="#e4c27f" stroke-width="1.5" filter="url(#shadow)"/>
+    <text x="1965" y="1286" class="nodeTitle">Optional AI Provider</text>
+    <text x="1965" y="1312" class="nodeBody">Behind FeedbackProvider interface</text>
+    <text x="1965" y="1340" class="small">Offline stub first · provider/model/cost TBD</text>
+  </g>
+  <path d="M1037 925 H1073 V1227 H2135 V1244" class="lineGold"/>
+
+  <!-- Shared contracts band -->
+  <rect x="70" y="1402" width="2260" height="104" rx="18" fill="#173b56"/>
+  <text x="98" y="1437" font-size="17" font-weight="750" fill="#fff">SHARED CONTRACTS · JSON Schema 2020-12</text>
+  <text x="98" y="1472" font-size="14" fill="#d4e5ef">EvidenceEvent · ShareGrant · SharedEvidence · RoleRequirement · query envelopes</text>
+  <text x="1200" y="1437" font-size="14" font-weight="700" fill="#9bd6d1">RULES THAT CROSS EVERY MODULE</text>
+  <text x="1200" y="1472" font-size="14" fill="#d4e5ef">Pseudonymous IDs · versioned provenance · idempotent events · explicit consent · no aggregate/rank · experimental labels</text>
+
+  <!-- Footer: caution + legend -->
+  <rect x="70" y="1530" width="1420" height="104" rx="16" fill="#fff3df" stroke="#e4c27f" stroke-width="1.5"/>
+  <text x="96" y="1562" font-size="15" font-weight="750" fill="#8f5e11">KEY OPEN DECISION · SQL ISOLATION</text>
+  <text x="96" y="1587" class="small">Drafts conflict: in-process SQLite vs worker process vs container. Resolve in ADR before build.</text>
+  <text x="96" y="1610" class="small">If safe restricted SQL cannot be verified quickly, use fixed query templates. Never claim a container unless tested.</text>
+
+  <rect x="1520" y="1530" width="810" height="104" rx="16" fill="#fff" stroke="#d6e1eb" stroke-width="1.5"/>
+  <text x="1545" y="1560" class="nodeTitle">Connector legend</text>
+  <path d="M1548 1588 H1600" class="lineTeal"/><text x="1612" y="1593" class="legend">learner/task data flow</text>
+  <path d="M1800 1588 H1852" class="line"/><text x="1864" y="1593" class="legend">module / contract call</text>
+  <path d="M2070 1588 H2122" class="lineGold"/><text x="2134" y="1593" class="legend">optional / human review</text>
+  <text x="1545" y="1618" class="small">Stack and module design are proposals; public integrations remain simulated.</text>
+
+  <text x="72" y="1670" font-size="12" fill="#637c90">Source context: handbook Round 2 pp. 8–9 · workspace architecture overview · ADR-0001/0002 · Crucible Round 1 Notion draft · 2026-10-10</text>
+</svg>

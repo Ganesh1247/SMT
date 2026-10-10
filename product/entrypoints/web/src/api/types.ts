@@ -288,10 +288,9 @@ export interface ReceiptResult {
 export interface LedgerVerify {
   verified: boolean;
   entries: number;
-  head_hash: string;
-  head_sequence: number;
   first_failing_sequence?: number | null;
-  verified_at?: string;
+  message: string;
+  canonicalisation: string;
 }
 export interface InterviewTurnResponse {
   prompt?: InterviewPrompt | null;

@@ -292,7 +292,7 @@ class ReviewService:
         built: list[tuple[str, str, dict, str]] = []
         head = self.evidence.head()
         for (learner, cmp_id), g in chosen.items():
-            alias = self.identity.alias_for(learner, request["recipient_id"])
+            alias = self.identity.alias_for(learner)
             if refs and alias not in refs:
                 continue
             item = self._shared_item(learner, alias, cmp_id, g, head)
@@ -314,7 +314,9 @@ class ReviewService:
         }
 
     def _shared_item(self, learner: str, alias: str, cmp_id: str, grant: dict, head: dict) -> dict | None:
-        est = self.scoring.competency_estimate(learner, cmp_id)
+        # scoring's competency names are bare ("python"), evidence/hr use the "cmp_" prefixed id
+        scoring_competency = cmp_id[4:] if cmp_id.startswith("cmp_") else cmp_id
+        est = self.scoring.competency_estimate(learner, scoring_competency)
         if not est:
             return None
         events = [e for e in self.evidence.list_for_learner(learner)

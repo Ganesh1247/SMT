@@ -1,0 +1,85 @@
+<!-- STATUS: DRAFT -->
+<svg xmlns="http://www.w3.org/2000/svg" width="2200" height="1840" viewBox="0 0 2200 1840" role="img" aria-labelledby="title desc">
+  <title id="title">Crucible — user workflow</title>
+  <desc id="desc">A plain-language workflow diagram for the learner, reviewer, recruiter and auditor journeys through Crucible. It includes consent-gated Level 4 recording, assessment, appeals, learner-controlled sharing and evidence verification.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f5f7ff"/><stop offset="1" stop-color="#eef7f5"/></linearGradient>
+    <linearGradient id="hero" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#243c86"/><stop offset="1" stop-color="#3357bd"/></linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#1b2b4a" flood-opacity=".10"/></filter>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M1 1 L11 6 L1 11 Z" fill="#8290aa"/></marker>
+    <marker id="greenArrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M1 1 L11 6 L1 11 Z" fill="#169b83"/></marker>
+    <marker id="purpleArrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M1 1 L11 6 L1 11 Z" fill="#8056c7"/></marker>
+    <style>
+      text{font-family:Inter,'Segoe UI',Arial,sans-serif;fill:#182238} .title{font-size:46px;font-weight:750;letter-spacing:-1px}.subtitle{font-size:19px;fill:#5b6880}.laneTitle{font-size:21px;font-weight:750;letter-spacing:.8px}.laneSub{font-size:14px;fill:#627089}.cardTitle{font-size:18px;font-weight:700}.body{font-size:14px;fill:#43516a}.small{font-size:12px;fill:#5c6b84}.badge{font-size:12px;font-weight:700;letter-spacing:.5px}.card{fill:#fff;stroke:#dbe2ef;stroke-width:1.5;rx:16;filter:url(#shadow)}.line{fill:none;stroke:#8290aa;stroke-width:2.5;marker-end:url(#arrow)}.shareLine{fill:none;stroke:#169b83;stroke-width:3;marker-end:url(#greenArrow)}.reviewLine{fill:none;stroke:#8056c7;stroke-width:2.7;stroke-dasharray:8 7;marker-end:url(#purpleArrow)}.lane{rx:24;stroke-width:1.4}.dot{stroke:#fff;stroke-width:3}
+    </style>
+  </defs>
+  <rect width="2200" height="1840" fill="url(#bg)"/>
+  <text x="92" y="88" class="title">Crucible · User workflow</text>
+  <text x="94" y="124" class="subtitle">How a learner builds evidence, a reviewer handles uncertainty, and a recruiter sees only what the learner chooses to share.</text>
+  <rect x="1732" y="54" width="374" height="42" rx="21" fill="#fff" stroke="#d8dfeb"/><text x="1754" y="81" class="badge" fill="#344c8c">CURRENT SCOPE · FOUNDER-APPROVED CHANGE</text>
+
+  <!-- swimlanes -->
+  <rect x="76" y="164" width="2048" height="730" class="lane" fill="#edf1ff" stroke="#d8dff4"/>
+  <rect x="76" y="918" width="2048" height="292" class="lane" fill="#f4efff" stroke="#e3d8fa"/>
+  <rect x="76" y="1234" width="2048" height="260" class="lane" fill="#eaf8f4" stroke="#d0eee5"/>
+  <rect x="76" y="1518" width="2048" height="210" class="lane" fill="#f2f5f8" stroke="#dbe2e8"/>
+  <circle cx="112" cy="204" r="19" fill="#4967c8"/><text x="105" y="211" font-size="18" font-weight="700" fill="#fff">L</text><text x="146" y="201" class="laneTitle">LEARNER · NYERAS</text><text x="146" y="224" class="laneSub">Do the work · understand results · stay in control</text>
+  <circle cx="112" cy="958" r="19" fill="#8056c7"/><text x="105" y="965" font-size="18" font-weight="700" fill="#fff">R</text><text x="146" y="955" class="laneTitle">HUMAN REVIEWER · TRUST</text><text x="146" y="978" class="laneSub">Review uncertainty, appeals and integrity flags; record a human decision</text>
+  <circle cx="112" cy="1274" r="19" fill="#169b83"/><text x="105" y="1281" font-size="18" font-weight="700" fill="#fff">H</text><text x="146" y="1271" class="laneTitle">RECRUITER · NXTMOVE</text><text x="146" y="1294" class="laneSub">Define role needs · inspect consented evidence · make an independent human judgement</text>
+  <circle cx="112" cy="1558" r="19" fill="#66758b"/><text x="105" y="1565" font-size="18" font-weight="700" fill="#fff">A</text><text x="146" y="1555" class="laneTitle">AUDITOR · TRUST</text><text x="146" y="1578" class="laneSub">Check record integrity and assessment health</text>
+
+  <!-- learner journey cards -->
+  <g><rect x="104" y="294" width="214" height="142" class="card"/><circle cx="127" cy="318" r="14" fill="#4967c8"/><text x="123" y="323" class="badge" fill="#fff">1</text><text x="151" y="324" class="cardTitle">Sign in</text><text x="124" y="357" class="body"><tspan x="124">Choose learner role.</tspan><tspan x="124" dy="21">Open your private</tspan><tspan x="124" dy="21">“My path” dashboard.</tspan></text></g>
+  <g><rect x="356" y="294" width="220" height="142" class="card"/><circle cx="379" cy="318" r="14" fill="#4967c8"/><text x="375" y="323" class="badge" fill="#fff">2</text><text x="403" y="324" class="cardTitle">Choose a level</text><text x="376" y="357" class="body"><tspan x="376">See progress across L1–L4.</tspan><tspan x="376" dy="21">Resume saved work; later</tspan><tspan x="376" dy="21">levels unlock in sequence.</tspan></text></g>
+  <g><rect x="620" y="294" width="240" height="142" class="card"/><circle cx="643" cy="318" r="14" fill="#4967c8"/><text x="639" y="323" class="badge" fill="#fff">3</text><text x="667" y="324" class="cardTitle">Read task &amp; rubric</text><text x="640" y="357" class="body"><tspan x="640">Review instructions, criteria</tspan><tspan x="640" dy="21">and your assigned synthetic</tspan><tspan x="640" dy="21">dataset before starting.</tspan></text></g>
+  <g><rect x="904" y="294" width="245" height="142" class="card"/><circle cx="927" cy="318" r="14" fill="#4967c8"/><text x="923" y="323" class="badge" fill="#fff">4</text><text x="951" y="324" class="cardTitle">Solve &amp; submit</text><text x="924" y="357" class="body"><tspan x="924">Write a SQL / Python answer</tspan><tspan x="924" dy="21">in the constrained workspace;</tspan><tspan x="924" dy="21">submit when ready.</tspan></text></g>
+  <g><rect x="1200" y="294" width="270" height="142" class="card"/><circle cx="1223" cy="318" r="14" fill="#4967c8"/><text x="1219" y="323" class="badge" fill="#fff">5</text><text x="1247" y="324" class="cardTitle">See clear results</text><text x="1220" y="357" class="body"><tspan x="1220">Automated checks + labelled</tspan><tspan x="1220" dy="21">AI feedback where appropriate;</tspan><tspan x="1220" dy="21">each result links to a criterion.</tspan></text></g>
+  <g><rect x="1520" y="294" width="245" height="142" class="card"/><circle cx="1543" cy="318" r="14" fill="#4967c8"/><text x="1539" y="323" class="badge" fill="#fff">6</text><text x="1567" y="324" class="cardTitle">Check understanding</text><text x="1540" y="357" class="body"><tspan x="1540">Answer a changed-data probe.</tspan><tspan x="1540" dy="21">Output correctness and</tspan><tspan x="1540" dy="21">understanding stay distinct.</tspan></text></g>
+  <g><rect x="1814" y="294" width="278" height="142" class="card"/><circle cx="1837" cy="318" r="14" fill="#4967c8"/><text x="1833" y="323" class="badge" fill="#fff">7</text><text x="1861" y="324" class="cardTitle">Review &amp; retry</text><text x="1834" y="357" class="body"><tspan x="1834">Read feedback; retry on a fresh</tspan><tspan x="1834" dy="21">variant, appeal a criterion, or</tspan><tspan x="1834" dy="21">continue along your path.</tspan></text></g>
+  <path d="M318 365 H349" class="line"/><path d="M576 365 H613" class="line"/><path d="M860 365 H897" class="line"/><path d="M1149 365 H1193" class="line"/><path d="M1470 365 H1513" class="line"/><path d="M1765 365 H1807" class="line"/>
+
+  <!-- progression, profile, share -->
+  <g><rect x="220" y="540" width="280" height="138" class="card"/><text x="244" y="574" class="cardTitle">Levels 1–3 complete?</text><text x="244" y="608" class="body"><tspan x="244">If not, keep practising and</tspan><tspan x="244" dy="21">retry. Level 4 becomes available</tspan><tspan x="244" dy="21">after Levels 1–3 are passed.</tspan></text></g>
+  <path d="M1950 436 V492 H500 V532" class="line"/>
+  <text x="832" y="483" class="badge" fill="#66758b">NOT YET · RETURN TO MY PATH</text>
+  <g><rect x="580" y="540" width="322" height="138" class="card"/><text x="604" y="574" class="cardTitle">Level 4: consent check-in</text><text x="604" y="608" class="body"><tspan x="604">Explain live session and recording.</tspan><tspan x="604" dy="21">Learner reviews camera, mic, screen</tspan><tspan x="604" dy="21">share and rules before consenting.</tspan></text></g>
+  <g><rect x="980" y="540" width="300" height="138" class="card"/><text x="1004" y="574" class="cardTitle">Live interview &amp; AI</text><text x="1004" y="608" class="body"><tspan x="1004">Answer prompts with captions / text</tspan><tspan x="1004" dy="21">alternative. Recording is disclosed;</tspan><tspan x="1004" dy="21">AI-assisted summary is labelled.</tspan></text></g>
+  <g><rect x="1360" y="540" width="300" height="138" class="card"/><text x="1384" y="574" class="cardTitle">Profile &amp; evidence</text><text x="1384" y="608" class="body"><tspan x="1384">See level results, methods, dates</tspan><tspan x="1384" dy="21">and estimate range when eligible.</tspan><tspan x="1384" dy="21">“Experimental” label stays visible.</tspan></text></g>
+  <g><rect x="1740" y="540" width="330" height="138" class="card"/><text x="1764" y="574" class="cardTitle">Choose whether to share</text><text x="1764" y="608" class="body"><tspan x="1764">Preview exact evidence + role;</tspan><tspan x="1764" dy="21">set expiry, confirm, or revoke.</tspan><tspan x="1764" dy="21">Sharing starts off by default.</tspan></text></g>
+  <path d="M500 608 H572" class="line"/><path d="M902 608 H972" class="line"/><path d="M1280 608 H1352" class="line"/><path d="M1660 608 H1732" class="shareLine"/>
+  <text x="512" y="598" class="badge" fill="#66758b">YES</text>
+
+  <rect x="220" y="735" width="1850" height="100" rx="18" fill="#fff" stroke="#e0e5ef"/>
+  <text x="246" y="770" class="cardTitle">Always true across the learner journey</text>
+  <text x="246" y="802" class="body">No timers or speed scoring</text><text x="526" y="802" class="body">·</text><text x="554" y="802" class="body">No automatic cheating verdict</text><text x="865" y="802" class="body">·</text><text x="895" y="802" class="body">AI use disclosed</text><text x="1084" y="802" class="body">·</text><text x="1114" y="802" class="body">Every criterion can be appealed</text><text x="1470" y="802" class="body">·</text><text x="1500" y="802" class="body">No hiring prediction or candidate ranking</text>
+
+  <!-- reviewer flow -->
+  <g><rect x="300" y="1008" width="350" height="145" class="card"/><text x="326" y="1044" class="cardTitle">Case enters review queue</text><text x="326" y="1078" class="body"><tspan x="326">Appeal, low confidence, method</tspan><tspan x="326" dy="21">disagreement or integrity flag.</tspan><tspan x="326" dy="21">Flags are review signals only.</tspan></text></g>
+  <g><rect x="800" y="1008" width="410" height="145" class="card"/><text x="826" y="1044" class="cardTitle">Reviewer checks full context</text><text x="826" y="1078" class="body"><tspan x="826">Original work, rubric version, probe,</tspan><tspan x="826" dy="21">AI rationale, appeal and session</tspan><tspan x="826" dy="21">context where relevant.</tspan></text></g>
+  <g><rect x="1370" y="1008" width="430" height="145" class="card"/><text x="1396" y="1044" class="cardTitle">Record human decision</text><text x="1396" y="1078" class="body"><tspan x="1396">Uphold, change, or ask for more info;</tspan><tspan x="1396" dy="21">add a reason. Append decision to</tspan><tspan x="1396" dy="21">the audit record and update learner.</tspan></text></g>
+  <path d="M650 1080 H792" class="reviewLine"/><path d="M1210 1080 H1362" class="reviewLine"/>
+  <path d="M1500 1008 V876 H1945 V686" class="reviewLine"/>
+  <text x="1570" y="865" class="badge" fill="#8056c7">RESULT / APPEAL STATUS RETURNS TO LEARNER</text>
+  <path d="M1460 436 V466 H1010 V532" class="line"/><text x="1120" y="457" class="badge" fill="#66758b">LEVEL 4 (AFTER L1–L3)</text>
+
+  <!-- recruiter flow -->
+  <g><rect x="250" y="1320" width="360" height="125" class="card"/><text x="276" y="1356" class="cardTitle">Create a role</text><text x="276" y="1390" class="body"><tspan x="276">Choose competencies and explain</tspan><tspan x="276" dy="21">required evidence in plain words.</tspan></text></g>
+  <g><rect x="780" y="1320" width="400" height="125" class="card"/><text x="806" y="1356" class="cardTitle">See shared evidence only</text><text x="806" y="1390" class="body"><tspan x="806">Coverage and gaps against the role;</tspan><tspan x="806" dy="21">aliases, never a strength ranking.</tspan></text></g>
+  <g><rect x="1360" y="1320" width="430" height="125" class="card"/><text x="1386" y="1356" class="cardTitle">Inspect &amp; verify evidence</text><text x="1386" y="1390" class="body"><tspan x="1386">Methods, dates, rubric version and</tspan><tspan x="1386" dy="21">ledger receipt. Recruiter decides.</tspan></text></g>
+  <path d="M610 1382 H772" class="line"/><path d="M1180 1382 H1352" class="line"/>
+  <path d="M1900 678 V1190 H980 V1312" class="shareLine"/><text x="1260" y="1180" class="badge" fill="#169b83">ONLY AFTER LEARNER CONFIRMS A SHARE GRANT</text>
+  <rect x="1845" y="1335" width="230" height="96" rx="16" fill="#e0f4ed" stroke="#8ad3bd"/><text x="1868" y="1372" class="cardTitle" fill="#117661">Human judgement</text><text x="1868" y="1401" class="small">No hire / reject recommendation</text>
+  <path d="M1790 1382 H1837" class="line"/>
+
+  <!-- auditor -->
+  <g><rect x="300" y="1621" width="470" height="74" class="card"/><text x="326" y="1652" class="cardTitle">Verify evidence ledger</text><text x="326" y="1677" class="small">Check whether an evidence receipt matches the recorded entry.</text></g>
+  <g><rect x="890" y="1621" width="500" height="74" class="card"/><text x="916" y="1652" class="cardTitle">Check assessor health</text><text x="916" y="1677" class="small">Review rubric-version quality reports and known limitations.</text></g>
+  <g><rect x="1510" y="1621" width="480" height="74" class="card"/><text x="1536" y="1652" class="cardTitle">Keep a traceable record</text><text x="1536" y="1677" class="small">Task, rubric, result, review and access events remain linked.</text></g>
+  <path d="M770 1658 H882" class="line"/><path d="M1390 1658 H1502" class="line"/>
+
+  <!-- legend / scope note -->
+  <line x1="98" y1="1780" x2="148" y2="1780" stroke="#8290aa" stroke-width="3" marker-end="url(#arrow)"/><text x="160" y="1785" class="small">normal step</text>
+  <line x1="305" y1="1780" x2="355" y2="1780" stroke="#169b83" stroke-width="3" marker-end="url(#greenArrow)"/><text x="367" y="1785" class="small">consent-controlled sharing</text>
+  <line x1="615" y1="1780" x2="665" y2="1780" stroke="#8056c7" stroke-width="3" stroke-dasharray="8 7" marker-end="url(#purpleArrow)"/><text x="677" y="1785" class="small">human review / appeal loop</text>
+  <text x="1050" y="1785" class="small">Nyeras and NxtMove are simulated; task data are synthetic. Workflow describes the current project scope.</text>
+</svg>

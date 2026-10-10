@@ -72,6 +72,11 @@ class LedgerService:
     def list_for_learner(self, learner_id: str) -> list[StoredEntry]:
         return self._store.for_learner(learner_id)
 
+    def head(self) -> tuple[int, str]:
+        """Global ledger head as (sequence, hash); (0, "genesis") when the ledger is empty."""
+        last = self._store.last()
+        return (last.sequence, last.hash) if last else (0, canonical.GENESIS)
+
     def verify(self, learner_id: Optional[str] = None) -> Verification:
         """Verify the chain. With learner_id, only that learner's entries are judged.
 
