@@ -1,0 +1,17 @@
+id: G2
+name: product-definition
+owner: product-owner
+auditor: compliance-auditor
+approver: founder
+purpose: Define what will be built and how success is measured.
+requires_gates:
+  - G1
+artifacts:
+  - delivery/G2-product-definition/prd.md
+  - delivery/G2-product-definition/success-metrics.md
+exit_criteria:
+  - Requirements have unique IDs, priority (MoSCoW) and testable acceptance criteria
+  - Non-functional requirements stated (performance, security, a11y, availability)
+  - Scope and explicit non-goals defined
+  - Success metrics have baseline, target and measurement method
+  - Traceable to G1 findings

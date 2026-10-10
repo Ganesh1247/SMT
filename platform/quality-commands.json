@@ -1,0 +1,4 @@
+{
+  "_comment": "Set at G3 once the stack is chosen. Commands run from the repo root after every edit under product/. Empty list = no-op.",
+  "on_edit": []
+}

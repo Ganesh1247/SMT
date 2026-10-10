@@ -1,0 +1,72 @@
+{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Glob",
+      "Grep",
+      "Bash(python platform/scripts/*)",
+      "Bash(python -I platform/scripts/*)",
+      "Bash(python platform/scripts/memory.py *)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)"
+    ],
+    "ask": [
+      "Edit(delivery/state/lifecycle-state.yaml)",
+      "Write(delivery/state/lifecycle-state.yaml)",
+      "Edit(governance/**)",
+      "Write(governance/**)",
+      "Edit(.claude/**)",
+      "Write(.claude/**)"
+    ],
+    "deny": [
+      "Edit(reference/**)",
+      "Write(reference/**)",
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Write(./.env)",
+      "Write(./.env.*)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          { "type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/session_brief.py\"" }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          { "type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/route_prompt.py\"" }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          { "type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/log_turn.py\"" }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          { "type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/enforce_gate_lock.py\"" },
+          { "type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/scan_secrets.py\"" },
+          { "type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/enforce_module_boundaries.py\"" }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          { "type": "command", "command": "python \"$CLAUDE_PROJECT_DIR/.claude/hooks/run_quality_checks.py\"" }
+        ]
+      }
+    ]
+  }
+}

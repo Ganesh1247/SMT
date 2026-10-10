@@ -1,0 +1,16 @@
+id: G5
+name: build
+owner: backend-engineer
+auditor: compliance-auditor
+approver: founder
+purpose: Implement slices test-first with independent verification and evidence.
+requires_gates:
+  - G4
+artifacts:
+  - delivery/G5-build-log/build-log.md
+exit_criteria:
+  - Every planned Must slice is done per the Definition of Done
+  - Each slice has test evidence and an independent review verdict
+  - Architecture fitness tests pass
+  - Deviations from the plan recorded and approved
+  - Dependency register is current

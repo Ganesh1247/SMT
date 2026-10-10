@@ -1,0 +1,26 @@
+# secrets and local config
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.claude/settings.local.json
+
+# python
+__pycache__/
+*.pyc
+
+# editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# build / dependencies (stack-specific entries added at G3)
+node_modules/
+dist/
+build/
+coverage/
+
+# local telemetry (not committed)
+kaizen/telemetry/

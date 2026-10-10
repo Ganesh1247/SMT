@@ -1,0 +1,17 @@
+id: G7
+name: release
+owner: platform-engineer
+auditor: compliance-auditor
+approver: founder
+purpose: Ship safely with a tested rollback.
+requires_gates:
+  - G6
+artifacts:
+  - delivery/G7-release/release-checklist.md
+  - delivery/G7-release/release-notes.md
+exit_criteria:
+  - Release checklist fully completed
+  - Rollback plan documented and tested or rehearsed
+  - Monitoring, alerting and health checks in place
+  - Release notes written for users and operators
+  - Founder go decision recorded

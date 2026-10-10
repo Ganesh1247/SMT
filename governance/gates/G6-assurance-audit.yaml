@@ -1,0 +1,18 @@
+id: G6
+name: assurance-audit
+owner: compliance-auditor
+auditor: compliance-auditor
+approver: founder
+purpose: Independent end-to-end verification that the product meets the PRD, design and quality bar.
+requires_gates:
+  - G5
+artifacts:
+  - delivery/G6-assurance-audit/audit-report.md
+  - delivery/G6-assurance-audit/test-report.md
+  - delivery/G6-assurance-audit/security-review.md
+exit_criteria:
+  - Requirements traceability matrix complete; every Must requirement verified
+  - Test report shows results against test-strategy targets
+  - Security review has no open Critical or High findings (or Founder-accepted risk)
+  - Performance and accessibility results meet success-metrics
+  - Audit verdict is PASS or CONDITIONAL with owners and dates

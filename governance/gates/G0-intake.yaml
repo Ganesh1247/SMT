@@ -1,0 +1,15 @@
+id: G0
+name: intake
+owner: product-owner
+auditor: compliance-auditor
+approver: founder
+purpose: Capture the raw request, context, constraints and desired outcome before any analysis.
+requires_gates:
+artifacts:
+  - delivery/G0-intake/project-brief.md
+exit_criteria:
+  - Problem or opportunity stated in one paragraph
+  - Stakeholders and target users named
+  - Hard constraints listed (time, budget, tech, legal, data)
+  - Desired outcome and what is explicitly out of scope
+  - Active profile chosen (none, hackathon-24h, ...)

@@ -1,0 +1,16 @@
+id: G8
+name: operate
+owner: platform-engineer
+auditor: compliance-auditor
+approver: founder
+purpose: Run, observe and learn; feed outcomes back into the process.
+requires_gates:
+  - G7
+artifacts:
+  - delivery/G8-operations/runbook.md
+  - delivery/G8-operations/operations-review.md
+exit_criteria:
+  - Runbook covers startup, deploy, rollback, backup, incident response and on-call escalation
+  - Success metrics reviewed against targets after the agreed period
+  - Incidents and defects analysed
+  - Retrospective completed and lessons logged in kaizen/

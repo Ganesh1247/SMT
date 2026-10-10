@@ -1,0 +1,22 @@
+id: G3
+name: solution-design
+owner: principal-architect
+auditor: compliance-auditor
+approver: founder
+purpose: Design the solution - UX, architecture, security - so that building is mechanical.
+requires_gates:
+  - G2
+artifacts:
+  - delivery/G3-solution-design/ux-flows.md
+  - delivery/G3-solution-design/architecture-overview.md
+  - delivery/G3-solution-design/threat-model.md
+  - delivery/G3-solution-design/dependency-register.md
+  - delivery/decisions/adr/ADR-*.md
+exit_criteria:
+  - Module map with bounded contexts, owners and api surfaces defined
+  - Stack chosen through ADRs with alternatives and consequences
+  - Data model and integration contracts specified
+  - UX flows cover all Must requirements, with accessibility criteria
+  - Threat model covers every trust boundary with mitigations
+  - platform/quality-commands.json configured for the chosen stack
+  - Every PRD Must requirement maps to a module and a flow

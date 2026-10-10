@@ -1,0 +1,18 @@
+id: G4
+name: delivery-plan
+owner: principal-architect
+auditor: compliance-auditor
+approver: founder
+purpose: Convert the design into ordered, verifiable vertical slices and a test strategy.
+requires_gates:
+  - G3
+artifacts:
+  - delivery/G4-delivery-plan/delivery-plan.md
+  - delivery/G4-delivery-plan/test-strategy.md
+exit_criteria:
+  - Work decomposed into vertical slices with IDs, requirement links, owner and acceptance tests
+  - Critical path and dependencies identified
+  - Risk register with mitigations and fallbacks
+  - Test strategy covers unit, contract, end-to-end, performance, security and a11y
+  - CI pipeline defined in platform/ci/
+  - Definition of Done confirmed

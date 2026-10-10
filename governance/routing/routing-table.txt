@@ -1,0 +1,175 @@
+# Intent routing table. The UserPromptSubmit hook scores every prompt against these records and injects
+# the best route into the orchestrator's context. Records are separated by '---'.
+# Fields: intent | profile (optional) | keywords (comma separated, substring match) | roles (A > B = handoff order)
+#         | skills | gate | chain (artifact relationships touched) | note
+# Learned keywords live in kaizen/learned-routing.txt ("phrase => intent") and are merged at runtime.
+
+intent: new-project
+keywords: new project, start project, kickoff, kick off, i want to build, build a product, new idea, from scratch, start a startup
+roles: product-owner > research-analyst
+skills: orchestrate-lifecycle
+gate: G0
+chain: project-brief -> research -> PRD
+note: Open G0 first. No design or code before intake is approved.
+---
+intent: continue
+keywords: continue, next step, what next, status, where are we, proceed, resume, carry on, go ahead, what now
+roles: Chief of Staff
+skills: orchestrate-lifecycle
+gate: current
+chain: state -> gate_check -> owners of missing artifacts
+note: Read the brief, run gate_check for the current gate, dispatch owners for missing artifacts.
+---
+intent: research
+keywords: research, competitor, market, user need, users want, feasibility, compare alternatives, benchmark, landscape, prior art
+roles: research-analyst
+skills: orchestrate-lifecycle
+gate: G1
+chain: brief -> research -> feasibility -> PRD
+note: Findings carry sources; label FACT / INFERENCE / ASSUMPTION.
+---
+intent: requirements
+keywords: requirement, prd, user story, acceptance criteria, success metric, kpi, priorit, moscow, non-goal
+roles: product-owner
+skills: author-prd
+gate: G2
+chain: research -> PRD -> ux-flows, architecture, plan, tests
+note: Every requirement gets REQ-ID, priority and testable criteria.
+---
+intent: requirement-change
+keywords: change requirement, scope change, change the scope, add a feature, add feature, remove feature, pivot, new requirement, change of plan, descope, rescope
+roles: product-owner > principal-architect > quality-engineer
+skills: author-prd, trace-requirements
+gate: reopen affected
+chain: PRD -> ux-flows -> architecture -> delivery-plan -> build-log -> test-report
+note: Change control. Run trace.py impact prd, list affected approved gates, get Founder approval, re-open them.
+---
+intent: ux-design
+keywords: ui, ux, user interface, wireframe, user flow, screen, accessibility, a11y, layout, design system, mockup, navigation, onboarding flow
+roles: ux-architect
+skills: design-ux-flow
+gate: G3
+chain: PRD -> ux-flows -> frontend slices -> a11y tests
+note: Specify every screen state and accessibility criteria before frontend work.
+---
+intent: architecture
+keywords: architecture, tech stack, choose stack, which database, adr, module boundary, bounded context, api design, scalab, microservice, monolith, integration design, data model
+roles: principal-architect
+skills: record-adr
+gate: G3
+chain: PRD NFRs -> architecture -> ADR -> module map -> slices
+note: Compare at least two options; record an ADR; Founder approves stack decisions.
+---
+intent: security
+keywords: security, threat, vulnerab, owasp, auth, encrypt, pentest, secret, sql injection, xss, privacy, gdpr
+roles: security-engineer
+skills: model-threats
+gate: G3 or G6
+chain: architecture trust boundaries -> threat model -> mitigations -> tests -> security review
+note: Rate findings; Critical/High block release.
+---
+intent: planning
+keywords: plan, roadmap, slice, task breakdown, break down, estimate, backlog, sprint, timeline, schedule, milestone
+roles: principal-architect > quality-engineer
+skills: decompose-work
+gate: G4
+chain: architecture + PRD -> slices -> test strategy -> CI
+note: Walking skeleton first; every Must REQ maps to a slice.
+---
+intent: implement
+keywords: implement, build it, write code, code this, develop, create endpoint, create component, add function, program, start coding
+roles: backend-engineer, frontend-engineer > quality-engineer > staff-code-reviewer
+skills: implement-slice-tdd, review-change
+gate: G5 (needs G3+G4 approved)
+chain: slice -> tests -> code -> build-log -> verification -> review
+note: Gate lock blocks product/ until G3 and G4 are approved. If locked, route to planning/architecture instead.
+---
+intent: bug
+keywords: bug, error, broken, crash, not working, fails, failing, exception, regression, stack trace, defect, fix this
+roles: quality-engineer > backend-engineer, frontend-engineer > staff-code-reviewer
+skills: implement-slice-tdd, review-change
+gate: G5/G6
+chain: failing test (reproduce) -> fix -> regression test -> review -> build-log
+note: Reproduce with a failing test first; the fixer is not the verifier.
+---
+intent: testing
+keywords: test, coverage, qa, verify, validation, test plan, test case, e2e, regression suite
+roles: quality-engineer
+skills: audit-release
+gate: G4/G6
+chain: PRD criteria -> test strategy -> tests -> test report
+note: Derive tests from acceptance criteria; report facts with evidence.
+---
+intent: review-audit
+keywords: review, audit, quality check, code review, gate review, approve gate, is it ready, ready for approval, compliance
+roles: staff-code-reviewer, compliance-auditor
+skills: review-change, evaluate-gate
+gate: current
+chain: artifacts -> gate_check -> audit verdict -> Founder decision
+note: Independent verdict (PASS / CONDITIONAL / FAIL); author never reviews own work.
+---
+intent: release
+keywords: release, deploy, ship, launch, go live, rollback, rollout, publish version
+roles: platform-engineer > technical-writer
+skills: prepare-release, audit-release
+gate: G7 (needs G6 approved)
+chain: audit -> checklist -> rollback -> monitoring -> notes -> Founder go/no-go
+note: Destructive or production actions need Founder approval.
+---
+intent: operate
+keywords: runbook, incident, monitoring, on-call, outage, alert, observability, postmortem, uptime
+roles: platform-engineer > technical-writer
+skills: author-runbook
+gate: G8
+chain: SLOs -> alerts -> runbook -> incident review -> lessons
+note: Every procedure copy-pasteable and tested.
+---
+intent: documentation
+keywords: document, readme, docs, release notes, onboarding guide, user guide, write up the, changelog
+roles: technical-writer
+skills: orchestrate-lifecycle
+gate: any
+chain: FINAL artifacts -> docs
+note: Source facts only from FINAL artifacts.
+---
+intent: memory
+keywords: remember, recall, what did we decide, what was decided, memory, forget, previously, last time, earlier we, note this
+roles: knowledge-curator
+skills: capture-memory, recall-context, compact-memory
+gate: any
+chain: conversation -> memory entries -> index -> brief
+note: Search before adding; store only non-derivable facts.
+---
+intent: improve
+keywords: improve, retro, retrospective, lessons, optimise workflow, optimize workflow, self improve, enhance the process, refine the process, upgrade the system, make it better, new skill, new agent, evolve
+roles: process-improvement-engineer > knowledge-curator
+skills: self-improve, conduct-retrospective, compact-memory
+gate: any
+chain: telemetry + audits + lessons -> signals -> change proposals -> Founder decision -> applied -> measured
+note: Proposals only; changes to .claude/ and governance/ need Founder approval.
+---
+intent: traceability
+keywords: traceability, trace, impact analysis, depends on, dependency between, relationship, coverage matrix, who owns, linked to, orphan
+roles: compliance-auditor, quality-engineer
+skills: trace-requirements
+gate: any
+chain: REQ -> flow -> module -> slice -> test -> evidence
+note: Use trace.py matrix / req / impact / slices.
+---
+intent: hackathon-scoring
+profile: hackathon-24h
+keywords: hackathon, round 1, round 2, round 3, round 4, judge, rubric, mentor checkpoint, samartha, score us, points
+roles: hackathon-judge-simulator
+skills: score-against-rubric
+gate: profile timeline
+chain: artifacts + prototype -> rubric scores -> ranked fixes -> next round
+note: Optimise for working functionality and evidence; pitch is only 1 mark.
+---
+intent: hackathon-demo
+profile: hackathon-24h
+keywords: demo, pitch, defence, defense, q&a, presentation, final round, present
+roles: demo-defence-coach
+skills: plan-demo, rehearse-defence
+gate: G6/G7 compressed
+chain: requirement matrix -> evidence pack -> demo script -> Q&A drill
+note: Demo the submitted version live; label anything simulated.

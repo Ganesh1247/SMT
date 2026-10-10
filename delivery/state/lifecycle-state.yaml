@@ -1,0 +1,28 @@
+# Machine-readable lifecycle state. Only the Chief of Staff edits this file, and only after the
+# Founder explicitly approves a gate in chat. Gate statuses: pending | in_progress | audit | approved
+project: unassigned
+profile: none
+stack: unset
+current_gate: G0
+gate_lock: enforced
+rework_limit: 2
+gates:
+  G0: in_progress
+  G1: pending
+  G2: pending
+  G3: pending
+  G4: pending
+  G5: pending
+  G6: pending
+  G7: pending
+  G8: pending
+rework_count:
+  G0: 0
+  G1: 0
+  G2: 0
+  G3: 0
+  G4: 0
+  G5: 0
+  G6: 0
+  G7: 0
+  G8: 0

@@ -1,0 +1,17 @@
+id: G1
+name: discovery
+owner: research-analyst
+auditor: compliance-auditor
+approver: founder
+purpose: Establish the evidence base - users, alternatives, feasibility - before defining the product.
+requires_gates:
+  - G0
+artifacts:
+  - delivery/G1-discovery/market-and-user-research.md
+  - delivery/G1-discovery/feasibility-assessment.md
+exit_criteria:
+  - Target users and their jobs-to-be-done described with sources
+  - At least 3 alternatives or competitors compared
+  - Key assumptions listed with a validation method for each
+  - Technical, legal and data feasibility assessed with a risk rating
+  - Every claim carries a source or is labelled as an assumption
