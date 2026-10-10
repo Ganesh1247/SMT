@@ -105,7 +105,8 @@ Rules: each role sees only its own area; no cross-role links. Primary nav has 3 
 
 | State | Screen(s) | Behaviour and copy |
 |---|---|---|
-| Empty | Profile | "No evidence yet. Complete Level 1 to start your profile." Link to My path. |
+| Empty | Profile | Only when the learner has no evidence at all: "No evidence yet. Complete Level 1 to start your profile." Link to My path. |
+| Partial progress | Profile | After any level is passed but before all four: no estimate; "Your estimate updates after all four levels are passed." Levels passed and evidence so far are shown. Link to My path. |
 | Empty | Sharing | "Nobody can see your evidence. Sharing is off until you choose to share." |
 | Empty | Appeals | "You have no appeals." |
 | Loading | Any | Skeleton or spinner with text "Loading your results" announced via `role="status"`. After 5 s, "Still loading. Your work is saved." No time shown against the learner. |
@@ -114,7 +115,7 @@ Rules: each role sees only its own area; no cross-role links. Primary nav has 3 
 | Error | Submit | "Your answer was not sent. It is still in the box. Try again." Draft retained. |
 | No-grant | Sharing, Profile | Profile shows "Only you can see this." with "Share" action. |
 | Low-confidence | Criterion feedback | "We are not sure about this result. A person will check it." Result shown as "Pending review"; confidence shown in words (Low, Medium, High) with the number on request. Auto-routed to the review queue. |
-| Probe-failed | Probe result, Profile, evidence | "Output verified, understanding unconfirmed." Explanation: "Your answer to the main task is correct and your score for it is unchanged. We could not confirm you can explain or predict how it works. This is not a finding of misconduct. You can try another probe or ask for a person to look." Actions: "Try another probe", "Appeal". |
+| Probe-failed | Probe result, Profile, evidence | "Output verified, understanding unconfirmed." Explanation: "Your answer to the main task is correct and its result is unchanged. We could not confirm you can explain or predict how it works. This is not a finding about your conduct. You can try another probe or ask for a person to look." Actions: "Try another probe", "Appeal". |
 | Probe format request | Probe | "We will offer a different format, such as a written explanation. Your answer is not timed." |
 | Success | Profile | Band shown with date; "Updated just now". |
 | Experimental | Profile | Persistent: "Experimental. This is not a validated predictor of job performance." |
@@ -225,7 +226,7 @@ Rules: each role sees only its own area; no cross-role links. Primary nav has 3 
 | Error | "We could not load this case. Try again." No partial decision form. |
 | Low-confidence | The queue's normal case; confidence labelled "Low" with the reason. |
 | Conflict | "Automated test and AI-assisted judgement disagree" shown as the entry reason with both results side by side. |
-| Probe unconfirmed | Shown as "Output verified, understanding unconfirmed" with an explicit line: "This is not evidence of misconduct. Decide only on the rubric." |
+| Probe unconfirmed | Shown as "Output verified, understanding unconfirmed" with an explicit line: "This is not a finding about the learner's conduct. Decide only on the rubric." |
 | Review flag | "Review flag: answer values match another learner's seed. A flag does not change the result." |
 | Already decided | "This case was decided by another reviewer." Read-only. |
 | Missing original work | "Original work is unavailable. You cannot decide this case." Decision actions disabled; case reported. |
@@ -419,3 +420,5 @@ Time on task is recorded to find friction, never shown to or scored for the lear
 | 6 | Learner-facing display of the 0 to 1 scale: proposed plain wording "0.58, likely range 0.45 to 0.70" rather than percent, to avoid implying a grade. | Founder |
 | 7 | Recruiter filtering by coverage state is permitted; any sort by "number met" is not. Confirm filtering is acceptable. | Founder |
 | 8 | Probe alternative format: what is the alternative at MVP (written explanation)? Plain-English probe is a Could tier. | product-owner |
+
+Change note 2026-10-10 (v0.1 DRAFT): 4.6 probe explanation reworded to drop "score" and "misconduct" (review F-01); 4.6 Empty row narrowed to zero evidence and a Partial progress row added (F-02, per 4.1 step 8).

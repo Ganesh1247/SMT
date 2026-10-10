@@ -1,0 +1,2932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Pathway LMS Platform — Workforce Readiness System</title>
+
+  <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet"/>
+  
+  <!-- Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#2a14b4",
+            "primary-container": "#4338ca",
+            "on-primary": "#ffffff",
+            "on-primary-container": "#c1beff",
+            "primary-fixed": "#e3dfff",
+            "primary-fixed-dim": "#c3c0ff",
+            secondary: "#006c4a",
+            "secondary-container": "#82f5c1",
+            "on-secondary": "#ffffff",
+            "secondary-fixed": "#85f8c4",
+            tertiary: "#5c2f00",
+            "tertiary-container": "#7d4200",
+            "tertiary-fixed": "#ffdcc3",
+            error: "#ba1a1a",
+            "error-container": "#ffdad6",
+            surface: "#f8f9ff",
+            background: "#f8f9ff",
+            "on-surface": "#0d1c2e",
+            "on-surface-variant": "#464554",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#eff4ff",
+            "surface-container": "#e6eeff",
+            "surface-container-high": "#dce9ff",
+            "surface-container-highest": "#d5e3fc",
+            outline: "#777586",
+            "outline-variant": "#c7c4d7"
+          },
+          fontFamily: {
+            "display-lg": ["'Plus Jakarta Sans'", "sans-serif"],
+            "headline-xl": ["'Plus Jakarta Sans'", "sans-serif"],
+            "headline-lg": ["'Plus Jakarta Sans'", "sans-serif"],
+            "headline-md": ["'Plus Jakarta Sans'", "sans-serif"],
+            "title-sm": ["'Plus Jakarta Sans'", "sans-serif"],
+            "body-md": ["'Inter'", "sans-serif"],
+            "body-sm": ["'Inter'", "sans-serif"],
+            "label-md": ["'Inter'", "sans-serif"],
+            "label-sm": ["'Inter'", "sans-serif"],
+            "code-sm": ["'Inter'", "monospace"]
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- React 18 & Babel CDN -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Firebase 10 SDK (Compat for reliable zero-build browser runtime) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f8f9ff;
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    ::-webkit-scrollbar {
+      display: none;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
+</head>
+<body class="bg-[#f8f9ff] text-[#0d1c2e] antialiased">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    // ==========================================
+    // 1. FIREBASE CONFIGURATION & INITIALIZATION
+    // ==========================================
+    const firebaseConfig = {
+      apiKey: "AIzaSyDV4KG7lFDJFQamt4q0VhnO6ooUvK_xou4",
+      authDomain: "smta-f918c.firebaseapp.com",
+      projectId: "smta-f918c",
+      storageBucket: "smta-f918c.firebasestorage.app",
+      messagingSenderId: "835347685975",
+      appId: "1:835347685975:web:6107cecec1322ce30fb912"
+    };
+
+    let firebaseAppInstance = null;
+    let authInstance = null;
+    let firestoreInstance = null;
+
+    try {
+      if (typeof firebase !== 'undefined') {
+        firebaseAppInstance = firebase.apps.length > 0 ? firebase.app() : firebase.initializeApp(firebaseConfig);
+        authInstance = firebase.auth();
+        firestoreInstance = firebase.firestore();
+        console.log("🔥 Firebase initialized successfully with project smta-f918c");
+      }
+    } catch (err) {
+      console.warn("Firebase Init note:", err);
+    }
+
+    // ==========================================
+    // 2. MOCK DATA & DEFAULT APPLICATION STATE
+    // ==========================================
+    const defaultUser = {
+      uid: "elena-vance-default",
+      email: "elena.vance@pathway.edu",
+      name: "Elena Vance",
+      role: "Workforce Fellow",
+      avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&h=120&fit=crop&crop=faces",
+      track: "Associate to Senior PM Track",
+      cohort: "Cohort #14 • Week 6",
+      currentMilestone: "Product Strategy & Discovery",
+      milestoneProgress: 68,
+      streakDays: 5,
+      streakBest: 12,
+      xpBonus: 150,
+      q1Target: 84,
+      studyHours: 4.5,
+      targetHours: 6.0,
+      emailVerified: true
+    };
+
+    const initialSpotlightModule = {
+      courseTitle: "User Discovery & Qualitative Research",
+      moduleTitle: "Synthesizing Customer Interview Insights & Affinity Mapping",
+      subTitle: "Module 3 of 5",
+      moduleIndex: 3,
+      totalModules: 5,
+      progressPercent: 72,
+      completedLessons: 4,
+      totalLessons: 6,
+      estimatedMinutesLeft: 18,
+      benchmarkBadge: "Preps for Senior PM Benchmark",
+      imageUrl: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=1000&h=500&fit=crop",
+      lessons: [
+        { id: "3.1", title: "3.1 Structuring Non-Biased Interview Guides", duration: "14m", done: true },
+        { id: "3.2", title: "3.2 Conducting Problem Exploration Calls (Live Teardown)", duration: "22m", done: true },
+        { id: "3.3", title: "3.3 Affinity Mapping & Pain-Point Hierarchy", duration: "Now", done: false, active: true, notes: "Includes interactive Figma template exercise" },
+        { id: "3.4", title: "3.4 Translating Insights into User Story Maps", duration: "25m", done: false, locked: true }
+      ]
+    };
+
+    const initialCourses = [
+      {
+        id: "c1",
+        title: "User Discovery & Qualitative Research",
+        instructor: "Sarah Jenkins",
+        instructorRole: "Staff PM at Figma",
+        instructorInitials: "SJ",
+        rating: 4.9,
+        ratingCount: 1420,
+        duration: "6.5 hrs",
+        level: "Intermediate",
+        tag: "Enrolled • In Progress",
+        tagType: "in_progress",
+        progress: 72,
+        isEnrolled: true,
+        isBookmarked: true,
+        imageUrl: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=600&fit=crop",
+        role: "Product Management"
+      },
+      {
+        id: "c2",
+        title: "Quantitative Product Analytics & A/B Testing",
+        instructor: "David Park",
+        instructorRole: "Principal Data Scientist",
+        instructorInitials: "DP",
+        rating: 4.8,
+        ratingCount: 980,
+        duration: "8 hrs",
+        level: "Intermediate",
+        tag: "Path Core",
+        tagType: "path_core",
+        progress: 0,
+        isEnrolled: false,
+        isBookmarked: false,
+        imageUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&fit=crop",
+        role: "Product Management"
+      },
+      {
+        id: "c3",
+        title: "Technical Architecture for Product Managers",
+        instructor: "Alex Rivera",
+        instructorRole: "Head of Engineering",
+        instructorInitials: "AR",
+        rating: 4.9,
+        ratingCount: 2100,
+        duration: "5 hrs",
+        level: "Intermediate",
+        tag: "Systems Lab",
+        tagType: "systems_lab",
+        progress: 0,
+        isEnrolled: false,
+        isBookmarked: false,
+        imageUrl: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&fit=crop",
+        role: "Software Engineering"
+      },
+      {
+        id: "c4",
+        title: "Executive Storytelling & Roadmapping",
+        instructor: "Rachel Moore",
+        instructorRole: "VP of Product",
+        instructorInitials: "RM",
+        rating: 4.9,
+        ratingCount: 840,
+        duration: "4 hrs",
+        level: "Advanced",
+        tag: "Cohort Special",
+        tagType: "standard",
+        progress: 0,
+        isEnrolled: false,
+        isBookmarked: false,
+        imageUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&fit=crop",
+        role: "Leadership"
+      },
+      {
+        id: "c5",
+        title: "SQL & Data Pipeline Fundamentals for PMs",
+        instructor: "Priya Sharma",
+        instructorRole: "Lead Analytics Architect",
+        instructorInitials: "PS",
+        rating: 4.7,
+        ratingCount: 1650,
+        duration: "9 hrs",
+        level: "Beginner",
+        tag: "Interactive Lab",
+        tagType: "standard",
+        progress: 0,
+        isEnrolled: false,
+        isBookmarked: true,
+        imageUrl: "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=600&fit=crop",
+        role: "Data & Analytics"
+      },
+      {
+        id: "c6",
+        title: "Design Systems & High-Fidelity UX Heuristics",
+        instructor: "Lucas Bennett",
+        instructorRole: "Principal Design Director",
+        instructorInitials: "LB",
+        rating: 4.9,
+        ratingCount: 1120,
+        duration: "5.5 hrs",
+        level: "Intermediate",
+        tag: "Studio Track",
+        tagType: "standard",
+        progress: 0,
+        isEnrolled: false,
+        isBookmarked: false,
+        imageUrl: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=600&fit=crop",
+        role: "UX/UI Design"
+      }
+    ];
+
+    const initialCompetencies = [
+      { name: "Agile Execution", score: 90, sub: "Sprint rituals, backlog grooming, PRDs", level: "Expert" },
+      { name: "User Research", score: 85, sub: "Discovery interviews, persona validation", level: "Proficient" },
+      { name: "Product Strategy", score: 70, sub: "TAM sizing, moat definitions, positioning", level: "Intermediate" },
+      { name: "Data Analysis & SQL", score: 60, sub: "Funnel metrics, A/B design, cohort retention", level: "Developing" },
+      { name: "Stakeholder Management & Alignment", score: 40, sub: "C-suite consensus, trade-off communication (Unlocks in Phase 3)", level: "Foundational" }
+    ];
+
+    const tracksData = [
+      {
+        id: "pm-track",
+        name: "Associate to Senior Product Manager",
+        duration: "24 Weeks (~120 Hours)",
+        level: "Intermediate to Advanced",
+        icon: "rocket_launch",
+        badge: "Industry Endorsed",
+        description: "From discovery interviews and PRD synthesis to cohort analytics and boardroom strategic trade-offs.",
+        skills: ["Affinity Mapping", "SQL Retention Queries", "A/B Testing", "Executive Roadmapping"],
+        partners: ["Figma", "FinScale", "Google"],
+        enrolledCount: "12,400+ Fellows"
+      },
+      {
+        id: "data-track",
+        name: "Data Analytics & BI Engineering",
+        duration: "18 Weeks (~90 Hours)",
+        level: "Beginner to Advanced",
+        icon: "analytics",
+        badge: "High Demand",
+        description: "Transform unstructured telemetry into strategic data pipelines, DBT models, and automated executive dashboards.",
+        skills: ["Advanced SQL", "DBT Models", "Cohort Curvature", "Looker Studio"],
+        partners: ["Snowflake", "dbt Labs", "Stripe"],
+        enrolledCount: "9,850+ Fellows"
+      },
+      {
+        id: "swe-track",
+        name: "Software Systems & Cloud Architecture",
+        duration: "20 Weeks (~100 Hours)",
+        level: "Intermediate",
+        icon: "developer_board",
+        badge: "Technical Core",
+        description: "Bridge system design, microservice latency trade-offs, distributed consensus, and cloud infra scaling.",
+        skills: ["Distributed Systems", "Kafka Event Streams", "Go / Rust", "Cloud Architecture"],
+        partners: ["AWS", "Cloudflare", "Datadog"],
+        enrolledCount: "8,200+ Fellows"
+      },
+      {
+        id: "ux-track",
+        name: "Enterprise UX/UI Design Systems",
+        duration: "16 Weeks (~80 Hours)",
+        level: "All Levels",
+        icon: "palette",
+        badge: "Studio Sandbox",
+        description: "Design scalable design token architectures, interactive Figma components, and accessibility compliance test suites.",
+        skills: ["Design Tokens", "Figma Variables", "WCAG 2.2 AA", "Heuristic Auditing"],
+        partners: ["Figma", "Linear", "Vercel"],
+        enrolledCount: "7,150+ Fellows"
+      }
+    ];
+
+    const mentorsData = [
+      {
+        name: "Sarah Jenkins",
+        role: "Staff PM at Figma",
+        topic: "User Research & Heuristic Synthesis",
+        avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop&crop=faces",
+        rating: "4.9 ★ (340 sessions)",
+        company: "Figma"
+      },
+      {
+        name: "David Park",
+        role: "Principal Data Scientist",
+        topic: "Quantitative A/B Testing & Funnels",
+        avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=faces",
+        rating: "4.9 ★ (290 sessions)",
+        company: "FinScale"
+      },
+      {
+        name: "Melissa Chen",
+        role: "VP of Product",
+        topic: "Executive Roadmaps & Metrics",
+        avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&crop=faces",
+        rating: "5.0 ★ (410 sessions)",
+        company: "Stripe"
+      },
+      {
+        name: "Alex Rivera",
+        role: "Head of Engineering",
+        topic: "Technical Architecture for PMs",
+        avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=faces",
+        rating: "4.8 ★ (185 sessions)",
+        company: "Google Cloud"
+      }
+    ];
+
+    // ==========================================
+    // 3. MAIN REACT APP COMPONENT
+    // ==========================================
+    function App() {
+      // Screen views: 'landing' | 'dashboard' | 'my-learning-path' | 'course-catalog' | 'assignments-and-practice' | 'settings'
+      const [currentScreen, setCurrentScreen] = useState('landing');
+      const [currentUser, setCurrentUser] = useState(defaultUser);
+      const [isAuthenticated, setIsAuthenticated] = useState(false);
+      const [learnerRoleView, setLearnerRoleView] = useState('Learner View');
+
+      // Modals
+      const [authModalOpen, setAuthModalOpen] = useState(false);
+      const [authMode, setAuthMode] = useState('signin'); // 'signin' | 'signup' | 'forgot'
+      const [quizModalOpen, setQuizModalOpen] = useState(false);
+      const [assignmentModalOpen, setAssignmentModalOpen] = useState(false);
+      const [syllabusModalOpen, setSyllabusModalOpen] = useState(false);
+      const [lessonModalOpen, setLessonModalOpen] = useState(false);
+      const [searchModalOpen, setSearchModalOpen] = useState(false);
+      const [firebaseInfoModalOpen, setFirebaseInfoModalOpen] = useState(false);
+      const [peerReviewModalOpen, setPeerReviewModalOpen] = useState(false);
+      const [credentialsModalOpen, setCredentialsModalOpen] = useState(false);
+      const [infoModalData, setInfoModalData] = useState(null);
+
+      // App Data State
+      const [courses, setCourses] = useState(initialCourses);
+      const [spotlightModule, setSpotlightModule] = useState(initialSpotlightModule);
+      const [competencies, setCompetencies] = useState(initialCompetencies);
+      const [rsvps, setRsvps] = useState({ ev2: false });
+      const [deckSubmitted, setDeckSubmitted] = useState(false);
+      const [toastMsg, setToastMsg] = useState(null);
+      const [verificationBannerVisible, setVerificationBannerVisible] = useState(true);
+
+      // Search & Filters
+      const [selectedRole, setSelectedRole] = useState('All Roles');
+      const [selectedLevel, setSelectedLevel] = useState('Intermediate');
+
+      const showToast = (msg) => {
+        setToastMsg(msg);
+        setTimeout(() => setToastMsg(null), 3500);
+      };
+
+      // Realtime listener for Firebase Auth & Firestore User Sync
+      useEffect(() => {
+        if (authInstance) {
+          const unsubscribe = authInstance.onAuthStateChanged(async (firebaseUser) => {
+            if (firebaseUser) {
+              setIsAuthenticated(true);
+              let loadedProfile = {
+                uid: firebaseUser.uid,
+                email: firebaseUser.email,
+                name: firebaseUser.displayName || (firebaseUser.email ? firebaseUser.email.split('@')[0] : "Learner Fellow"),
+                role: "Workforce Fellow",
+                avatarUrl: firebaseUser.photoURL || defaultUser.avatarUrl,
+                track: defaultUser.track,
+                cohort: "Cohort #14 • Week 6",
+                currentMilestone: "Product Strategy & Discovery",
+                milestoneProgress: 68,
+                streakDays: 5,
+                streakBest: 12,
+                xpBonus: 150,
+                q1Target: 84,
+                studyHours: 4.5,
+                targetHours: 6.0,
+                emailVerified: firebaseUser.emailVerified
+              };
+
+              // Try reading from real Firestore DB
+              if (firestoreInstance) {
+                try {
+                  const docSnap = await firestoreInstance.collection("users").doc(firebaseUser.uid).get();
+                  if (docSnap.exists) {
+                    const data = docSnap.data();
+                    loadedProfile = { ...loadedProfile, ...data };
+                  } else {
+                    // Create in Firestore
+                    await firestoreInstance.collection("users").doc(firebaseUser.uid).set(loadedProfile, { merge: true });
+                  }
+
+                  // Load enrollments from Firestore
+                  const enrollmentsSnap = await firestoreInstance.collection("enrollments").where("userId", "==", firebaseUser.uid).get();
+                  if (!enrollmentsSnap.empty) {
+                    const enrolledCourseIds = new Set();
+                    enrollmentsSnap.forEach(d => enrolledCourseIds.add(d.data().courseId));
+                    setCourses(prev => prev.map(c => enrolledCourseIds.has(c.id) ? { ...c, isEnrolled: true, tag: "Enrolled • In Progress" } : c));
+                  }
+
+                  // Load RSVPs
+                  const rsvpsSnap = await firestoreInstance.collection("cohort_rsvps").where("userId", "==", firebaseUser.uid).get();
+                  if (!rsvpsSnap.empty) {
+                    const newRsvps = {};
+                    rsvpsSnap.forEach(d => {
+                      const data = d.data();
+                      newRsvps[data.eventId] = data.isRsvped;
+                    });
+                    setRsvps(prev => ({ ...prev, ...newRsvps }));
+                  }
+                } catch (dbErr) {
+                  console.warn("Firestore sync error:", dbErr);
+                }
+              }
+
+              setCurrentUser(loadedProfile);
+            } else {
+              setIsAuthenticated(false);
+            }
+          });
+          return () => unsubscribe();
+        }
+      }, []);
+
+      // Toggle checklist item with Real Firestore Sync
+      const toggleLesson = (lessonId) => {
+        setSpotlightModule(prev => {
+          const updatedLessons = prev.lessons.map(l => {
+            if (l.id === lessonId) {
+              return { ...l, done: !l.done };
+            }
+            return l;
+          });
+          const doneCount = updatedLessons.filter(l => l.done).length;
+          const pct = Math.round((doneCount / prev.totalLessons) * 100);
+          const targetLesson = prev.lessons.find(l => l.id === lessonId);
+          const newDoneState = targetLesson ? !targetLesson.done : true;
+
+          // Sync with Firestore DB
+          if (firestoreInstance && currentUser.uid) {
+            try {
+              firestoreInstance.collection("lesson_progress").doc(`${currentUser.uid}_${lessonId}`).set({
+                userId: currentUser.uid,
+                lessonId,
+                isCompleted: newDoneState,
+                timestamp: new Date().toISOString()
+              }, { merge: true });
+            } catch (e) {
+              console.warn("Firestore write note:", e);
+            }
+          }
+
+          showToast(`Lesson ${lessonId} updated! Course progress: ${pct}%`);
+          return {
+            ...prev,
+            lessons: updatedLessons,
+            completedLessons: doneCount,
+            progressPercent: pct
+          };
+        });
+      };
+
+      // Toggle RSVP with Real Firestore Sync
+      const toggleRsvp = (eventId) => {
+        const next = !rsvps[eventId];
+        setRsvps(prev => ({ ...prev, [eventId]: next }));
+
+        if (firestoreInstance && currentUser.uid) {
+          try {
+            firestoreInstance.collection("cohort_rsvps").doc(`${currentUser.uid}_${eventId}`).set({
+              userId: currentUser.uid,
+              eventId,
+              isRsvped: next,
+              timestamp: new Date().toISOString()
+            }, { merge: true });
+          } catch (e) {
+            console.warn("Firestore RSVP write note:", e);
+          }
+        }
+        showToast(next ? "RSVP Confirmed for Live Q&A with Melissa Chen! ✓" : "RSVP Cancelled");
+      };
+
+      // Toggle Bookmark with Real Firestore Sync
+      const toggleBookmark = (courseId) => {
+        setCourses(prev => prev.map(c => {
+          if (c.id === courseId) {
+            const next = !c.isBookmarked;
+            if (firestoreInstance && currentUser.uid) {
+              try {
+                firestoreInstance.collection("bookmarks").doc(`${currentUser.uid}_${courseId}`).set({
+                  userId: currentUser.uid,
+                  courseId,
+                  isBookmarked: next,
+                  timestamp: new Date().toISOString()
+                }, { merge: true });
+              } catch (e) {
+                console.warn("Firestore bookmark write note:", e);
+              }
+            }
+            showToast(next ? `Bookmarked "${c.title}"` : `Removed bookmark for "${c.title}"`);
+            return { ...c, isBookmarked: next };
+          }
+          return c;
+        }));
+      };
+
+      // Enroll in course with Real Firestore Sync
+      const enrollCourse = (courseId) => {
+        setCourses(prev => prev.map(c => {
+          if (c.id === courseId) {
+            if (firestoreInstance && currentUser.uid) {
+              try {
+                firestoreInstance.collection("enrollments").doc(`${currentUser.uid}_${courseId}`).set({
+                  userId: currentUser.uid,
+                  courseId,
+                  title: c.title,
+                  status: "in_progress",
+                  progress: 0,
+                  timestamp: new Date().toISOString()
+                }, { merge: true });
+              } catch (e) {
+                console.warn("Firestore enrollment write note:", e);
+              }
+            }
+            showToast(`Enrolled in "${c.title}"! Course added to your learning dashboard.`);
+            return { ...c, isEnrolled: true, tag: "Enrolled • In Progress", tagType: "in_progress", progress: 0 };
+          }
+          return c;
+        }));
+      };
+
+      // Log study time (+30 minutes interactive goal updater)
+      const handleLogStudyTime = () => {
+        setCurrentUser(prev => {
+          const newHours = Math.min(prev.targetHours, parseFloat((prev.studyHours + 0.5).toFixed(1)));
+          const streakIncrement = newHours >= prev.targetHours ? 1 : 0;
+          const updated = {
+            ...prev,
+            studyHours: newHours,
+            streakDays: prev.streakDays + streakIncrement,
+            xpBonus: prev.xpBonus + 25
+          };
+          if (firestoreInstance && prev.uid) {
+            firestoreInstance.collection("users").doc(prev.uid).set(updated, { merge: true });
+          }
+          showToast(`Logged +30m study session! Total this week: ${newHours}h / ${prev.targetHours}h (+25 XP)`);
+          return updated;
+        });
+      };
+
+      // Resend Email Verification (Mail Automation)
+      const handleResendVerificationEmail = async () => {
+        try {
+          if (authInstance && authInstance.currentUser) {
+            await authInstance.currentUser.sendEmailVerification();
+            showToast(`Verification email re-dispatched to ${currentUser.email}! Check your inbox.`);
+          } else {
+            showToast(`Verification email sent to ${currentUser.email}! (Simulated for demo session)`);
+          }
+        } catch (err) {
+          showToast(`Email error: ${err.message}`);
+        }
+      };
+
+      // Sign out
+      const handleSignOut = () => {
+        if (authInstance) {
+          authInstance.signOut();
+        }
+        setIsAuthenticated(false);
+        setCurrentScreen('landing');
+        showToast("Signed out successfully.");
+      };
+
+      return (
+        <div className="min-h-screen bg-[#f8f9ff] text-[#0d1c2e] flex flex-col font-body-md antialiased selection:bg-indigo-500 selection:text-white">
+          
+          {/* TOAST NOTIFICATION POPUP */}
+          {toastMsg && (
+            <div className="fixed bottom-6 right-6 z-50 bg-[#0d1c2e] text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 border border-slate-700 animate-bounce">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+              <span className="text-xs font-semibold">{toastMsg}</span>
+            </div>
+          )}
+
+          {/* EMAIL VERIFICATION AUTOMATION BANNER (Visible if email is unverified) */}
+          {isAuthenticated && !currentUser.emailVerified && verificationBannerVisible && (
+            <div className="bg-amber-500 text-slate-950 px-6 py-2.5 flex items-center justify-between text-xs font-semibold sticky top-0 z-50 shadow-sm">
+              <div className="flex items-center gap-2">
+                <span className="material-symbols-outlined text-[18px]">mark_email_unread</span>
+                <span>Verification email automatically dispatched to <strong>{currentUser.email}</strong>. Please confirm your email address.</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={handleResendVerificationEmail}
+                  className="bg-slate-900 text-white px-3 py-1 rounded-lg text-xs font-bold hover:bg-slate-800 transition-colors shadow-xs"
+                >
+                  Resend Email
+                </button>
+                <button onClick={() => setVerificationBannerVisible(false)} className="text-slate-800 hover:text-black">
+                  <span className="material-symbols-outlined text-[18px]">close</span>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* SCREEN ROUTING */}
+          {currentScreen === 'landing' ? (
+            /* =====================================
+               PUBLIC HIGH-CONVERTING LANDING PAGE
+               ===================================== */
+            <LandingPageView
+              onGetStarted={() => { setAuthMode('signup'); setAuthModalOpen(true); }}
+              onSignIn={() => { setAuthMode('signin'); setAuthModalOpen(true); }}
+              onExploreCatalog={() => setCurrentScreen('course-catalog')}
+              onGoDashboard={() => setCurrentScreen('dashboard')}
+              onSelectTrack={(track) => {
+                setCurrentUser(prev => ({ ...prev, track: track.name }));
+                setAuthMode('signup');
+                setAuthModalOpen(true);
+              }}
+              onOpenQuiz={() => setQuizModalOpen(true)}
+              onOpenSyllabus={() => setSyllabusModalOpen(true)}
+              onOpenInfoModal={(data) => setInfoModalData(data)}
+              onOpenFirebaseInfo={() => setFirebaseInfoModalOpen(true)}
+              isAuthenticated={isAuthenticated}
+            />
+          ) : (
+            /* =====================================
+               AUTHENTICATED LMS WORKSPACE
+               ===================================== */
+            <div className="flex min-h-screen">
+              {/* SIDEBAR NAVIGATION */}
+              <Sidebar
+                currentScreen={currentScreen}
+                onSelectScreen={setCurrentScreen}
+                user={currentUser}
+                onOpenLanding={() => setCurrentScreen('landing')}
+                learnerRoleView={learnerRoleView}
+                onSetRoleView={setLearnerRoleView}
+                onOpenMilestones={() => setCurrentScreen('my-learning-path')}
+              />
+
+              {/* MAIN CONTENT AREA */}
+              <div className="pl-72 flex-1 flex flex-col min-w-0">
+                {/* HEADER */}
+                <Header
+                  currentScreen={currentScreen}
+                  user={currentUser}
+                  isAuthenticated={isAuthenticated}
+                  onSelectScreen={setCurrentScreen}
+                  onOpenSearch={() => setSearchModalOpen(true)}
+                  onOpenAuth={() => { setAuthMode('signin'); setAuthModalOpen(true); }}
+                  onOpenFirebaseInfo={() => setFirebaseInfoModalOpen(true)}
+                  onResendVerification={handleResendVerificationEmail}
+                  onSignOut={handleSignOut}
+                />
+
+                {/* VIEWS CONTAINER */}
+                <main className="w-full pt-16 px-8 py-8 min-h-screen">
+                  {currentScreen === 'dashboard' && (
+                    <DashboardView
+                      user={currentUser}
+                      module={spotlightModule}
+                      courses={courses}
+                      rsvps={rsvps}
+                      deckSubmitted={deckSubmitted}
+                      onToggleLesson={toggleLesson}
+                      onToggleRsvp={toggleRsvp}
+                      onOpenQuiz={() => setQuizModalOpen(true)}
+                      onOpenAssignment={() => setAssignmentModalOpen(true)}
+                      onResumeLesson={() => setLessonModalOpen(true)}
+                      onOpenPeerReview={() => setPeerReviewModalOpen(true)}
+                      onOpenCredentials={() => setCredentialsModalOpen(true)}
+                      onLogStudyTime={handleLogStudyTime}
+                      onNavigate={setCurrentScreen}
+                    />
+                  )}
+
+                  {currentScreen === 'my-learning-path' && (
+                    <LearningPathView
+                      competencies={competencies}
+                      onOpenSyllabus={() => setSyllabusModalOpen(true)}
+                      onContinueCourse={() => setCurrentScreen('dashboard')}
+                      onReviewLesson={() => setLessonModalOpen(true)}
+                      onOpenQuiz={() => setQuizModalOpen(true)}
+                    />
+                  )}
+
+                  {currentScreen === 'course-catalog' && (
+                    <CourseCatalogView
+                      courses={courses}
+                      selectedRole={selectedRole}
+                      onSelectRole={setSelectedRole}
+                      selectedLevel={selectedLevel}
+                      onSelectLevel={setSelectedLevel}
+                      onToggleBookmark={toggleBookmark}
+                      onEnroll={enrollCourse}
+                      onResumeCourse={() => setCurrentScreen('dashboard')}
+                      onOpenInfoModal={(data) => setInfoModalData(data)}
+                    />
+                  )}
+
+                  {currentScreen === 'assignments-and-practice' && (
+                    <AssignmentsPracticeView
+                      deckSubmitted={deckSubmitted}
+                      onOpenAssignment={() => setAssignmentModalOpen(true)}
+                      onOpenQuiz={() => setQuizModalOpen(true)}
+                      onOpenPeerReview={() => setPeerReviewModalOpen(true)}
+                    />
+                  )}
+
+                  {currentScreen === 'settings' && (
+                    <SettingsView
+                      user={currentUser}
+                      onUpdateUser={(updated) => {
+                        setCurrentUser(updated);
+                        if (firestoreInstance && updated.uid) {
+                          firestoreInstance.collection("users").doc(updated.uid).set(updated, { merge: true });
+                        }
+                        showToast("Account profile successfully saved to Firebase!");
+                      }}
+                      onResendVerification={handleResendVerificationEmail}
+                      onOpenFirebaseInfo={() => setFirebaseInfoModalOpen(true)}
+                      onSignOut={handleSignOut}
+                    />
+                  )}
+                </main>
+              </div>
+            </div>
+          )}
+
+          {/* =====================================
+             INTERACTIVE MODALS & SANDBOXES
+             ===================================== */}
+          {/* 1. AUTH MODAL (Google + Email + Auto Verification + Reset) */}
+          {authModalOpen && (
+            <AuthModal
+              mode={authMode}
+              setMode={setAuthMode}
+              onClose={() => setAuthModalOpen(false)}
+              onSuccess={(user) => {
+                setIsAuthenticated(true);
+                setCurrentUser(user);
+                setAuthModalOpen(false);
+                setCurrentScreen('dashboard');
+                showToast(`Welcome to Pathway LMS, ${user.name}!`);
+              }}
+            />
+          )}
+
+          {/* 2. RAPID FORMULA QUIZ SANDBOX */}
+          {quizModalOpen && (
+            <RapidQuizModal
+              userId={currentUser.uid}
+              onClose={() => setQuizModalOpen(false)}
+              onSubmit={(score) => {
+                setQuizModalOpen(false);
+                setCurrentUser(prev => ({ ...prev, xpBonus: prev.xpBonus + 100 }));
+                showToast(`Quiz completed! You scored ${score}/3 (+100 XP awarded & saved to Firebase)`);
+              }}
+            />
+          )}
+
+          {/* 3. ASSIGNMENT UPLOAD MODAL */}
+          {assignmentModalOpen && (
+            <AssignmentUploadModal
+              userId={currentUser.uid}
+              isSubmitted={deckSubmitted}
+              onClose={() => setAssignmentModalOpen(false)}
+              onSubmit={(fileName) => {
+                setDeckSubmitted(true);
+                setAssignmentModalOpen(false);
+                showToast(`Discovery Deck "${fileName}" uploaded to Firebase! Mentor Sarah Blake notified.`);
+              }}
+            />
+          )}
+
+          {/* 4. SYLLABUS MODAL */}
+          {syllabusModalOpen && (
+            <SyllabusModal onClose={() => setSyllabusModalOpen(false)} />
+          )}
+
+          {/* 5. LESSON READER SANDBOX MODAL */}
+          {lessonModalOpen && (
+            <LessonReaderModal
+              lesson={spotlightModule.lessons[2]}
+              onClose={() => setLessonModalOpen(false)}
+              onComplete={() => {
+                toggleLesson("3.3");
+                setLessonModalOpen(false);
+              }}
+            />
+          )}
+
+          {/* 6. GLOBAL SEARCH MODAL (Command+K) */}
+          {searchModalOpen && (
+            <SearchModal
+              courses={courses}
+              onClose={() => setSearchModalOpen(false)}
+              onSelectCourse={(c) => {
+                setSearchModalOpen(false);
+                setCurrentScreen('course-catalog');
+              }}
+            />
+          )}
+
+          {/* 7. FIREBASE SMTA-F918C CONNECTION INFO MODAL */}
+          {firebaseInfoModalOpen && (
+            <FirebaseInfoModal onClose={() => setFirebaseInfoModalOpen(false)} />
+          )}
+
+          {/* 8. PEER REVIEW SANDBOX MODAL */}
+          {peerReviewModalOpen && (
+            <PeerReviewModal onClose={() => setPeerReviewModalOpen(false)} />
+          )}
+
+          {/* 9. CREDENTIALS & BADGES MODAL */}
+          {credentialsModalOpen && (
+            <CredentialsModal onClose={() => setCredentialsModalOpen(false)} />
+          )}
+
+          {/* 10. GENERIC INFO MODAL (Privacy, Terms, Licensing) */}
+          {infoModalData && (
+            <InfoModal data={infoModalData} onClose={() => setInfoModalData(null)} />
+          )}
+
+        </div>
+      );
+    }
+
+    // ==========================================
+    // 4. LANDING PAGE VIEW COMPONENT
+    // ==========================================
+    function LandingPageView({ onGetStarted, onSignIn, onExploreCatalog, onGoDashboard, onSelectTrack, onOpenQuiz, onOpenSyllabus, onOpenInfoModal, onOpenFirebaseInfo, isAuthenticated }) {
+      return (
+        <div className="flex flex-col w-full bg-[#f8f9ff]">
+          {/* Sticky Navbar */}
+          <nav className="h-20 px-8 lg:px-16 flex items-center justify-between border-b border-slate-200 bg-white/90 backdrop-blur-md sticky top-0 z-40">
+            <div className="flex items-center gap-3 cursor-pointer" onClick={isAuthenticated ? onGoDashboard : () => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+              <div className="w-10 h-10 rounded-xl bg-indigo-700 text-white flex items-center justify-center font-bold shadow-sm">
+                <span className="material-symbols-outlined text-[24px]">school</span>
+              </div>
+              <span className="font-bold text-xl text-indigo-700 tracking-tight">Pathway LMS</span>
+            </div>
+
+            <div className="hidden md:flex items-center gap-8 font-medium text-sm text-slate-600">
+              <a href="#tracks" className="hover:text-indigo-700 transition-colors">Career Tracks</a>
+              <button onClick={onExploreCatalog} className="hover:text-indigo-700 transition-colors">Course Catalog</button>
+              <a href="#sandboxes" className="hover:text-indigo-700 transition-colors">Assessment Sandboxes</a>
+              <a href="#mentors" className="hover:text-indigo-700 transition-colors">Mentorship</a>
+              <button onClick={onOpenFirebaseInfo} className="hover:text-emerald-700 flex items-center gap-1.5 transition-colors text-xs font-semibold px-2.5 py-1 bg-emerald-50 rounded-full border border-emerald-200">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>Firebase smta-f918c</span>
+              </button>
+            </div>
+
+            <div className="flex items-center gap-3">
+              {isAuthenticated ? (
+                <button
+                  onClick={onGoDashboard}
+                  className="px-5 py-2.5 rounded-xl bg-indigo-700 hover:bg-indigo-800 text-white font-semibold text-sm shadow-sm transition-all"
+                >
+                  Enter Dashboard →
+                </button>
+              ) : (
+                <>
+                  <button
+                    onClick={onSignIn}
+                    className="px-4 py-2 rounded-xl text-slate-700 hover:text-indigo-700 font-semibold text-sm transition-colors"
+                  >
+                    Sign In
+                  </button>
+                  <button
+                    onClick={onGetStarted}
+                    className="px-5 py-2.5 rounded-xl bg-indigo-700 hover:bg-indigo-800 text-white font-semibold text-sm shadow-sm transition-all active:scale-95"
+                  >
+                    Get Started Free
+                  </button>
+                </>
+              )}
+            </div>
+          </nav>
+
+          {/* Hero Section */}
+          <section className="relative px-8 lg:px-16 pt-16 pb-20 flex flex-col items-center text-center max-w-5xl mx-auto">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-bold mb-6">
+              <span className="w-2 h-2 rounded-full bg-indigo-600 animate-pulse"></span>
+              Workforce Readiness System • Spring 2025 Cohorts
+            </div>
+
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.15]">
+              Master High-Impact Skills Through <br className="hidden sm:inline"/>
+              <span className="text-indigo-700 underline decoration-indigo-300">Evidence-Based</span> Sandboxes
+            </h1>
+
+            <p className="text-lg text-slate-600 mt-6 max-w-2xl leading-relaxed">
+              Ditch passive certificate tests. Pathway LMS delivers realistic task simulations, criterion-level AI rubrics, and verified mentor-graded capstone portfolios.
+            </p>
+
+            <div className="flex flex-wrap items-center justify-center gap-4 mt-8">
+              <button
+                onClick={onGetStarted}
+                className="px-8 py-3.5 rounded-xl bg-indigo-700 hover:bg-indigo-800 text-white font-bold text-base shadow-lg shadow-indigo-700/20 transition-all transform active:scale-95"
+              >
+                Start Learning Free
+              </button>
+              <button
+                onClick={onExploreCatalog}
+                className="px-6 py-3.5 rounded-xl bg-white border border-slate-300 hover:bg-slate-50 text-slate-800 font-bold text-base shadow-sm transition-all"
+              >
+                Explore 250+ Courses
+              </button>
+            </div>
+
+            {/* Interactive Preview Card Hero Element */}
+            <div className="mt-16 w-full rounded-2xl bg-white border border-slate-200 p-6 shadow-2xl text-left">
+              <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
+                <div className="flex items-center gap-3">
+                  <span className="w-3 h-3 rounded-full bg-red-400"></span>
+                  <span className="w-3 h-3 rounded-full bg-amber-400"></span>
+                  <span className="w-3 h-3 rounded-full bg-emerald-400"></span>
+                  <span className="text-xs font-semibold text-slate-400 ml-2">Product Manager Career Sandbox • Week 6 Overview</span>
+                </div>
+                <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">● 68% Milestone Velocity</span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer hover:bg-slate-100 transition-colors" onClick={onGoDashboard}>
+                  <span className="text-xs font-bold uppercase text-slate-400 tracking-wider">Current Sprint</span>
+                  <h4 className="font-bold text-base text-slate-900 mt-1">Affinity Mapping & Interview Synthesis</h4>
+                  <p className="text-xs text-slate-500 mt-1">Interactive Figma exercise teardown with mentor feedback.</p>
+                </div>
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer hover:bg-slate-100 transition-colors" onClick={onOpenSyllabus}>
+                  <span className="text-xs font-bold uppercase text-slate-400 tracking-wider">Verified Competency</span>
+                  <h4 className="font-bold text-base text-slate-900 mt-1">Agile PRDs & Backlog Grooming</h4>
+                  <div className="w-full h-1.5 rounded-full bg-slate-200 mt-2 overflow-hidden">
+                    <div className="bg-emerald-600 h-full rounded-full" style={{ width: '90%' }}></div>
+                  </div>
+                  <span className="text-xs text-emerald-700 font-bold mt-1 block">90% Mastery Score</span>
+                </div>
+                <div className="p-4 rounded-xl bg-indigo-50/60 border border-indigo-200 flex flex-col justify-between">
+                  <div>
+                    <span className="text-xs font-bold uppercase text-indigo-700 tracking-wider">Next Live Session</span>
+                    <h4 className="font-bold text-sm text-slate-900 mt-1">Live Q&A with Melissa Chen (FinScale)</h4>
+                  </div>
+                  <button onClick={onGoDashboard} className="mt-3 py-1.5 bg-indigo-700 text-white rounded-lg text-xs font-bold hover:bg-indigo-800">
+                    Preview in Dashboard →
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Social Proof & Enterprise Endorsements */}
+          <section className="py-8 bg-white border-y border-slate-200">
+            <div className="max-w-6xl mx-auto px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+              <span className="text-xs font-bold uppercase text-slate-400 tracking-wider">Trusted by fellows placed at</span>
+              <div className="flex flex-wrap items-center gap-8 opacity-75 font-bold text-slate-600 text-sm">
+                <span className="flex items-center gap-1.5"><span className="text-blue-600 font-extrabold text-base">G</span>oogle</span>
+                <span className="flex items-center gap-1.5"><span className="text-indigo-600 font-extrabold text-base">F</span>igma</span>
+                <span className="flex items-center gap-1.5"><span className="text-purple-600 font-extrabold text-base">S</span>tripe</span>
+                <span className="flex items-center gap-1.5"><span className="text-emerald-600 font-extrabold text-base">F</span>inScale</span>
+                <span className="flex items-center gap-1.5"><span className="text-rose-600 font-extrabold text-base">D</span>atadog</span>
+              </div>
+            </div>
+          </section>
+
+          {/* SECTION: CAREER TRACKS (#tracks) */}
+          <section id="tracks" className="px-8 lg:px-16 py-20 max-w-6xl mx-auto w-full">
+            <div className="text-center max-w-2xl mx-auto mb-12">
+              <span className="text-xs font-bold uppercase text-indigo-700 tracking-wider">Job-Aligned Roadmaps</span>
+              <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Select Your Career Specialization</h2>
+              <p className="text-sm text-slate-600 mt-2">Comprehensive 16–24 week paths built directly with hiring managers.</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {tracksData.map((t) => (
+                <div key={t.id} className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold">
+                        <span className="material-symbols-outlined text-[26px]">{t.icon}</span>
+                      </div>
+                      <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-200">
+                        {t.badge}
+                      </span>
+                    </div>
+
+                    <h3 className="text-xl font-bold text-slate-900">{t.name}</h3>
+                    <p className="text-xs text-slate-600 mt-2 leading-relaxed">{t.description}</p>
+
+                    <div className="flex items-center gap-4 text-xs text-slate-500 my-4">
+                      <span>⏱ {t.duration}</span>
+                      <span>•</span>
+                      <span>🎯 {t.level}</span>
+                    </div>
+
+                    <div className="flex flex-wrap gap-2 mb-6">
+                      {t.skills.map(s => (
+                        <span key={s} className="px-2.5 py-1 bg-slate-50 border border-slate-200 text-slate-700 rounded-lg text-xs font-medium">
+                          {s}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="pt-6 border-t border-slate-100 flex items-center justify-between">
+                    <span className="text-xs text-slate-500 font-semibold">{t.enrolledCount}</span>
+                    <button
+                      onClick={() => onSelectTrack(t)}
+                      className="px-5 py-2.5 bg-indigo-700 hover:bg-indigo-800 text-white rounded-xl text-xs font-bold transition-all shadow-xs"
+                    >
+                      Enroll in Track →
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* SECTION: VALUE PILLARS & ASSESSMENT SANDBOXES (#sandboxes) */}
+          <section id="sandboxes" className="px-8 lg:px-16 py-20 bg-white border-y border-slate-200">
+            <div className="max-w-6xl mx-auto">
+              <div className="text-center max-w-2xl mx-auto mb-14">
+                <span className="text-xs font-bold uppercase text-indigo-700 tracking-wider">Assessment Sandbox Engine</span>
+                <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Built for Real Capability, Not Just Completion</h2>
+                <p className="text-sm text-slate-600 mt-2">Every lesson connects to verifiable workplace tasks evaluated against transparent rubrics.</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div className="p-6 rounded-2xl bg-[#f8f9ff] border border-slate-200 flex flex-col justify-between">
+                  <div>
+                    <div className="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold mb-4">
+                      <span className="material-symbols-outlined text-[26px]">terminal</span>
+                    </div>
+                    <h3 className="font-bold text-base text-slate-900">Task-Based Labs</h3>
+                    <p className="text-xs text-slate-600 mt-2 leading-relaxed">Solve real data, PRD, and architecture puzzles instead of trivial multiple-choice quizzes.</p>
+                  </div>
+                  <button onClick={onOpenQuiz} className="mt-4 text-xs font-bold text-indigo-700 hover:underline text-left">
+                    Try Sample Quiz Sandbox →
+                  </button>
+                </div>
+
+                <div className="p-6 rounded-2xl bg-[#f8f9ff] border border-slate-200 flex flex-col justify-between">
+                  <div>
+                    <div className="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold mb-4">
+                      <span className="material-symbols-outlined text-[26px]">smart_toy</span>
+                    </div>
+                    <h3 className="font-bold text-base text-slate-900">Deterministic Rubrics</h3>
+                    <p className="text-xs text-slate-600 mt-2 leading-relaxed">AI and automated tests evaluate submissions against explicit industry rubrics with clear retry paths.</p>
+                  </div>
+                  <button onClick={onOpenSyllabus} className="mt-4 text-xs font-bold text-emerald-700 hover:underline text-left">
+                    View Rubric System →
+                  </button>
+                </div>
+
+                <div className="p-6 rounded-2xl bg-[#f8f9ff] border border-slate-200 flex flex-col justify-between">
+                  <div>
+                    <div className="w-12 h-12 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold mb-4">
+                      <span className="material-symbols-outlined text-[26px]">verified</span>
+                    </div>
+                    <h3 className="font-bold text-base text-slate-900">Evidence Profiles</h3>
+                    <p className="text-xs text-slate-600 mt-2 leading-relaxed">Scores link directly to tasks, criteria, and submission timestamps. Shareable with recruiters.</p>
+                  </div>
+                  <button onClick={onExploreCatalog} className="mt-4 text-xs font-bold text-amber-800 hover:underline text-left">
+                    View Verified Badges →
+                  </button>
+                </div>
+
+                <div className="p-6 rounded-2xl bg-[#f8f9ff] border border-slate-200 flex flex-col justify-between">
+                  <div>
+                    <div className="w-12 h-12 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold mb-4">
+                      <span className="material-symbols-outlined text-[26px]">groups</span>
+                    </div>
+                    <h3 className="font-bold text-base text-slate-900">Live Mentorship</h3>
+                    <p className="text-xs text-slate-600 mt-2 leading-relaxed">Weekly live teardowns and human reviews on consequential capstone submissions.</p>
+                  </div>
+                  <a href="#mentors" className="mt-4 text-xs font-bold text-purple-700 hover:underline text-left">
+                    Explore Mentor Roster →
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* SECTION: MENTORS ROSTER (#mentors) */}
+          <section id="mentors" className="px-8 lg:px-16 py-20 max-w-6xl mx-auto w-full">
+            <div className="text-center max-w-2xl mx-auto mb-14">
+              <span className="text-xs font-bold uppercase text-indigo-700 tracking-wider">Industry Practitioner Faculty</span>
+              <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Learn Directly From Veteran Leaders</h2>
+              <p className="text-sm text-slate-600 mt-2">Active practitioners from top tier companies hosting live teardowns and async reviews.</p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {mentorsData.map((m) => (
+                <div key={m.name} className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col items-center text-center">
+                  <img className="w-20 h-20 rounded-full object-cover mb-4 border-2 border-indigo-100" src={m.avatar} alt={m.name}/>
+                  <h4 className="font-bold text-base text-slate-900">{m.name}</h4>
+                  <span className="text-xs font-semibold text-indigo-700">{m.role}</span>
+                  <p className="text-xs text-slate-500 mt-2">{m.topic}</p>
+                  <span className="text-[11px] font-bold text-amber-600 mt-3">{m.rating}</span>
+                  <button
+                    onClick={onExploreCatalog}
+                    className="mt-4 w-full py-2 bg-slate-50 hover:bg-indigo-50 hover:text-indigo-700 border border-slate-200 rounded-xl text-xs font-bold transition-colors"
+                  >
+                    View Courses →
+                  </button>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* CALL TO ACTION BANNER */}
+          <section className="px-8 lg:px-16 py-16 max-w-5xl mx-auto w-full">
+            <div className="rounded-3xl bg-indigo-700 text-white p-10 sm:p-14 text-center shadow-xl relative overflow-hidden">
+              <div className="relative z-10 max-w-2xl mx-auto flex flex-col items-center">
+                <span className="px-3 py-1 rounded-full bg-indigo-600 text-indigo-200 text-xs font-bold mb-4">Zero Commitments • Instant Access</span>
+                <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">Ready to Prove Your Workforce Readiness?</h2>
+                <p className="text-indigo-200 text-sm mt-3 leading-relaxed">
+                  Join 45,000+ fellows already mastering real-world skills with verified portfolio artifacts.
+                </p>
+                <div className="flex flex-wrap items-center justify-center gap-4 mt-8">
+                  <button
+                    onClick={onGetStarted}
+                    className="px-8 py-3.5 bg-white text-indigo-700 font-bold rounded-xl text-sm shadow-md hover:bg-slate-100 transition-all active:scale-95"
+                  >
+                    Create Free Account
+                  </button>
+                  <button
+                    onClick={onSignIn}
+                    className="px-6 py-3.5 bg-indigo-800 text-white font-bold rounded-xl text-sm hover:bg-indigo-900 transition-colors"
+                  >
+                    Fellow Sign In
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Footer */}
+          <footer className="px-8 lg:px-16 py-12 bg-slate-900 text-slate-400 text-xs">
+            <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-2 text-white font-bold text-sm">
+                <span className="material-symbols-outlined text-[20px] text-indigo-400">school</span>
+                <span>Pathway LMS</span>
+                <span className="text-slate-500 font-normal">© 2025 All rights reserved.</span>
+              </div>
+              <div className="flex gap-6">
+                <button onClick={() => onOpenInfoModal({ title: "Privacy Policy", content: "Pathway LMS enforces stringent student privacy standards. No student data or submission code is shared with third parties without express consent." })} className="hover:text-white transition-colors">Privacy Policy</button>
+                <button onClick={() => onOpenInfoModal({ title: "Terms of Service", content: "By accessing Pathway LMS, learners agree to honor the academic integrity code. Automated plagiarism checks are performed on portfolio submissions." })} className="hover:text-white transition-colors">Terms of Service</button>
+                <button onClick={() => onOpenInfoModal({ title: "Enterprise Licensing", content: "Pathway LMS Enterprise edition is actively licensed. Contact support@pathway.edu for cohort seat expansions." })} className="hover:text-white transition-colors">Enterprise Licensing</button>
+                <button onClick={onOpenFirebaseInfo} className="hover:text-emerald-400 text-emerald-400 font-semibold transition-colors">Firebase Status</button>
+              </div>
+            </div>
+          </footer>
+        </div>
+      );
+    }
+
+    // ==========================================
+    // 5. SIDEBAR NAVIGATION COMPONENT
+    // ==========================================
+    function Sidebar({ currentScreen, onSelectScreen, user, onOpenLanding, learnerRoleView, onSetRoleView, onOpenMilestones }) {
+      const [roleDropdownOpen, setRoleDropdownOpen] = useState(false);
+
+      const items = [
+        { id: 'dashboard', label: 'Dashboard', icon: 'dashboard' },
+        { id: 'my-learning-path', label: 'My Learning Path', icon: 'route' },
+        { id: 'course-catalog', label: 'Course Catalog', icon: 'menu_book' },
+        { id: 'assignments-and-practice', label: 'Assignments & Practice', icon: 'assignment_turned_in' },
+        { id: 'settings', label: 'Settings', icon: 'settings' }
+      ];
+
+      return (
+        <aside className="fixed left-0 top-0 h-full w-72 bg-white border-r border-slate-200 flex flex-col justify-between py-4 z-30 shadow-xs">
+          <div className="flex flex-col">
+            <div className="px-6 py-2 flex items-center justify-between">
+              <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => onSelectScreen('dashboard')}>
+                <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold">
+                  <span className="material-symbols-outlined text-[20px]">school</span>
+                </div>
+                <span className="font-bold text-base text-indigo-700 tracking-tight">Pathway LMS</span>
+              </div>
+              <button onClick={onOpenLanding} title="Go to Public Landing Page" className="text-slate-400 hover:text-indigo-700 p-1 rounded-lg hover:bg-slate-50 transition-colors">
+                <span className="material-symbols-outlined text-[18px]">home</span>
+              </button>
+            </div>
+
+            {/* Learner Role View Dropdown */}
+            <div className="px-6 my-4 relative">
+              <button
+                onClick={() => setRoleDropdownOpen(!roleDropdownOpen)}
+                className="w-full flex items-center justify-between px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 hover:bg-slate-100 transition-colors"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
+                  <span className="text-xs uppercase font-bold text-slate-800 tracking-wider">{learnerRoleView}</span>
+                </div>
+                <span className="material-symbols-outlined text-[16px] text-slate-400">unfold_more</span>
+              </button>
+
+              {roleDropdownOpen && (
+                <div className="absolute left-6 right-6 mt-1 bg-white border border-slate-200 rounded-xl shadow-lg py-1 z-40 text-xs">
+                  {['Learner View', 'Mentor Preview', 'Enterprise Admin'].map(r => (
+                    <button
+                      key={r}
+                      onClick={() => { onSetRoleView(r); setRoleDropdownOpen(false); }}
+                      className="w-full px-3 py-1.5 text-left hover:bg-slate-50 flex items-center justify-between text-slate-700"
+                    >
+                      <span>{r}</span>
+                      {learnerRoleView === r && <span className="text-indigo-700 font-bold">✓</span>}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Navigation links */}
+            <nav className="flex flex-col px-3 space-y-1">
+              {items.map(item => {
+                const active = currentScreen === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => onSelectScreen(item.id)}
+                    className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl font-semibold text-sm transition-all text-left ${
+                      active ? 'bg-indigo-700 text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                    }`}
+                  >
+                    <span className="material-symbols-outlined text-[20px]">{item.icon}</span>
+                    <span>{item.label}</span>
+                  </button>
+                );
+              })}
+            </nav>
+          </div>
+
+          {/* Lower Sidebar: Q1 Target Card */}
+          <div className="px-6 pt-4">
+            <div
+              onClick={onOpenMilestones}
+              className="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col gap-2 cursor-pointer hover:bg-slate-100 transition-colors"
+            >
+              <div className="flex items-center justify-between text-xs font-semibold">
+                <span className="text-slate-700">Q1 Target</span>
+                <span className="text-indigo-700 font-bold">{user.q1Target}%</span>
+              </div>
+              <div className="w-full h-1.5 rounded-full bg-slate-200 overflow-hidden">
+                <div className="bg-emerald-600 h-full rounded-full transition-all duration-500" style={{ width: `${user.q1Target}%` }}></div>
+              </div>
+              <div className="flex items-center justify-between text-[11px] text-slate-500">
+                <span>3 milestones left</span>
+                <span className="text-indigo-700 font-bold">Details →</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+      );
+    }
+
+    // ==========================================
+    // 6. HEADER COMPONENT
+    // ==========================================
+    function Header({ currentScreen, user, isAuthenticated, onSelectScreen, onOpenSearch, onOpenAuth, onOpenFirebaseInfo, onResendVerification, onSignOut }) {
+      const [menuOpen, setMenuOpen] = useState(false);
+      const [notifOpen, setNotifOpen] = useState(false);
+
+      const titleMap = {
+        dashboard: "Overview",
+        "my-learning-path": "Career Path Roadmap",
+        "course-catalog": "Course Catalog",
+        "assignments-and-practice": "Assignments & Practice",
+        settings: "Account Settings"
+      };
+
+      return (
+        <header className="fixed top-0 left-72 right-0 h-16 bg-white/90 backdrop-blur-md border-b border-slate-200 px-8 flex items-center justify-between z-20">
+          <div className="flex items-center gap-2 text-sm text-slate-500">
+            <button onClick={() => onSelectScreen('dashboard')} className="hover:text-slate-800 font-medium">LMS</button>
+            <span className="material-symbols-outlined text-[16px] text-slate-400">chevron_right</span>
+            <span className="font-semibold text-slate-900">{titleMap[currentScreen] || "Overview"}</span>
+          </div>
+
+          <div className="flex items-center gap-4">
+            {/* Search Button (Command+K) */}
+            <div
+              onClick={onOpenSearch}
+              className="flex items-center bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 w-60 justify-between cursor-pointer hover:bg-white transition-colors"
+            >
+              <div className="flex items-center gap-2 text-slate-400">
+                <span className="material-symbols-outlined text-[18px]">search</span>
+                <span className="text-xs text-slate-400">Search courses & labs...</span>
+              </div>
+              <kbd className="bg-slate-200 text-slate-600 text-[10px] font-semibold px-1.5 py-0.5 rounded">⌘K</kbd>
+            </div>
+
+            {/* Firebase Live Status Badge */}
+            <div
+              onClick={onOpenFirebaseInfo}
+              className="hidden lg:flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-semibold border border-emerald-200 cursor-pointer hover:bg-emerald-100 transition-colors"
+              title="Click for Firebase smta-f918c Details"
+            >
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span>Firebase: smta-f918c</span>
+            </div>
+
+            {/* Notification Bell */}
+            <div className="relative">
+              <button
+                onClick={() => setNotifOpen(!notifOpen)}
+                className="w-9 h-9 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-slate-100 transition-colors relative"
+              >
+                <span className="material-symbols-outlined text-[18px]">notifications</span>
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full"></span>
+              </button>
+
+              {notifOpen && (
+                <div className="absolute right-0 mt-2 w-72 rounded-2xl bg-white border border-slate-200 shadow-xl py-3 z-50 text-xs">
+                  <div className="px-4 pb-2 border-b border-slate-100 font-bold text-slate-900 flex justify-between items-center">
+                    <span>Notifications (2)</span>
+                    <button onClick={() => setNotifOpen(false)} className="text-slate-400 hover:text-slate-600">×</button>
+                  </div>
+                  <div className="divide-y divide-slate-100">
+                    <div className="p-3 hover:bg-slate-50 cursor-pointer">
+                      <span className="font-semibold text-slate-900 block">Live Q&A with Melissa Chen</span>
+                      <span className="text-[11px] text-slate-500">Thursday at 2:00 PM • RSVP open</span>
+                    </div>
+                    <div className="p-3 hover:bg-slate-50 cursor-pointer">
+                      <span className="font-semibold text-slate-900 block">Sprint Deck Due Tomorrow</span>
+                      <span className="text-[11px] text-slate-500">Upload affinity map by 11:59 PM</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* User Profile / Auth Toggle */}
+            {isAuthenticated ? (
+              <div className="relative">
+                <div
+                  onClick={() => setMenuOpen(!menuOpen)}
+                  className="flex items-center gap-2.5 pl-1 pr-3 py-1 bg-slate-50 border border-slate-200 rounded-full cursor-pointer hover:bg-slate-100 transition-colors"
+                >
+                  <img className="w-7 h-7 rounded-full object-cover" src={user.avatarUrl} alt={user.name}/>
+                  <div className="flex flex-col text-left">
+                    <span className="text-xs font-bold text-slate-800 leading-tight">{user.name}</span>
+                    <span className="text-[10px] text-slate-500 leading-tight">{user.role}</span>
+                  </div>
+                  <span className="material-symbols-outlined text-[16px] text-slate-400">expand_more</span>
+                </div>
+
+                {menuOpen && (
+                  <div className="absolute right-0 mt-2 w-56 rounded-2xl bg-white border border-slate-200 shadow-xl py-2 z-50 text-xs">
+                    <div className="px-4 py-2 border-b border-slate-100">
+                      <span className="font-bold text-slate-900 block">{user.name}</span>
+                      <span className="text-slate-500 truncate block">{user.email}</span>
+                      <span className="text-[10px] font-semibold text-emerald-700 block mt-0.5">UID: {user.uid}</span>
+                    </div>
+                    <button onClick={() => { onSelectScreen('settings'); setMenuOpen(false); }} className="w-full px-4 py-2 text-left hover:bg-slate-50 flex items-center gap-2 text-slate-700">
+                      <span className="material-symbols-outlined text-[16px]">manage_accounts</span> Account Settings
+                    </button>
+                    <button onClick={() => { onSelectScreen('landing'); setMenuOpen(false); }} className="w-full px-4 py-2 text-left hover:bg-slate-50 flex items-center gap-2 text-slate-700">
+                      <span className="material-symbols-outlined text-[16px]">public</span> Public Landing Page
+                    </button>
+                    <button onClick={() => { onResendVerification(); setMenuOpen(false); }} className="w-full px-4 py-2 text-left hover:bg-slate-50 flex items-center gap-2 text-indigo-700 font-semibold">
+                      <span className="material-symbols-outlined text-[16px]">mark_email_read</span> Send Verification Email
+                    </button>
+                    <div className="h-px bg-slate-100 my-1"></div>
+                    <button onClick={() => { setMenuOpen(false); onSignOut(); }} className="w-full px-4 py-2 text-left text-red-600 hover:bg-red-50 flex items-center gap-2 font-semibold">
+                      <span className="material-symbols-outlined text-[16px]">logout</span> Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <button onClick={onOpenAuth} className="px-4 py-2 rounded-xl bg-indigo-700 text-white font-semibold text-xs shadow-sm">
+                Sign In
+              </button>
+            )}
+          </div>
+        </header>
+      );
+    }
+
+    // ==========================================
+    // 7. DASHBOARD VIEW COMPONENT
+    // ==========================================
+    function DashboardView({ user, module, courses, rsvps, deckSubmitted, onToggleLesson, onToggleRsvp, onOpenQuiz, onOpenAssignment, onResumeLesson, onOpenPeerReview, onOpenCredentials, onLogStudyTime, onNavigate }) {
+      return (
+        <div className="flex flex-col gap-6">
+          {/* Welcome Banner */}
+          <div className="relative overflow-hidden rounded-2xl bg-white border border-slate-200 p-6 shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            <div className="max-w-2xl">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 text-xs font-semibold flex items-center gap-1.5 border border-indigo-100">
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-700"></span>
+                  {user.track}
+                </span>
+                <span className="text-xs text-slate-500 font-medium">{user.cohort}</span>
+              </div>
+              <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Good morning, {user.name.split(' ')[0]} 👋</h1>
+              <p className="text-sm text-slate-600 mt-1 leading-relaxed">
+                You're <span className="font-semibold text-indigo-700">{user.milestoneProgress}% through</span> your <strong className="text-slate-900 font-semibold">{user.currentMilestone}</strong> milestone. Next up: User Interview Synthesis. Keep up the momentum!
+              </p>
+            </div>
+
+            <div className="flex items-center gap-3 shrink-0">
+              <button
+                onClick={onResumeLesson}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-700 hover:bg-indigo-800 text-white font-semibold text-sm shadow-sm transition-all active:scale-95"
+              >
+                <span className="material-symbols-outlined text-[20px]">play_circle</span>
+                <span>Resume Learning ({module.estimatedMinutesLeft}m left)</span>
+              </button>
+              <button
+                onClick={() => onNavigate('my-learning-path')}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold text-sm transition-colors border border-slate-200"
+              >
+                <span>View Full Path</span>
+                <span className="material-symbols-outlined text-[18px] text-slate-500">arrow_forward</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Bento Grid: Spotlight & Goals */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            {/* Spotlight (8 cols) */}
+            <div className="lg:col-span-8 bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
+              <div className="relative h-52 bg-slate-800 overflow-hidden">
+                <img className="w-full h-full object-cover opacity-85" src={module.imageUrl} alt={module.moduleTitle}/>
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent p-6 flex flex-col justify-between">
+                  <div className="flex items-center justify-between">
+                    <span className="px-3 py-1 rounded-full bg-white/90 backdrop-blur-md text-xs font-bold text-indigo-700 flex items-center gap-1.5 shadow-sm">
+                      <span className="material-symbols-outlined text-[14px]">school</span>
+                      Current Course • {module.subTitle}
+                    </span>
+                    <button className="w-8 h-8 rounded-full bg-white/80 backdrop-blur-md flex items-center justify-center text-slate-700 hover:bg-white transition-colors">
+                      <span className="material-symbols-outlined text-[18px]">bookmark</span>
+                    </button>
+                  </div>
+                  <div>
+                    <span className="text-xs uppercase tracking-wider text-indigo-200 font-semibold">{module.courseTitle}</span>
+                    <h2 className="text-xl font-bold text-white line-clamp-1">{module.moduleTitle}</h2>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-6 flex flex-col gap-5">
+                <div>
+                  <div className="flex items-center justify-between mb-1.5 text-sm">
+                    <span className="font-bold text-slate-800">Overall Course Progress</span>
+                    <span className="font-bold text-indigo-700">{module.progressPercent}%</span>
+                  </div>
+                  <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
+                    <div className="bg-indigo-700 h-full rounded-full transition-all duration-700" style={{ width: `${module.progressPercent}%` }}></div>
+                  </div>
+                  <div className="flex items-center justify-between text-xs text-slate-500 mt-2">
+                    <span>⏱ Estimated {module.estimatedMinutesLeft} mins left in Module 3</span>
+                    <span className="text-emerald-700 font-medium">✓ {module.benchmarkBadge}</span>
+                  </div>
+                </div>
+
+                {/* Interactive Checklist (Syncs with Firebase) */}
+                <div className="flex flex-col gap-2">
+                  <span className="text-xs uppercase font-bold text-slate-400 tracking-wider">Module Breakdown (Click to toggle complete)</span>
+                  <div className="flex flex-col rounded-xl border border-slate-200 overflow-hidden text-sm">
+                    {module.lessons.map(l => (
+                      <div
+                        key={l.id}
+                        onClick={() => onToggleLesson(l.id)}
+                        className={`flex items-center justify-between p-3 cursor-pointer transition-colors border-b border-slate-100 last:border-b-0 ${
+                          l.done ? 'bg-slate-50/70 hover:bg-slate-100' : l.active ? 'bg-white border-2 border-indigo-200 shadow-xs' : 'bg-white hover:bg-slate-50'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <input
+                            type="checkbox"
+                            checked={l.done}
+                            onChange={() => {}}
+                            className="w-4 h-4 rounded text-indigo-700 accent-indigo-700 cursor-pointer"
+                          />
+                          <div>
+                            <span className={`text-sm ${l.done ? 'line-through text-slate-500' : l.active ? 'font-bold text-indigo-700' : 'text-slate-800'}`}>
+                              {l.title}
+                            </span>
+                            {l.notes && <span className="block text-xs text-slate-400">{l.notes}</span>}
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs bg-slate-100 px-2 py-0.5 rounded text-slate-500">{l.duration}</span>
+                          {l.active && (
+                            <button
+                              onClick={(e) => { e.stopPropagation(); onResumeLesson(); }}
+                              className="px-2.5 py-1 bg-indigo-700 text-white rounded-lg text-xs font-semibold hover:bg-indigo-800"
+                            >
+                              Launch
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Side Goal (4 cols) */}
+            <div className="lg:col-span-4 flex flex-col gap-6">
+              <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col gap-5">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="text-xs uppercase font-bold text-slate-400 tracking-wider">Weekly Pace</span>
+                    <h3 className="text-lg font-bold text-slate-900">Study Goal</h3>
+                  </div>
+                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold">On Track</span>
+                </div>
+
+                <div className="flex items-center gap-5">
+                  <div className="relative w-24 h-24 shrink-0 flex items-center justify-center">
+                    <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                      <circle cx="50" cy="50" fill="transparent" r="40" stroke="#e2e8f0" strokeWidth="9"></circle>
+                      <circle cx="50" cy="50" fill="transparent" r="40" stroke="#4338ca" strokeDasharray="188.5 251.32" strokeLinecap="round" strokeWidth="9"></circle>
+                    </svg>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+                      <span className="text-xl font-bold text-slate-900 leading-none">{Math.round((user.studyHours / user.targetHours) * 100)}<span className="text-xs text-indigo-700 font-bold">%</span></span>
+                      <span className="text-[10px] text-slate-400 font-bold mt-0.5">TARGET</span>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-extrabold text-slate-900">{user.studyHours} <span className="text-sm font-normal text-slate-500">/ {user.targetHours} hrs</span></div>
+                    <p className="text-xs text-slate-500 mt-1">{(user.targetHours - user.studyHours).toFixed(1)} hrs left to hit your weekly workforce milestone.</p>
+                    <button
+                      onClick={onLogStudyTime}
+                      className="mt-2 text-xs font-bold text-indigo-700 hover:text-indigo-800 flex items-center gap-1"
+                    >
+                      <span>+ Log 30m Session</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">🔥</span>
+                    <div>
+                      <span className="text-xs font-bold text-slate-900 block">{user.streakDays}-Day Study Streak</span>
+                      <span className="text-[11px] text-slate-500 block">Personal best: {user.streakBest} days</span>
+                    </div>
+                  </div>
+                  <span className="bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-bold px-2 py-0.5 rounded">+{user.xpBonus} XP</span>
+                </div>
+              </div>
+
+              {/* Credentials Earned Card */}
+              <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col gap-3">
+                <div className="flex items-center justify-between text-xs font-semibold">
+                  <span className="uppercase tracking-wider text-slate-400 font-bold">Credentials Earned</span>
+                  <span onClick={onOpenCredentials} className="text-indigo-700 hover:underline cursor-pointer">View all (4)</span>
+                </div>
+                <div onClick={onOpenCredentials} className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center gap-3 cursor-pointer hover:bg-slate-100 transition-colors">
+                  <div className="w-9 h-9 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">★</div>
+                  <div>
+                    <span className="text-xs font-bold text-slate-900 block">User Research Maven</span>
+                    <span className="text-[11px] text-emerald-700 block">Issued Feb 12 • Level 2 Badge</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Lower Grid: Deadlines and Practice */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start pb-6">
+            <div className="lg:col-span-7 bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col gap-4">
+              <h3 className="font-bold text-base text-slate-900">Upcoming Deadlines & Live Cohorts</h3>
+              
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-4">
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="font-bold text-sm text-slate-900">Sprint Assignment: Discovery Deck</span>
+                    <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${deckSubmitted ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}`}>
+                      {deckSubmitted ? 'Submitted ✓' : 'Due Tomorrow'}
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-500">Submit raw transcripts & affinity clustering for review by Sarah Blake.</p>
+                </div>
+                <button
+                  onClick={onOpenAssignment}
+                  className={`px-4 py-2 rounded-xl text-xs font-semibold shrink-0 transition-colors ${
+                    deckSubmitted ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-indigo-700 hover:bg-indigo-800 text-white'
+                  }`}
+                >
+                  {deckSubmitted ? 'Review Submission' : 'Upload Deck'}
+                </button>
+              </div>
+
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-4">
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="font-bold text-sm text-slate-900">Live Q&A: Metrics That Matter</span>
+                    <span className="bg-indigo-100 text-indigo-700 text-[11px] font-bold px-2 py-0.5 rounded-full">Thursday 2:00 PM</span>
+                  </div>
+                  <p className="text-xs text-slate-500">With Melissa Chen, VP of Product at FinScale.</p>
+                </div>
+                <button
+                  onClick={() => onToggleRsvp('ev2')}
+                  className={`px-4 py-2 rounded-xl text-xs font-semibold shrink-0 transition-all ${
+                    rsvps.ev2 ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-white border border-slate-300 hover:bg-slate-100 text-slate-800'
+                  }`}
+                >
+                  {rsvps.ev2 ? '✓ RSVP Confirmed' : 'RSVP Seat'}
+                </button>
+              </div>
+            </div>
+
+            <div className="lg:col-span-5 bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col gap-4">
+              <h3 className="font-bold text-base text-slate-900">Practice & Peer Labs</h3>
+              <div
+                onClick={onOpenQuiz}
+                className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between hover:bg-slate-100 transition-colors cursor-pointer"
+              >
+                <div>
+                  <span className="font-bold text-sm text-slate-900 block">Product Analytics Rapid Quiz</span>
+                  <span className="text-xs text-slate-500 block">Test North Star Metric formula intuition • 10m</span>
+                </div>
+                <button className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-indigo-700 font-bold shadow-xs">▶</button>
+              </div>
+              <div
+                onClick={onOpenPeerReview}
+                className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between hover:bg-slate-100 transition-colors cursor-pointer"
+              >
+                <div>
+                  <span className="font-bold text-sm text-slate-900 block">PRD Teardown Peer Review</span>
+                  <span className="text-xs text-slate-500 block">Review onboarding PRD rubric • 25m</span>
+                </div>
+                <button className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-indigo-700 font-bold shadow-xs">▶</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ==========================================
+    // 8. COURSE CATALOG VIEW COMPONENT
+    // ==========================================
+    function CourseCatalogView({ courses, selectedRole, onSelectRole, selectedLevel, onSelectLevel, onToggleBookmark, onEnroll, onResumeCourse, onOpenInfoModal }) {
+      const [search, setSearch] = useState('');
+
+      const roles = ['All Roles', 'Product Management', 'Data & Analytics', 'UX/UI Design', 'Software Engineering', 'Leadership'];
+      const topics = ['SQL', 'Product Discovery', 'System Design', 'UX Heuristics', 'Financial Modeling'];
+
+      const filtered = courses.filter(c => {
+        const matchesRole = selectedRole === 'All Roles' || c.role === selectedRole;
+        const matchesSearch = !search || c.title.toLowerCase().includes(search.toLowerCase()) || c.instructor.toLowerCase().includes(search.toLowerCase());
+        return matchesRole && matchesSearch;
+      });
+
+      return (
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <span className="text-xs uppercase font-bold text-indigo-700 tracking-wider">Enterprise Catalog • Spring 2025</span>
+                <h1 className="text-2xl font-bold text-slate-900">Explore Courses & Learning Paths</h1>
+                <p className="text-sm text-slate-600">Browse 250+ role-based courses and career tracks taught by leading practitioners.</p>
+              </div>
+              <button
+                onClick={() => onOpenInfoModal({ title: "Enterprise License Active", content: "All 250+ courses, interactive sandboxes, and mentor capstone submissions are fully unlocked under your institution's enterprise agreement." })}
+                className="px-4 py-2 rounded-xl bg-white border border-slate-200 text-xs font-semibold text-slate-700 flex items-center gap-2 hover:bg-slate-50 transition-colors"
+              >
+                <span className="text-emerald-600">●</span> Enterprise License: <strong>Active</strong>
+              </button>
+            </div>
+
+            {/* Search Bar */}
+            <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex flex-col gap-3">
+              <div className="flex items-center gap-3">
+                <div className="flex-1 flex items-center gap-2 bg-slate-50 border border-slate-200 px-4 py-2.5 rounded-xl">
+                  <span className="material-symbols-outlined text-[20px] text-slate-400">search</span>
+                  <input
+                    type="text"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder="Search by competency, tool, mentor, or syllabus topics..."
+                    className="bg-transparent text-sm w-full outline-none text-slate-800 placeholder-slate-400"
+                  />
+                  {search && (
+                    <button onClick={() => setSearch('')} className="text-xs text-slate-400 hover:text-slate-600">Clear</button>
+                  )}
+                </div>
+                <button className="bg-indigo-700 hover:bg-indigo-800 text-white font-semibold text-sm px-6 py-2.5 rounded-xl shadow-xs">Search</button>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-slate-500">
+                <span className="font-bold text-slate-600">Quick Topics:</span>
+                {topics.map(t => (
+                  <button
+                    key={t}
+                    onClick={() => setSearch(t === search ? '' : t)}
+                    className={`px-2.5 py-1 rounded-full font-medium transition-colors ${
+                      search === t ? 'bg-indigo-700 text-white font-bold' : 'bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700'
+                    }`}
+                  >
+                    {t}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Role Filter Tabs */}
+            <div className="flex items-center gap-2 overflow-x-auto pb-1">
+              {roles.map(r => (
+                <button
+                  key={r}
+                  onClick={() => onSelectRole(r)}
+                  className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all whitespace-nowrap ${
+                    selectedRole === r ? 'bg-indigo-700 text-white shadow-xs' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
+                  }`}
+                >
+                  {r}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {filtered.map(c => (
+              <div key={c.id} className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between">
+                <div>
+                  <div className="relative h-44 bg-slate-700 overflow-hidden">
+                    <img className="w-full h-full object-cover" src={c.imageUrl} alt={c.title}/>
+                    <span className="absolute top-3 left-3 bg-indigo-100 text-indigo-700 text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-indigo-200">
+                      {c.tag}
+                    </span>
+                    <button
+                      onClick={() => onToggleBookmark(c.id)}
+                      className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/40 backdrop-blur-md text-white flex items-center justify-center hover:bg-black/60 transition-colors"
+                    >
+                      <span className="material-symbols-outlined text-[18px]">
+                        {c.isBookmarked ? 'bookmark' : 'bookmark_border'}
+                      </span>
+                    </button>
+                  </div>
+                  <div className="p-4 flex flex-col gap-2">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-amber-600 font-bold">★ {c.rating} <span className="text-slate-400 font-normal">({c.ratingCount})</span></span>
+                      <span className="text-slate-400">{c.duration} • {c.level}</span>
+                    </div>
+                    <h3 className="font-bold text-sm text-slate-900 leading-snug">{c.title}</h3>
+                    <span className="text-xs text-slate-500">{c.instructor} • {c.instructorRole}</span>
+                  </div>
+                </div>
+
+                <div className="p-4 pt-0">
+                  {c.isEnrolled ? (
+                    <button
+                      onClick={onResumeCourse}
+                      className="w-full py-2 bg-indigo-700 hover:bg-indigo-800 text-white rounded-xl text-xs font-semibold"
+                    >
+                      Resume Course ({c.progress || 72}%)
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => onEnroll(c.id)}
+                      className="w-full py-2 bg-slate-100 hover:bg-indigo-700 hover:text-white text-slate-800 border border-slate-200 rounded-xl text-xs font-semibold transition-colors"
+                    >
+                      Enroll (Included in Path)
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    // ==========================================
+    // 9. LEARNING PATH ROADMAP VIEW COMPONENT
+    // ==========================================
+    function LearningPathView({ competencies, onOpenSyllabus, onContinueCourse, onReviewLesson, onOpenQuiz }) {
+      return (
+        <div className="flex flex-col gap-6">
+          <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col lg:flex-row justify-between gap-6">
+            <div className="max-w-3xl">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold border border-indigo-100">Curated Workforce Path</span>
+                <span className="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 text-xs font-semibold">Enterprise Endorsed</span>
+                <span className="text-xs text-slate-400">ID: PM-TRACK-2025</span>
+              </div>
+              <h1 className="text-2xl font-bold text-slate-900">Product Manager Career Path</h1>
+              <p className="text-sm text-slate-600 mt-1 leading-relaxed">
+                A curated 6-month industry path from Associate to Senior Product Manager, verified by industry mentors with real-world case simulations.
+              </p>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3 bg-slate-50 border border-slate-200 rounded-xl mt-4 text-xs">
+                <div><span className="text-slate-400 block">Target Role</span><strong className="text-slate-900">Product Manager</strong></div>
+                <div><span className="text-slate-400 block">Seniority</span><strong className="text-slate-900">Mid-Level</strong></div>
+                <div><span className="text-slate-400 block">Duration</span><strong className="text-slate-900">24 Wks (~120h)</strong></div>
+                <div><span className="text-slate-400 block">Velocity</span><strong className="text-emerald-700">⚡ On Track</strong></div>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2 shrink-0 self-start">
+              <button onClick={onContinueCourse} className="px-5 py-2.5 bg-indigo-700 hover:bg-indigo-800 text-white rounded-xl text-sm font-semibold shadow-xs">
+                Continue Active Course
+              </button>
+              <button onClick={onOpenSyllabus} className="px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-xl text-xs font-semibold text-slate-700 border border-slate-200">
+                Syllabus PDF / Export
+              </button>
+            </div>
+          </div>
+
+          {/* Curriculum Progress & Competencies Radar */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            <div className="lg:col-span-5 bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col justify-between">
+              <div>
+                <div className="flex justify-between items-center mb-3">
+                  <h3 className="font-bold text-base text-slate-900">Curriculum Progress</h3>
+                  <span className="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">+14% this month</span>
+                </div>
+                <div className="flex items-center gap-5 my-4">
+                  <div className="relative w-24 h-24 shrink-0 flex items-center justify-center">
+                    <svg className="w-full h-full -rotate-90" viewBox="0 0 96 96">
+                      <circle cx="48" cy="48" fill="transparent" r="40" stroke="#e2e8f0" strokeWidth="8"></circle>
+                      <circle cx="48" cy="48" fill="transparent" r="40" stroke="#4338ca" strokeDasharray="251.32" strokeDashoffset="105.5" strokeLinecap="round" strokeWidth="8"></circle>
+                    </svg>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+                      <span className="text-xl font-bold text-slate-900 leading-none">58%</span>
+                      <span className="text-[10px] text-slate-400 font-bold">TOTAL</span>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="w-full h-2 rounded-full bg-slate-100 flex overflow-hidden mb-2">
+                      <div className="bg-emerald-600 h-full" style={{ width: '54%' }}></div>
+                      <div className="bg-indigo-700 h-full" style={{ width: '15%' }}></div>
+                    </div>
+                    <p className="text-xs text-slate-500">14 of 24 weeks elapsed. Estimated finish: May 18, 2025.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-2 pt-4 border-t border-slate-100 text-center">
+                <div className="p-2 rounded-xl bg-slate-50"><span className="text-lg font-bold text-emerald-700 block">7</span><span className="text-[10px] text-slate-500">Done</span></div>
+                <div className="p-2 rounded-xl bg-slate-50"><span className="text-lg font-bold text-indigo-700 block">2</span><span className="text-[10px] text-slate-500">Active</span></div>
+                <div className="p-2 rounded-xl bg-slate-50"><span className="text-lg font-bold text-slate-400 block">4</span><span className="text-[10px] text-slate-500">Upcoming</span></div>
+              </div>
+            </div>
+
+            <div className="lg:col-span-7 bg-white rounded-2xl border border-slate-200 p-6 shadow-xs flex flex-col justify-between">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="font-bold text-base text-slate-900">Verified Competencies</h3>
+                <span className="text-xs text-indigo-700 font-bold">Assessment Radar</span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                {competencies.map((comp, idx) => (
+                  <div key={idx} className={idx === 4 ? 'sm:col-span-2' : ''}>
+                    <div className="flex justify-between mb-1">
+                      <span className="font-semibold text-slate-800">{comp.name}</span>
+                      <span className={`font-bold ${comp.score >= 80 ? 'text-emerald-700' : 'text-indigo-700'}`}>{comp.score}%</span>
+                    </div>
+                    <div className="w-full h-1.5 rounded-full bg-slate-100 overflow-hidden">
+                      <div className={`h-full rounded-full ${comp.score >= 80 ? 'bg-emerald-600' : 'bg-indigo-700'}`} style={{ width: `${comp.score}%` }}></div>
+                    </div>
+                    <span className="text-[10px] text-slate-400 mt-1 block">{comp.sub}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="pt-4 border-t border-slate-100 mt-4 text-xs text-slate-500 flex justify-between">
+                <span>✓ 3 of 5 thresholds unlocked</span>
+                <strong className="text-slate-800">Target: 80% Min for Placement</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ==========================================
+    // 10. ASSIGNMENTS & PRACTICE VIEW COMPONENT
+    // ==========================================
+    function AssignmentsPracticeView({ deckSubmitted, onOpenAssignment, onOpenQuiz, onOpenPeerReview }) {
+      return (
+        <div className="flex flex-col gap-6">
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-2xl font-bold text-slate-900">Assignments & Skill Sandboxes</h1>
+              <p className="text-sm text-slate-600">Track and submit your portfolio deliverables evaluated by mentors.</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col justify-between">
+              <div>
+                <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full ${deckSubmitted ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}`}>
+                  {deckSubmitted ? 'Submitted ✓' : 'Pending Submission'}
+                </span>
+                <h3 className="text-lg font-bold text-slate-900 mt-2">Discovery Deck: User Interview Affinity Board</h3>
+                <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                  Synthesize at least 5 user discovery transcripts into pain-point clusters and prioritize top 3 opportunities.
+                </p>
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 mt-4 text-xs text-slate-500">
+                  <span>Mentor: <strong>Sarah Blake</strong> • Rubric: Problem Sizing (40%), Bias Control (30%), Story Mapping (30%)</span>
+                </div>
+              </div>
+              <button
+                onClick={onOpenAssignment}
+                className="mt-6 py-2.5 bg-indigo-700 hover:bg-indigo-800 text-white rounded-xl font-semibold text-xs shadow-xs"
+              >
+                {deckSubmitted ? 'View Submission & Grade' : 'Open Submission Sandbox'}
+              </button>
+            </div>
+
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col justify-between">
+              <div>
+                <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-700">
+                  Interactive Sandbox
+                </span>
+                <h3 className="text-lg font-bold text-slate-900 mt-2">Product Analytics Rapid Formula Quiz</h3>
+                <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                  Practice North Star metrics, cohort retention curvature, and A/B test sample sizing formulas.
+                </p>
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 mt-4 text-xs text-slate-500">
+                  <span>Timed Challenge: 3 Questions • Reward: +100 XP & Skill Badge update</span>
+                </div>
+              </div>
+              <button
+                onClick={onOpenQuiz}
+                className="mt-6 py-2.5 bg-indigo-700 hover:bg-indigo-800 text-white rounded-xl font-semibold text-xs shadow-xs"
+              >
+                Launch Rapid Quiz →
+              </button>
+            </div>
+
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col justify-between">
+              <div>
+                <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+                  Peer Review Lab
+                </span>
+                <h3 className="text-lg font-bold text-slate-900 mt-2">PRD Teardown Peer Review Sandbox</h3>
+                <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                  Critique peer PRDs against industry launch readiness rubrics and deliver structured actionable feedback.
+                </p>
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 mt-4 text-xs text-slate-500">
+                  <span>Peer Task: 2 reviews required for Level 2 PM credential unlock.</span>
+                </div>
+              </div>
+              <button
+                onClick={onOpenPeerReview}
+                className="mt-6 py-2.5 bg-indigo-700 hover:bg-indigo-800 text-white rounded-xl font-semibold text-xs shadow-xs"
+              >
+                Launch Peer Sandbox →
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ==========================================
+    // 11. ACCOUNT SETTINGS VIEW COMPONENT
+    // ==========================================
+    function SettingsView({ user, onUpdateUser, onResendVerification, onOpenFirebaseInfo, onSignOut }) {
+      const [name, setName] = useState(user.name);
+      const [track, setTrack] = useState(user.track);
+
+      return (
+        <div className="max-w-2xl bg-white p-8 rounded-2xl border border-slate-200 shadow-xs flex flex-col gap-6">
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-bold text-slate-900">Account & Profile Settings</h1>
+            <button
+              onClick={onOpenFirebaseInfo}
+              className="text-xs font-semibold px-2.5 py-1 bg-emerald-50 text-emerald-800 rounded-full border border-emerald-200"
+            >
+              smta-f918c Connected
+            </button>
+          </div>
+
+          <div className="flex items-center gap-4 pb-6 border-b border-slate-100">
+            <img className="w-16 h-16 rounded-full object-cover" src={user.avatarUrl} alt={user.name}/>
+            <div>
+              <span className="font-bold text-base text-slate-900 block">{user.name}</span>
+              <span className="text-xs text-slate-500 block">{user.email}</span>
+              <div className="flex items-center gap-2 mt-1">
+                <span className="text-xs text-emerald-700 font-semibold">Firebase UID: {user.uid}</span>
+                <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${user.emailVerified ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}`}>
+                  {user.emailVerified ? 'Email Verified ✓' : 'Email Unverified'}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-4">
+            <div>
+              <label className="text-xs font-bold text-slate-700 block mb-1">Display Name</label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:border-indigo-600 outline-none"
+              />
+            </div>
+
+            <div>
+              <label className="text-xs font-bold text-slate-700 block mb-1">Selected Workforce Track</label>
+              <select
+                value={track}
+                onChange={(e) => setTrack(e.target.value)}
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:border-indigo-600 outline-none"
+              >
+                <option>Associate to Senior PM Track</option>
+                <option>Data Analytics & BI Engineering</option>
+                <option>Software Systems & Cloud Architecture</option>
+                <option>Enterprise UX/UI Design Systems</option>
+              </select>
+            </div>
+
+            {/* Email Automation Controls */}
+            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+              <div>
+                <span className="font-bold text-slate-800 block">Email Automation & Verification</span>
+                <span className="text-slate-500">Send an automated verification email to verify your inbox.</span>
+              </div>
+              <button
+                onClick={onResendVerification}
+                className="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold rounded-lg border border-indigo-200 shrink-0"
+              >
+                Send Verification Email
+              </button>
+            </div>
+
+            <div className="pt-4 flex justify-between items-center">
+              <button
+                onClick={() => onUpdateUser({ ...user, name, track })}
+                className="px-6 py-2.5 bg-indigo-700 hover:bg-indigo-800 text-white rounded-xl font-bold text-sm shadow-xs"
+              >
+                Save Changes to Firebase
+              </button>
+              <button
+                onClick={onSignOut}
+                className="px-4 py-2 text-red-600 hover:bg-red-50 rounded-xl text-sm font-semibold"
+              >
+                Sign Out
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ==========================================
+    // 12. AUTHENTICATION MODAL (GOOGLE + EMAIL + PASS RESET + MAIL AUTO)
+    // ==========================================
+    function AuthModal({ mode, setMode, onClose, onSuccess }) {
+      const [email, setEmail] = useState('');
+      const [password, setPassword] = useState('');
+      const [name, setName] = useState('');
+      const [selectedTrack, setSelectedTrack] = useState('Associate to Senior PM Track');
+      const [loading, setLoading] = useState(false);
+      const [error, setError] = useState('');
+      const [resetSent, setResetSent] = useState(false);
+      const [verificationSent, setVerificationSent] = useState(false);
+
+      // Google Sign-In via Firebase SDK
+      const handleGoogleSignIn = async () => {
+        setLoading(true);
+        setError('');
+        try {
+          if (authInstance) {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            const res = await authInstance.signInWithPopup(provider);
+            const u = res.user;
+
+            const userDoc = {
+              uid: u.uid,
+              email: u.email,
+              name: u.displayName || (u.email ? u.email.split('@')[0] : "Learner Fellow"),
+              role: "Workforce Fellow",
+              avatarUrl: u.photoURL || defaultUser.avatarUrl,
+              track: selectedTrack,
+              cohort: "Cohort #14 • Week 6",
+              currentMilestone: "Product Strategy & Discovery",
+              milestoneProgress: 68,
+              streakDays: 5,
+              streakBest: 12,
+              xpBonus: 150,
+              q1Target: 84,
+              studyHours: 4.5,
+              targetHours: 6.0,
+              emailVerified: u.emailVerified
+            };
+
+            // Real Firestore synchronization
+            if (firestoreInstance) {
+              await firestoreInstance.collection("users").doc(u.uid).set(userDoc, { merge: true });
+            }
+
+            onSuccess(userDoc);
+          } else {
+            // Local fallback
+            onSuccess(defaultUser);
+          }
+        } catch (err) {
+          console.warn("Google Auth note:", err);
+          setError(err.message || "Failed to authenticate with Google.");
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      // Email Sign In / Sign Up with Automatic Email Verification Dispatched
+      const handleEmailSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError('');
+        try {
+          if (mode === 'signup') {
+            let resUser = null;
+            if (authInstance) {
+              const res = await authInstance.createUserWithEmailAndPassword(email, password);
+              resUser = res.user;
+              if (name) {
+                await resUser.updateProfile({ displayName: name });
+              }
+              // DISPATCH AUTOMATIC EMAIL VERIFICATION (MAIL AUTOMATION)
+              try {
+                await resUser.sendEmailVerification();
+                setVerificationSent(true);
+              } catch (mailErr) {
+                console.warn("Email verification automation note:", mailErr);
+              }
+            }
+
+            const newUserDoc = {
+              uid: resUser ? resUser.uid : `uid_${Date.now()}`,
+              email: email,
+              name: name || email.split('@')[0],
+              role: "Workforce Fellow",
+              avatarUrl: defaultUser.avatarUrl,
+              track: selectedTrack,
+              cohort: "Cohort #14 • Week 6",
+              currentMilestone: "Orientation & Foundations",
+              milestoneProgress: 0,
+              streakDays: 1,
+              streakBest: 1,
+              xpBonus: 50,
+              q1Target: 84,
+              studyHours: 0,
+              targetHours: 6.0,
+              emailVerified: false
+            };
+
+            // Save in real Firestore DB
+            if (firestoreInstance && resUser) {
+              await firestoreInstance.collection("users").doc(resUser.uid).set(newUserDoc, { merge: true });
+            }
+
+            onSuccess(newUserDoc);
+          } else {
+            // Sign in
+            let resUser = null;
+            if (authInstance) {
+              const res = await authInstance.signInWithEmailAndPassword(email, password);
+              resUser = res.user;
+            }
+
+            const existingDoc = {
+              uid: resUser ? resUser.uid : `uid_${Date.now()}`,
+              email: email,
+              name: resUser && resUser.displayName ? resUser.displayName : email.split('@')[0],
+              role: "Workforce Fellow",
+              avatarUrl: defaultUser.avatarUrl,
+              track: selectedTrack,
+              cohort: "Cohort #14 • Week 6",
+              currentMilestone: "Product Strategy & Discovery",
+              milestoneProgress: 68,
+              streakDays: 5,
+              streakBest: 12,
+              xpBonus: 150,
+              q1Target: 84,
+              studyHours: 4.5,
+              targetHours: 6.0,
+              emailVerified: resUser ? resUser.emailVerified : true
+            };
+
+            onSuccess(existingDoc);
+          }
+        } catch (err) {
+          setError(err.message);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      // Forgot Password email automation
+      const handlePasswordReset = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError('');
+        try {
+          if (authInstance) {
+            await authInstance.sendPasswordResetEmail(email);
+          }
+          setResetSent(true);
+        } catch (err) {
+          setError(err.message);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      // Fast Demo Login Bypass
+      const handleDemoLogin = () => {
+        onSuccess(defaultUser);
+      };
+
+      return (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl relative border border-slate-200">
+            <button onClick={onClose} className="absolute top-5 right-5 text-slate-400 hover:text-slate-600">
+              <span className="material-symbols-outlined text-[20px]">close</span>
+            </button>
+
+            <div className="text-center mb-6">
+              <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-700 flex items-center justify-center mx-auto mb-3 font-bold">
+                <span className="material-symbols-outlined text-[26px]">school</span>
+              </div>
+              <h2 className="text-2xl font-bold text-slate-900">
+                {mode === 'signup' ? 'Create Your Account' : mode === 'forgot' ? 'Reset Password' : 'Sign In to Pathway'}
+              </h2>
+              <p className="text-xs text-slate-500 mt-1">
+                {mode === 'signup' ? 'Join 45,000+ fellows in job-ready skill sandboxes.' : 'Access your workforce track, rubrics, and certificates.'}
+              </p>
+            </div>
+
+            {error && (
+              <div className="mb-4 p-3 rounded-xl bg-red-50 text-red-700 text-xs border border-red-200">
+                {error}
+              </div>
+            )}
+
+            {resetSent ? (
+              <div className="p-4 rounded-xl bg-emerald-50 text-emerald-800 text-xs text-center border border-emerald-200">
+                <span className="font-bold block mb-1">Check your inbox!</span>
+                Password reset link dispatched via Firebase to <strong>{email}</strong>.
+                <button onClick={() => { setResetSent(false); setMode('signin'); }} className="mt-3 block text-indigo-700 font-bold hover:underline mx-auto">
+                  Back to Sign In
+                </button>
+              </div>
+            ) : mode === 'forgot' ? (
+              <form onSubmit={handlePasswordReset} className="flex flex-col gap-3">
+                <div>
+                  <label className="text-xs font-semibold text-slate-700 block mb-1">Your Email</label>
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="name@example.com"
+                    className="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm outline-none focus:border-indigo-600"
+                  />
+                </div>
+                <button type="submit" disabled={loading} className="w-full py-2.5 bg-indigo-700 hover:bg-indigo-800 text-white rounded-xl font-bold text-sm shadow-xs mt-2">
+                  {loading ? 'Sending...' : 'Send Reset Link'}
+                </button>
+                <button type="button" onClick={() => setMode('signin')} className="text-xs text-slate-500 hover:underline text-center mt-2">
+                  Cancel
+                </button>
+              </form>
+            ) : (
+              <>
+                {/* One-Click Google Sign In */}
+                <button
+                  type="button"
+                  onClick={handleGoogleSignIn}
+                  disabled={loading}
+                  className="w-full py-2.5 px-4 rounded-xl border border-slate-300 hover:bg-slate-50 text-slate-700 font-semibold text-sm flex items-center justify-center gap-2.5 transition-colors shadow-xs mb-4"
+                >
+                  <svg className="w-4 h-4" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                  </svg>
+                  <span>Continue with Google</span>
+                </button>
+
+                <div className="flex items-center gap-3 my-4">
+                  <div className="flex-1 h-px bg-slate-200"></div>
+                  <span className="text-[11px] text-slate-400 font-semibold uppercase">Or with email</span>
+                  <div className="flex-1 h-px bg-slate-200"></div>
+                </div>
+
+                <form onSubmit={handleEmailSubmit} className="flex flex-col gap-3">
+                  {mode === 'signup' && (
+                    <>
+                      <div>
+                        <label className="text-xs font-semibold text-slate-700 block mb-1">Full Name</label>
+                        <input
+                          type="text"
+                          required
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          placeholder="Elena Vance"
+                          className="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm outline-none focus:border-indigo-600"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-xs font-semibold text-slate-700 block mb-1">Choose Career Track</label>
+                        <select
+                          value={selectedTrack}
+                          onChange={(e) => setSelectedTrack(e.target.value)}
+                          className="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm outline-none focus:border-indigo-600 bg-white"
+                        >
+                          <option>Associate to Senior PM Track</option>
+                          <option>Data Analytics & BI Engineering</option>
+                          <option>Software Systems & Cloud Architecture</option>
+                          <option>Enterprise UX/UI Design Systems</option>
+                        </select>
+                      </div>
+                    </>
+                  )}
+
+                  <div>
+                    <label className="text-xs font-semibold text-slate-700 block mb-1">Email Address</label>
+                    <input
+                      type="email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="elena@example.com"
+                      className="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm outline-none focus:border-indigo-600"
+                    />
+                  </div>
+
+                  <div>
+                    <div className="flex justify-between items-center mb-1">
+                      <label className="text-xs font-semibold text-slate-700">Password</label>
+                      {mode === 'signin' && (
+                        <button type="button" onClick={() => setMode('forgot')} className="text-[11px] text-indigo-700 hover:underline">
+                          Forgot password?
+                        </button>
+                      )}
+                    </div>
+                    <input
+                      type="password"
+                      required
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="••••••••"
+                      className="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm outline-none focus:border-indigo-600"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full py-2.5 bg-indigo-700 hover:bg-indigo-800 text-white rounded-xl font-bold text-sm shadow-xs mt-2 transition-all active:scale-95"
+                  >
+                    {loading ? 'Please wait...' : mode === 'signup' ? 'Create Account & Auto-Verify' : 'Sign In'}
+                  </button>
+                </form>
+
+                <div className="mt-4 pt-4 border-t border-slate-100 flex flex-col items-center gap-2 text-xs">
+                  {mode === 'signup' ? (
+                    <span>Already have an account? <button onClick={() => setMode('signin')} className="text-indigo-700 font-bold hover:underline">Sign In</button></span>
+                  ) : (
+                    <span>Don't have an account? <button onClick={() => setMode('signup')} className="text-indigo-700 font-bold hover:underline">Sign Up</button></span>
+                  )}
+
+                  <button onClick={handleDemoLogin} className="mt-1 text-slate-500 hover:text-indigo-700 font-semibold underline text-[11px]">
+                    ⚡ Quick Demo Login as Elena Vance
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    // ==========================================
+    // 13. RAPID FORMULA QUIZ MODAL
+    // ==========================================
+    function RapidQuizModal({ userId, onClose, onSubmit }) {
+      const questions = [
+        {
+          q: "1. Which ratio best measures sticky habituation and daily user retention?",
+          options: ["DAU / MAU Ratio", "Total Signups / CAC", "Bounce Rate", "CSAT Score"],
+          ans: 0
+        },
+        {
+          q: "2. When defining a two-sided marketplace North Star, which focus is most robust?",
+          options: ["Total Gross Merchandise App Visits", "Completed Core Transactions", "Total Seller Accounts", "App Store Ratings"],
+          ans: 1
+        },
+        {
+          q: "3. What p-value statistical significance threshold is standard in product A/B testing?",
+          options: ["p < 0.50", "p < 0.05 (95% Confidence)", "p = 0.00", "p > 0.10"],
+          ans: 1
+        }
+      ];
+
+      const [selected, setSelected] = useState({});
+
+      const handleSubmit = () => {
+        let score = 0;
+        questions.forEach((q, idx) => {
+          if (selected[idx] === q.ans) score++;
+        });
+
+        // Write submission to Firestore
+        if (firestoreInstance && userId) {
+          try {
+            firestoreInstance.collection("quiz_submissions").add({
+              userId,
+              quizId: "product_analytics_rapid",
+              score,
+              total: 3,
+              timestamp: new Date().toISOString()
+            });
+          } catch (e) {
+            console.warn("Quiz Firestore write:", e);
+          }
+        }
+
+        onSubmit(score);
+      };
+
+      return (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl relative border border-slate-200">
+            <button onClick={onClose} className="absolute top-5 right-5 text-slate-400 hover:text-slate-600">
+              <span className="material-symbols-outlined text-[20px]">close</span>
+            </button>
+
+            <div className="mb-4">
+              <span className="text-xs font-bold text-indigo-700 uppercase tracking-wider">Product Analytics Lab</span>
+              <h3 className="text-xl font-bold text-slate-900">Rapid Metric Formula Quiz</h3>
+              <p className="text-xs text-slate-500">Answer all 3 questions to unlock +100 XP and competency credit.</p>
+            </div>
+
+            <div className="flex flex-col gap-4 text-xs">
+              {questions.map((item, qIdx) => (
+                <div key={qIdx} className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                  <p className="font-bold text-slate-800 text-sm mb-2">{item.q}</p>
+                  <div className="flex flex-col gap-1.5">
+                    {item.options.map((opt, oIdx) => (
+                      <label key={oIdx} className="flex items-center gap-2 cursor-pointer p-1.5 rounded-lg hover:bg-white transition-colors">
+                        <input
+                          type="radio"
+                          name={`q-${qIdx}`}
+                          checked={selected[qIdx] === oIdx}
+                          onChange={() => setSelected(prev => ({ ...prev, [qIdx]: oIdx }))}
+                          className="accent-indigo-700"
+                        />
+                        <span className="text-slate-700">{opt}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <button
+              onClick={handleSubmit}
+              className="mt-6 w-full py-3 bg-indigo-700 hover:bg-indigo-800 text-white rounded-xl font-bold text-sm shadow-xs transition-all active:scale-95"
+            >
+              Submit Quiz Answers to Firebase
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    // ==========================================
+    // 14. ASSIGNMENT UPLOAD MODAL
+    // ==========================================
+    function AssignmentUploadModal({ userId, isSubmitted, onClose, onSubmit }) {
+      const [fileName, setFileName] = useState(isSubmitted ? "Elena_Vance_Discovery_Deck_v1.pdf" : "");
+
+      const handleSave = () => {
+        const picked = fileName || "Elena_Vance_Discovery_Deck_final.pdf";
+
+        // Save in Firestore
+        if (firestoreInstance && userId) {
+          try {
+            firestoreInstance.collection("assignments").doc(`${userId}_discovery_deck`).set({
+              userId,
+              assignmentId: "discovery_deck",
+              fileName: picked,
+              status: "submitted",
+              timestamp: new Date().toISOString()
+            }, { merge: true });
+          } catch (e) {
+            console.warn("Assignment write:", e);
+          }
+        }
+
+        onSubmit(picked);
+      };
+
+      return (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl relative border border-slate-200">
+            <button onClick={onClose} className="absolute top-5 right-5 text-slate-400 hover:text-slate-600">
+              <span className="material-symbols-outlined text-[20px]">close</span>
+            </button>
+
+            <div className="mb-4">
+              <span className="text-xs font-bold text-indigo-700 uppercase tracking-wider">Portfolio Deliverable</span>
+              <h3 className="text-xl font-bold text-slate-900">Sprint Assignment Submission</h3>
+              <p className="text-xs text-slate-500">Discovery Deck Review with Mentor Sarah Blake.</p>
+            </div>
+
+            <div className="p-6 rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 flex flex-col items-center justify-center text-center">
+              <span className="material-symbols-outlined text-[36px] text-indigo-600 mb-2">upload_file</span>
+              <span className="text-xs font-bold text-slate-800 block">Drag & Drop Affinity Deck (PDF, Figma link, or PPTX)</span>
+              <span className="text-[11px] text-slate-400 block mt-1">Maximum file size: 25MB</span>
+              <input
+                type="file"
+                id="file-input"
+                className="hidden"
+                onChange={(e) => setFileName(e.target.files[0]?.name || "discovery_deck.pdf")}
+              />
+              <button
+                type="button"
+                onClick={() => document.getElementById('file-input').click()}
+                className="mt-3 px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-semibold hover:bg-slate-100"
+              >
+                Choose Local File
+              </button>
+              {fileName && (
+                <div className="mt-3 p-2 bg-emerald-50 text-emerald-800 rounded-lg text-xs font-medium border border-emerald-200">
+                  Selected: <strong>{fileName}</strong>
+                </div>
+              )}
+            </div>
+
+            <div className="mt-4 p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600">
+              <span className="font-bold block mb-1">Evaluation Rubrics:</span>
+              <ul className="list-disc list-inside space-y-0.5 text-[11px]">
+                <li>Non-biased interview questions formulation (35%)</li>
+                <li>Clear categorization into high vs low urgency clusters (35%)</li>
+                <li>Actionable User Story Map transition (30%)</li>
+              </ul>
+            </div>
+
+            <button
+              onClick={handleSave}
+              className="mt-5 w-full py-3 bg-indigo-700 hover:bg-indigo-800 text-white rounded-xl font-bold text-sm shadow-xs transition-all active:scale-95"
+            >
+              {isSubmitted ? 'Update Submission' : 'Submit for Mentor Review'}
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    // ==========================================
+    // 15. LESSON READER MODAL
+    // ==========================================
+    function LessonReaderModal({ lesson, onClose, onComplete }) {
+      return (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-2xl w-full p-8 shadow-2xl relative border border-slate-200 max-h-[90vh] overflow-y-auto">
+            <button onClick={onClose} className="absolute top-5 right-5 text-slate-400 hover:text-slate-600">
+              <span className="material-symbols-outlined text-[20px]">close</span>
+            </button>
+
+            <span className="text-xs font-bold text-indigo-700 uppercase tracking-wider">Module 3 • Lesson 3.3</span>
+            <h2 className="text-2xl font-bold text-slate-900 mt-1 mb-3">{lesson.title}</h2>
+
+            <div className="prose prose-sm text-slate-600 space-y-4 text-xs leading-relaxed">
+              <p>
+                In this active sandbox lesson, you will cluster qualitative interview feedback using <strong>Affinity Diagramming</strong> to discover unexpected core drivers of customer friction.
+              </p>
+              <div className="p-4 rounded-xl bg-indigo-50 border border-indigo-200 text-indigo-900 font-medium">
+                <strong>Key Objective:</strong> Avoid clustering by preconceived features. Instead, group cards by user behavioral triggers and underlying emotional pain points.
+              </div>
+              <h4 className="font-bold text-slate-900 text-sm">Step 1: Raw Note Extraction</h4>
+              <p>Extract 1 statement per virtual card. Highlight verbatim quotes rather than your interpretation.</p>
+              <h4 className="font-bold text-slate-900 text-sm">Step 2: Bottom-Up Theme Synthesis</h4>
+              <p>Allow patterns to emerge organically before creating header categories.</p>
+            </div>
+
+            <div className="mt-8 pt-4 border-t border-slate-100 flex justify-between items-center">
+              <button onClick={onClose} className="px-4 py-2 text-slate-600 text-xs font-semibold hover:underline">
+                Close
+              </button>
+              <button
+                onClick={onComplete}
+                className="px-6 py-2.5 bg-indigo-700 hover:bg-indigo-800 text-white rounded-xl text-xs font-bold shadow-xs"
+              >
+                Mark as Complete & Return
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ==========================================
+    // 16. SYLLABUS MODAL (PRINT / PDF)
+    // ==========================================
+    function SyllabusModal({ onClose }) {
+      return (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-xl w-full p-8 shadow-2xl relative border border-slate-200 max-h-[85vh] overflow-y-auto">
+            <button onClick={onClose} className="absolute top-5 right-5 text-slate-400 hover:text-slate-600">
+              <span className="material-symbols-outlined text-[20px]">close</span>
+            </button>
+
+            <div className="border-b border-slate-200 pb-4 mb-4">
+              <span className="text-xs font-bold text-indigo-700 uppercase">Official Curriculum Specification</span>
+              <h2 className="text-xl font-bold text-slate-900">Product Manager Career Track (24 Wks)</h2>
+              <span className="text-xs text-slate-500">ID: PM-TRACK-2025 • Endorsed by Figma, FinScale, Google</span>
+            </div>
+
+            <div className="space-y-4 text-xs">
+              <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                <strong className="text-slate-900 block font-bold">Phase 1: Foundations (Wks 1–8)</strong>
+                <span className="text-slate-600 block mt-1">Product Sense, Kano model, CIRCLES, Agile user stories, Capstone PRD v1.</span>
+              </div>
+              <div className="p-3 bg-indigo-50/50 rounded-xl border border-indigo-200">
+                <strong className="text-indigo-900 block font-bold">Phase 2: Discovery & Analytics (Wks 9–16)</strong>
+                <span className="text-indigo-800 block mt-1">Affinity mapping, JTBD, SQL event queries, A/B test hypothesis, Cohort analysis.</span>
+              </div>
+              <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                <strong className="text-slate-900 block font-bold">Phase 3: Strategic Roadmapping & Defense (Wks 17–24)</strong>
+                <span className="text-slate-600 block mt-1">Executive trade-offs, Boardroom alignment, VP Jury portfolio capstone defense.</span>
+              </div>
+            </div>
+
+            <button
+              onClick={() => window.print()}
+              className="mt-6 w-full py-2.5 bg-indigo-700 hover:bg-indigo-800 text-white rounded-xl text-xs font-bold shadow-xs"
+            >
+              Print / Save as PDF
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    // ==========================================
+    // 17. GLOBAL SEARCH MODAL (COMMAND+K)
+    // ==========================================
+    function SearchModal({ courses, onClose, onSelectCourse }) {
+      const [query, setQuery] = useState('');
+
+      const filtered = courses.filter(c =>
+        !query || c.title.toLowerCase().includes(query.toLowerCase()) || c.instructor.toLowerCase().includes(query.toLowerCase())
+      );
+
+      return (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-start justify-center pt-24 p-4">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-4 shadow-2xl relative border border-slate-200">
+            <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
+              <span className="material-symbols-outlined text-[20px] text-slate-400">search</span>
+              <input
+                autoFocus
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search across all courses, mentors, and sandboxes..."
+                className="w-full text-sm outline-none text-slate-800 placeholder-slate-400"
+              />
+              <button onClick={onClose} className="text-xs text-slate-400 hover:text-slate-600">ESC</button>
+            </div>
+
+            <div className="max-h-72 overflow-y-auto mt-2 space-y-1 text-xs">
+              {filtered.map(c => (
+                <div
+                  key={c.id}
+                  onClick={() => onSelectCourse(c)}
+                  className="p-3 rounded-xl hover:bg-indigo-50/60 cursor-pointer flex justify-between items-center transition-colors"
+                >
+                  <div>
+                    <span className="font-bold text-slate-900 block">{c.title}</span>
+                    <span className="text-slate-500 text-[11px]">{c.instructor} • {c.role}</span>
+                  </div>
+                  <span className="text-indigo-700 font-semibold">View →</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ==========================================
+    // 18. FIREBASE SMTA-F918C INFO MODAL
+    // ==========================================
+    function FirebaseInfoModal({ onClose }) {
+      return (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative border border-slate-200">
+            <button onClick={onClose} className="absolute top-5 right-5 text-slate-400 hover:text-slate-600">
+              <span className="material-symbols-outlined text-[20px]">close</span>
+            </button>
+
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+                🔥
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-slate-900">Firebase Backend Status</h3>
+                <span className="text-xs text-emerald-700 font-semibold">Active & Initialized</span>
+              </div>
+            </div>
+
+            <div className="space-y-3 text-xs bg-slate-50 p-4 rounded-xl border border-slate-200 font-mono">
+              <div><span className="text-slate-400 block">Project ID:</span><strong className="text-slate-900">smta-f918c</strong></div>
+              <div><span className="text-slate-400 block">Auth Domain:</span><span className="text-slate-700">smta-f918c.firebaseapp.com</span></div>
+              <div><span className="text-slate-400 block">Storage Bucket:</span><span className="text-slate-700">smta-f918c.firebasestorage.app</span></div>
+              <div><span className="text-slate-400 block">App ID:</span><span className="text-slate-700">1:835347685975:web:6107cecec1322ce30fb912</span></div>
+            </div>
+
+            <div className="mt-4 text-xs text-slate-600">
+              <span className="font-bold text-slate-900 block mb-1">Active Synchronizations:</span>
+              <ul className="list-disc list-inside space-y-0.5">
+                <li>Google OAuth Popup & Email Auth</li>
+                <li>Automated Email Verification Dispatch</li>
+                <li>Real Firestore Collections: <code>users</code>, <code>enrollments</code>, <code>lesson_progress</code>, <code>cohort_rsvps</code>, <code>bookmarks</code>, <code>quiz_submissions</code></li>
+              </ul>
+            </div>
+
+            <button
+              onClick={onClose}
+              className="mt-6 w-full py-2.5 bg-indigo-700 hover:bg-indigo-800 text-white rounded-xl text-xs font-bold shadow-xs"
+            >
+              Done
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    // ==========================================
+    // 19. PEER REVIEW SANDBOX MODAL
+    // ==========================================
+    function PeerReviewModal({ onClose }) {
+      const [rating, setRating] = useState(4);
+      const [feedback, setFeedback] = useState("Solid framing of customer pain points. Suggest tightening success metrics with explicit DAU/MAU guardrails.");
+
+      return (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl relative border border-slate-200">
+            <button onClick={onClose} className="absolute top-5 right-5 text-slate-400 hover:text-slate-600">
+              <span className="material-symbols-outlined text-[20px]">close</span>
+            </button>
+
+            <span className="text-xs font-bold text-indigo-700 uppercase">Peer Teardown Lab</span>
+            <h3 className="text-xl font-bold text-slate-900 mt-1">PRD Onboarding Critique</h3>
+            <p className="text-xs text-slate-500 mb-4">Reviewing fellow Marcus Chen's Fintech Onboarding PRD.</p>
+
+            <div className="space-y-4 text-xs">
+              <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                <span className="font-bold block text-slate-900">Criterion: Problem Hypothesis & Evidence</span>
+                <p className="text-slate-600 text-[11px] mt-1">Does the PRD prove customer friction using qualitative discovery quotes?</p>
+              </div>
+
+              <div>
+                <label className="font-bold text-slate-800 block mb-1">Peer Score: {rating} / 5</label>
+                <input
+                  type="range"
+                  min="1"
+                  max="5"
+                  value={rating}
+                  onChange={(e) => setRating(e.target.value)}
+                  className="w-full accent-indigo-700"
+                />
+              </div>
+
+              <div>
+                <label className="font-bold text-slate-800 block mb-1">Written Critique</label>
+                <textarea
+                  rows="3"
+                  value={feedback}
+                  onChange={(e) => setFeedback(e.target.value)}
+                  className="w-full p-3 rounded-xl border border-slate-300 outline-none text-xs text-slate-800"
+                ></textarea>
+              </div>
+            </div>
+
+            <button
+              onClick={onClose}
+              className="mt-5 w-full py-2.5 bg-indigo-700 hover:bg-indigo-800 text-white rounded-xl text-xs font-bold shadow-xs"
+            >
+              Submit Peer Critique (+50 XP)
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    // ==========================================
+    // 20. CREDENTIALS MODAL
+    // ==========================================
+    function CredentialsModal({ onClose }) {
+      return (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative border border-slate-200">
+            <button onClick={onClose} className="absolute top-5 right-5 text-slate-400 hover:text-slate-600">
+              <span className="material-symbols-outlined text-[20px]">close</span>
+            </button>
+
+            <h3 className="text-xl font-bold text-slate-900 mb-1">Verifiable Credentials</h3>
+            <p className="text-xs text-slate-500 mb-4">Cryptographically stamped proof of competency completion.</p>
+
+            <div className="space-y-3 text-xs">
+              <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">★</div>
+                <div>
+                  <span className="font-bold text-slate-900 block">User Research Maven</span>
+                  <span className="text-slate-500 text-[11px]">Level 2 Badge • Verified Feb 2025</span>
+                </div>
+              </div>
+
+              <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold">★</div>
+                <div>
+                  <span className="font-bold text-slate-900 block">Agile Backlog Architect</span>
+                  <span className="text-slate-500 text-[11px]">Level 1 Badge • Verified Jan 2025</span>
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={onClose}
+              className="mt-6 w-full py-2.5 bg-indigo-700 hover:bg-indigo-800 text-white rounded-xl text-xs font-bold shadow-xs"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    // ==========================================
+    // 21. GENERIC INFO MODAL (PRIVACY / TERMS)
+    // ==========================================
+    function InfoModal({ data, onClose }) {
+      return (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative border border-slate-200">
+            <button onClick={onClose} className="absolute top-5 right-5 text-slate-400 hover:text-slate-600">
+              <span className="material-symbols-outlined text-[20px]">close</span>
+            </button>
+
+            <h3 className="text-xl font-bold text-slate-900 mb-2">{data.title}</h3>
+            <p className="text-xs text-slate-600 leading-relaxed mb-6">{data.content}</p>
+
+            <button
+              onClick={onClose}
+              className="w-full py-2.5 bg-indigo-700 hover:bg-indigo-800 text-white rounded-xl text-xs font-bold shadow-xs"
+            >
+              Understood
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    // Mount React App
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{
+ "version": "1.0.0",
+ "L1": {
+  "count": 5,
+  "min_correct": 4
+ },
+ "L2": {
+  "count": 3,
+  "min_pass": 2
+ },
+ "L3": {
+  "tasks": 2,
+  "min_full_tasks": 1,
+  "min_test_ratio": 0.7
+ },
+ "L4": {
+  "criteria": 5,
+  "max_per_criterion": 3,
+  "min_total": 10,
+  "min_each": 1,
+  "low_confidence_below": 0.5
+ },
+ "run_limit_per_item": 40
+}

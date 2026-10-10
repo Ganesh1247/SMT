@@ -1,0 +1,1460 @@
+{
+ "track": "python",
+ "level": 3,
+ "version": "1.0.0",
+ "rubric_id": "rbr_python_l3",
+ "items": [
+  {
+   "id": "py-l3-01",
+   "kind": "python",
+   "competency": "python",
+   "title": "Most frequent words",
+   "stages": {
+    "base": {
+     "prompt": "Write top_k_frequent(words, k) returning the k most frequent words as a list, most frequent first. Words with the same count are ordered alphabetically. If there are fewer than k distinct words, return all of them.",
+     "starter_code": "def top_k_frequent(words, k):\n    pass\n",
+     "function": "top_k_frequent",
+     "datasets": [
+      {
+       "name": "v1",
+       "tests": [
+        {
+         "id": "t1",
+         "args": [
+          [
+           "a",
+           "b",
+           "a",
+           "c",
+           "b",
+           "a"
+          ],
+          2
+         ],
+         "expected": [
+          "a",
+          "b"
+         ]
+        },
+        {
+         "id": "t2",
+         "args": [
+          [
+           "x",
+           "y"
+          ],
+          5
+         ],
+         "expected": [
+          "x",
+          "y"
+         ]
+        },
+        {
+         "id": "t3",
+         "args": [
+          [],
+          3
+         ],
+         "expected": []
+        },
+        {
+         "id": "t4",
+         "args": [
+          [
+           "b",
+           "a",
+           "b",
+           "a"
+          ],
+          1
+         ],
+         "expected": [
+          "a"
+         ]
+        },
+        {
+         "id": "t5",
+         "args": [
+          [
+           "q"
+          ],
+          0
+         ],
+         "expected": []
+        }
+       ]
+      },
+      {
+       "name": "v2",
+       "tests": [
+        {
+         "id": "t1",
+         "args": [
+          [
+           "z",
+           "z",
+           "y"
+          ],
+          1
+         ],
+         "expected": [
+          "z"
+         ]
+        },
+        {
+         "id": "t2",
+         "args": [
+          [
+           "m",
+           "n",
+           "m",
+           "n",
+           "o"
+          ],
+          3
+         ],
+         "expected": [
+          "m",
+          "n",
+          "o"
+         ]
+        },
+        {
+         "id": "t3",
+         "args": [
+          [],
+          1
+         ],
+         "expected": []
+        },
+        {
+         "id": "t4",
+         "args": [
+          [
+           "b",
+           "a"
+          ],
+          2
+         ],
+         "expected": [
+          "a",
+          "b"
+         ]
+        },
+        {
+         "id": "t5",
+         "args": [
+          [
+           "p",
+           "p",
+           "p"
+          ],
+          2
+         ],
+         "expected": [
+          "p"
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    "mutated": {
+     "prompt": "Constraint change: top_k_frequent(words, k) must now treat words case-insensitively (return them in lowercase) and ignore every word shorter than 3 characters. Adapt your solution.",
+     "starter_code": "def top_k_frequent(words, k):\n    pass\n",
+     "function": "top_k_frequent",
+     "datasets": [
+      {
+       "name": "v1",
+       "tests": [
+        {
+         "id": "t1",
+         "args": [
+          [
+           "The",
+           "the",
+           "THE",
+           "a",
+           "cat",
+           "Cat"
+          ],
+          2
+         ],
+         "expected": [
+          "the",
+          "cat"
+         ]
+        },
+        {
+         "id": "t2",
+         "args": [
+          [
+           "an",
+           "it",
+           "is"
+          ],
+          2
+         ],
+         "expected": []
+        },
+        {
+         "id": "t3",
+         "args": [
+          [
+           "Dog",
+           "dog",
+           "bird",
+           "BIRD",
+           "ant"
+          ],
+          3
+         ],
+         "expected": [
+          "bird",
+          "dog",
+          "ant"
+         ]
+        },
+        {
+         "id": "t4",
+         "args": [
+          [],
+          1
+         ],
+         "expected": []
+        },
+        {
+         "id": "t5",
+         "args": [
+          [
+           "Ox",
+           "ox",
+           "Emu"
+          ],
+          5
+         ],
+         "expected": [
+          "emu"
+         ]
+        }
+       ]
+      },
+      {
+       "name": "v2",
+       "tests": [
+        {
+         "id": "t1",
+         "args": [
+          [
+           "Red",
+           "red",
+           "Blue",
+           "blue",
+           "RED"
+          ],
+          1
+         ],
+         "expected": [
+          "red"
+         ]
+        },
+        {
+         "id": "t2",
+         "args": [
+          [
+           "to",
+           "be",
+           "or"
+          ],
+          3
+         ],
+         "expected": []
+        },
+        {
+         "id": "t3",
+         "args": [
+          [
+           "Sun",
+           "sun",
+           "Moon"
+          ],
+          2
+         ],
+         "expected": [
+          "sun",
+          "moon"
+         ]
+        },
+        {
+         "id": "t4",
+         "args": [
+          [],
+          2
+         ],
+         "expected": []
+        },
+        {
+         "id": "t5",
+         "args": [
+          [
+           "Cat",
+           "cat",
+           "cat",
+           "Dog"
+          ],
+          5
+         ],
+         "expected": [
+          "cat",
+          "dog"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "py-l3-02",
+   "kind": "python",
+   "competency": "python",
+   "title": "Merge intervals",
+   "stages": {
+    "base": {
+     "prompt": "Write merge_intervals(intervals) that merges overlapping closed intervals. Each interval is [start, end]. Intervals that touch (such as [1, 2] and [2, 3]) are merged. The input may be unsorted. Return a list of [start, end] sorted by start. An empty list returns [].",
+     "starter_code": "def merge_intervals(intervals):\n    pass\n",
+     "function": "merge_intervals",
+     "datasets": [
+      {
+       "name": "v1",
+       "tests": [
+        {
+         "id": "t1",
+         "args": [
+          [
+           [
+            1,
+            3
+           ],
+           [
+            2,
+            6
+           ],
+           [
+            8,
+            10
+           ]
+          ]
+         ],
+         "expected": [
+          [
+           1,
+           6
+          ],
+          [
+           8,
+           10
+          ]
+         ]
+        },
+        {
+         "id": "t2",
+         "args": [
+          [
+           [
+            1,
+            2
+           ],
+           [
+            2,
+            3
+           ]
+          ]
+         ],
+         "expected": [
+          [
+           1,
+           3
+          ]
+         ]
+        },
+        {
+         "id": "t3",
+         "args": [
+          []
+         ],
+         "expected": []
+        },
+        {
+         "id": "t4",
+         "args": [
+          [
+           [
+            5,
+            6
+           ],
+           [
+            1,
+            2
+           ]
+          ]
+         ],
+         "expected": [
+          [
+           1,
+           2
+          ],
+          [
+           5,
+           6
+          ]
+         ]
+        },
+        {
+         "id": "t5",
+         "args": [
+          [
+           [
+            1,
+            10
+           ],
+           [
+            2,
+            3
+           ]
+          ]
+         ],
+         "expected": [
+          [
+           1,
+           10
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "name": "v2",
+       "tests": [
+        {
+         "id": "t1",
+         "args": [
+          [
+           [
+            4,
+            5
+           ],
+           [
+            1,
+            4
+           ]
+          ]
+         ],
+         "expected": [
+          [
+           1,
+           5
+          ]
+         ]
+        },
+        {
+         "id": "t2",
+         "args": [
+          [
+           [
+            1,
+            2
+           ],
+           [
+            3,
+            4
+           ]
+          ]
+         ],
+         "expected": [
+          [
+           1,
+           2
+          ],
+          [
+           3,
+           4
+          ]
+         ]
+        },
+        {
+         "id": "t3",
+         "args": [
+          []
+         ],
+         "expected": []
+        },
+        {
+         "id": "t4",
+         "args": [
+          [
+           [
+            1,
+            5
+           ],
+           [
+            2,
+            3
+           ],
+           [
+            7,
+            9
+           ]
+          ]
+         ],
+         "expected": [
+          [
+           1,
+           5
+          ],
+          [
+           7,
+           9
+          ]
+         ]
+        },
+        {
+         "id": "t5",
+         "args": [
+          [
+           [
+            0,
+            0
+           ],
+           [
+            0,
+            0
+           ]
+          ]
+         ],
+         "expected": [
+          [
+           0,
+           0
+          ]
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    "mutated": {
+     "prompt": "Constraint change: the function is now merge_intervals(intervals, gap). Two intervals are also merged when the empty space between them is at most gap (gap >= 0; gap = 0 behaves like before). Adapt your solution.",
+     "starter_code": "def merge_intervals(intervals, gap):\n    pass\n",
+     "function": "merge_intervals",
+     "datasets": [
+      {
+       "name": "v1",
+       "tests": [
+        {
+         "id": "t1",
+         "args": [
+          [
+           [
+            1,
+            2
+           ],
+           [
+            4,
+            5
+           ]
+          ],
+          2
+         ],
+         "expected": [
+          [
+           1,
+           5
+          ]
+         ]
+        },
+        {
+         "id": "t2",
+         "args": [
+          [
+           [
+            1,
+            2
+           ],
+           [
+            4,
+            5
+           ]
+          ],
+          1
+         ],
+         "expected": [
+          [
+           1,
+           2
+          ],
+          [
+           4,
+           5
+          ]
+         ]
+        },
+        {
+         "id": "t3",
+         "args": [
+          [],
+          3
+         ],
+         "expected": []
+        },
+        {
+         "id": "t4",
+         "args": [
+          [
+           [
+            1,
+            2
+           ],
+           [
+            3,
+            4
+           ],
+           [
+            10,
+            11
+           ]
+          ],
+          1
+         ],
+         "expected": [
+          [
+           1,
+           4
+          ],
+          [
+           10,
+           11
+          ]
+         ]
+        },
+        {
+         "id": "t5",
+         "args": [
+          [
+           [
+            1,
+            3
+           ],
+           [
+            2,
+            6
+           ]
+          ],
+          0
+         ],
+         "expected": [
+          [
+           1,
+           6
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "name": "v2",
+       "tests": [
+        {
+         "id": "t1",
+         "args": [
+          [
+           [
+            1,
+            1
+           ],
+           [
+            3,
+            3
+           ],
+           [
+            5,
+            5
+           ]
+          ],
+          2
+         ],
+         "expected": [
+          [
+           1,
+           5
+          ]
+         ]
+        },
+        {
+         "id": "t2",
+         "args": [
+          [
+           [
+            1,
+            1
+           ],
+           [
+            3,
+            3
+           ]
+          ],
+          1
+         ],
+         "expected": [
+          [
+           1,
+           1
+          ],
+          [
+           3,
+           3
+          ]
+         ]
+        },
+        {
+         "id": "t3",
+         "args": [
+          [],
+          0
+         ],
+         "expected": []
+        },
+        {
+         "id": "t4",
+         "args": [
+          [
+           [
+            10,
+            12
+           ],
+           [
+            1,
+            2
+           ]
+          ],
+          7
+         ],
+         "expected": [
+          [
+           1,
+           2
+          ],
+          [
+           10,
+           12
+          ]
+         ]
+        },
+        {
+         "id": "t5",
+         "args": [
+          [
+           [
+            1,
+            4
+           ],
+           [
+            6,
+            8
+           ],
+           [
+            20,
+            21
+           ]
+          ],
+          2
+         ],
+         "expected": [
+          [
+           1,
+           8
+          ],
+          [
+           20,
+           21
+          ]
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "py-l3-03",
+   "kind": "python",
+   "competency": "python",
+   "title": "Account balance",
+   "stages": {
+    "base": {
+     "prompt": "Write final_balance(transactions). Each transaction is [kind, amount] where kind is 'deposit' or 'withdraw' and amount is a positive number. Start from 0 and return the final balance. No transactions returns 0.",
+     "starter_code": "def final_balance(transactions):\n    pass\n",
+     "function": "final_balance",
+     "datasets": [
+      {
+       "name": "v1",
+       "tests": [
+        {
+         "id": "t1",
+         "args": [
+          [
+           [
+            "deposit",
+            100
+           ],
+           [
+            "withdraw",
+            30
+           ]
+          ]
+         ],
+         "expected": 70
+        },
+        {
+         "id": "t2",
+         "args": [
+          []
+         ],
+         "expected": 0
+        },
+        {
+         "id": "t3",
+         "args": [
+          [
+           [
+            "withdraw",
+            10
+           ]
+          ]
+         ],
+         "expected": -10
+        },
+        {
+         "id": "t4",
+         "args": [
+          [
+           [
+            "deposit",
+            5
+           ],
+           [
+            "deposit",
+            5
+           ]
+          ]
+         ],
+         "expected": 10
+        },
+        {
+         "id": "t5",
+         "args": [
+          [
+           [
+            "deposit",
+            50
+           ],
+           [
+            "withdraw",
+            50
+           ]
+          ]
+         ],
+         "expected": 0
+        }
+       ]
+      },
+      {
+       "name": "v2",
+       "tests": [
+        {
+         "id": "t1",
+         "args": [
+          [
+           [
+            "deposit",
+            20
+           ],
+           [
+            "withdraw",
+            5
+           ],
+           [
+            "withdraw",
+            5
+           ]
+          ]
+         ],
+         "expected": 10
+        },
+        {
+         "id": "t2",
+         "args": [
+          [
+           [
+            "withdraw",
+            1
+           ],
+           [
+            "deposit",
+            1
+           ]
+          ]
+         ],
+         "expected": 0
+        },
+        {
+         "id": "t3",
+         "args": [
+          []
+         ],
+         "expected": 0
+        },
+        {
+         "id": "t4",
+         "args": [
+          [
+           [
+            "deposit",
+            2.5
+           ],
+           [
+            "withdraw",
+            1.5
+           ]
+          ]
+         ],
+         "expected": 1.0
+        },
+        {
+         "id": "t5",
+         "args": [
+          [
+           [
+            "deposit",
+            9
+           ]
+          ]
+         ],
+         "expected": 9
+        }
+       ]
+      }
+     ]
+    },
+    "mutated": {
+     "prompt": "Constraint change: a withdrawal that would make the balance negative must be rejected (skipped). final_balance(transactions) now returns [balance, rejected_count]. Adapt your solution.",
+     "starter_code": "def final_balance(transactions):\n    pass\n",
+     "function": "final_balance",
+     "datasets": [
+      {
+       "name": "v1",
+       "tests": [
+        {
+         "id": "t1",
+         "args": [
+          [
+           [
+            "deposit",
+            100
+           ],
+           [
+            "withdraw",
+            30
+           ]
+          ]
+         ],
+         "expected": [
+          70,
+          0
+         ]
+        },
+        {
+         "id": "t2",
+         "args": [
+          []
+         ],
+         "expected": [
+          0,
+          0
+         ]
+        },
+        {
+         "id": "t3",
+         "args": [
+          [
+           [
+            "withdraw",
+            10
+           ]
+          ]
+         ],
+         "expected": [
+          0,
+          1
+         ]
+        },
+        {
+         "id": "t4",
+         "args": [
+          [
+           [
+            "deposit",
+            5
+           ],
+           [
+            "withdraw",
+            8
+           ],
+           [
+            "deposit",
+            2
+           ]
+          ]
+         ],
+         "expected": [
+          7,
+          1
+         ]
+        },
+        {
+         "id": "t5",
+         "args": [
+          [
+           [
+            "deposit",
+            50
+           ],
+           [
+            "withdraw",
+            50
+           ],
+           [
+            "withdraw",
+            1
+           ]
+          ]
+         ],
+         "expected": [
+          0,
+          1
+         ]
+        }
+       ]
+      },
+      {
+       "name": "v2",
+       "tests": [
+        {
+         "id": "t1",
+         "args": [
+          [
+           [
+            "deposit",
+            20
+           ],
+           [
+            "withdraw",
+            25
+           ],
+           [
+            "withdraw",
+            5
+           ]
+          ]
+         ],
+         "expected": [
+          15,
+          1
+         ]
+        },
+        {
+         "id": "t2",
+         "args": [
+          [
+           [
+            "withdraw",
+            1
+           ],
+           [
+            "deposit",
+            1
+           ]
+          ]
+         ],
+         "expected": [
+          1,
+          1
+         ]
+        },
+        {
+         "id": "t3",
+         "args": [
+          []
+         ],
+         "expected": [
+          0,
+          0
+         ]
+        },
+        {
+         "id": "t4",
+         "args": [
+          [
+           [
+            "deposit",
+            3
+           ],
+           [
+            "withdraw",
+            3
+           ],
+           [
+            "withdraw",
+            3
+           ]
+          ]
+         ],
+         "expected": [
+          0,
+          1
+         ]
+        },
+        {
+         "id": "t5",
+         "args": [
+          [
+           [
+            "deposit",
+            9
+           ],
+           [
+            "withdraw",
+            4
+           ],
+           [
+            "withdraw",
+            6
+           ]
+          ]
+         ],
+         "expected": [
+          5,
+          1
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "py-l3-04",
+   "kind": "python",
+   "competency": "python",
+   "title": "Normalise scores",
+   "stages": {
+    "base": {
+     "prompt": "Write normalize_scores(scores) that min-max scales a list of numbers to the range 0 to 1, each rounded to 2 decimal places. If all values are equal return a list of 0.0 values. An empty list returns [].",
+     "starter_code": "def normalize_scores(scores):\n    pass\n",
+     "function": "normalize_scores",
+     "datasets": [
+      {
+       "name": "v1",
+       "tests": [
+        {
+         "id": "t1",
+         "args": [
+          [
+           0,
+           5,
+           10
+          ]
+         ],
+         "expected": [
+          0.0,
+          0.5,
+          1.0
+         ]
+        },
+        {
+         "id": "t2",
+         "args": [
+          []
+         ],
+         "expected": []
+        },
+        {
+         "id": "t3",
+         "args": [
+          [
+           3,
+           3,
+           3
+          ]
+         ],
+         "expected": [
+          0.0,
+          0.0,
+          0.0
+         ]
+        },
+        {
+         "id": "t4",
+         "args": [
+          [
+           1,
+           2,
+           4
+          ]
+         ],
+         "expected": [
+          0.0,
+          0.33,
+          1.0
+         ]
+        },
+        {
+         "id": "t5",
+         "args": [
+          [
+           -5,
+           0,
+           5
+          ]
+         ],
+         "expected": [
+          0.0,
+          0.5,
+          1.0
+         ]
+        }
+       ]
+      },
+      {
+       "name": "v2",
+       "tests": [
+        {
+         "id": "t1",
+         "args": [
+          [
+           10,
+           20
+          ]
+         ],
+         "expected": [
+          0.0,
+          1.0
+         ]
+        },
+        {
+         "id": "t2",
+         "args": [
+          []
+         ],
+         "expected": []
+        },
+        {
+         "id": "t3",
+         "args": [
+          [
+           7
+          ]
+         ],
+         "expected": [
+          0.0
+         ]
+        },
+        {
+         "id": "t4",
+         "args": [
+          [
+           2,
+           9,
+           4,
+           6
+          ]
+         ],
+         "expected": [
+          0.0,
+          1.0,
+          0.29,
+          0.57
+         ]
+        },
+        {
+         "id": "t5",
+         "args": [
+          [
+           100,
+           0
+          ]
+         ],
+         "expected": [
+          1.0,
+          0.0
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    "mutated": {
+     "prompt": "Constraint change: the list may contain None. Ignore None when finding the minimum and maximum, and keep None at the same positions in the result. Adapt your solution.",
+     "starter_code": "def normalize_scores(scores):\n    pass\n",
+     "function": "normalize_scores",
+     "datasets": [
+      {
+       "name": "v1",
+       "tests": [
+        {
+         "id": "t1",
+         "args": [
+          [
+           0,
+           null,
+           10
+          ]
+         ],
+         "expected": [
+          0.0,
+          null,
+          1.0
+         ]
+        },
+        {
+         "id": "t2",
+         "args": [
+          [
+           null,
+           null
+          ]
+         ],
+         "expected": [
+          null,
+          null
+         ]
+        },
+        {
+         "id": "t3",
+         "args": [
+          []
+         ],
+         "expected": []
+        },
+        {
+         "id": "t4",
+         "args": [
+          [
+           3,
+           null,
+           3
+          ]
+         ],
+         "expected": [
+          0.0,
+          null,
+          0.0
+         ]
+        },
+        {
+         "id": "t5",
+         "args": [
+          [
+           1,
+           2,
+           null,
+           4
+          ]
+         ],
+         "expected": [
+          0.0,
+          0.33,
+          null,
+          1.0
+         ]
+        }
+       ]
+      },
+      {
+       "name": "v2",
+       "tests": [
+        {
+         "id": "t1",
+         "args": [
+          [
+           5,
+           null
+          ]
+         ],
+         "expected": [
+          0.0,
+          null
+         ]
+        },
+        {
+         "id": "t2",
+         "args": [
+          [
+           null
+          ]
+         ],
+         "expected": [
+          null
+         ]
+        },
+        {
+         "id": "t3",
+         "args": [
+          []
+         ],
+         "expected": []
+        },
+        {
+         "id": "t4",
+         "args": [
+          [
+           null,
+           0,
+           10,
+           5
+          ]
+         ],
+         "expected": [
+          null,
+          0.0,
+          1.0,
+          0.5
+         ]
+        },
+        {
+         "id": "t5",
+         "args": [
+          [
+           8,
+           8,
+           null
+          ]
+         ],
+         "expected": [
+          0.0,
+          0.0,
+          null
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   }
+  }
+ ]
+}

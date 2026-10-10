@@ -1,6 +1,6 @@
 # Machine-readable lifecycle state. Only the Chief of Staff edits this file, and only after the
 # Founder explicitly approves a gate in chat. Gate statuses: pending | in_progress | audit | approved
-project: unassigned
+project: crucible
 profile: none
 stack: unset
 current_gate: G0
@@ -10,8 +10,8 @@ gates:
   G0: in_progress
   G1: pending
   G2: pending
-  G3: pending
-  G4: pending
+  G3: approved
+  G4: approved
   G5: pending
   G6: pending
   G7: pending

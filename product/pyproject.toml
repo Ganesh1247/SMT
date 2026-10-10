@@ -1,0 +1,20 @@
+[project]
+name = "crucible-sandbox"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.110",
+  "uvicorn>=0.27",
+  "pydantic>=2.5",
+  "sqlalchemy>=2.0",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8", "httpx>=0.27"]
+
+[tool.pytest.ini_options]
+pythonpath = ["modules", "shared-kernel", "entrypoints/http-api"]
+addopts = "--import-mode=importlib -p no:cacheprovider"
+markers = ["docker: needs a usable Docker engine"]
+norecursedirs = ["node_modules", "web", ".git", "data"]
+testpaths = ["modules", "architecture-tests", "entrypoints/http-api", "tests"]

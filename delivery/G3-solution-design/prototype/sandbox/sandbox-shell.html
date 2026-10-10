@@ -1,0 +1,845 @@
+<!-- STATUS: DRAFT -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crucible sandbox shell (PROTOTYPE)</title>
+<style>
+:root{
+  --color-text:#1A1A1A; --color-text-muted:#4A4A4A; --color-surface:#FFFFFF; --color-surface-alt:#F3F5F8;
+  --color-border:#767676; --color-primary:#0B4F9E; --color-focus:#0B4F9E; --color-success:#1B6E3A;
+  --color-warning-text:#7A4B00; --color-warning-bg:#FFF4D6; --color-error:#B3261E; --color-neutral-chip-bg:#E6EAF0;
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --s7:48px;
+  --radius:4px;
+  --fs-s:.875rem; --fs-b:1rem; --fs-m:1.25rem; --fs-l:1.5rem; --fs-xl:2rem;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{font-size:16px;scroll-padding-block-start:100px}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:var(--fs-b);line-height:1.5;color:var(--color-text);background:var(--color-surface);overflow-wrap:anywhere}
+h1,h2,h3,h4{line-height:1.25;margin:0 0 var(--s3)}
+h1{font-size:var(--fs-xl)} h2{font-size:var(--fs-l)} h3{font-size:var(--fs-m)} h4{font-size:var(--fs-b)}
+p{margin:0 0 var(--s3);max-width:75ch}
+ul,ol{margin:0;padding:0;list-style:none}
+ul.bul{list-style:disc;padding-inline-start:var(--s5);margin-block-end:var(--s3)}
+a{color:var(--color-primary);text-decoration:underline}
+code,.mono{font-family:ui-monospace,Consolas,"Courier New",monospace;font-size:var(--fs-s)}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.muted{color:var(--color-text-muted)}
+.small{font-size:var(--fs-s)}
+:focus{outline:none}
+:focus-visible{outline:3px solid var(--color-focus);outline-offset:2px;box-shadow:0 0 0 2px #fff}
+[tabindex="-1"]:focus{outline:none;box-shadow:none}
+.skip{position:absolute;inset-inline-start:var(--s2);inset-block-start:-100px;background:var(--color-primary);color:#fff;padding:var(--s3) var(--s4);z-index:100;min-height:44px;border-radius:var(--radius)}
+.skip:focus{inset-block-start:var(--s2)}
+.ic{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vertical-align:-4px}
+.banner{position:sticky;inset-block-start:0;z-index:50;background:var(--color-warning-bg);color:var(--color-warning-text);border-block-end:1px solid var(--color-warning-text);padding:var(--s2) var(--s4);font-weight:700;display:flex;gap:var(--s2);align-items:flex-start}
+.mockctl{border:1px dashed var(--color-text-muted);background:var(--color-surface-alt);padding:var(--s3) var(--s4);margin-block-end:var(--s4);border-radius:var(--radius)}
+.mockctl .tag{font-weight:700;margin:0 0 var(--s2);font-size:var(--fs-s)}
+.mockctl .field{margin-block-end:0}
+.wrap{max-width:75rem;margin-inline:auto;padding:var(--s4)}
+.site{display:flex;flex-wrap:wrap;gap:var(--s2) var(--s5);align-items:center;justify-content:space-between;padding-block:var(--s3)}
+.site .name{font-size:var(--fs-m);font-weight:700;margin:0}
+.rolebar{display:flex;flex-wrap:wrap;gap:var(--s2) var(--s3);align-items:center}
+nav ul{display:flex;flex-wrap:wrap;gap:var(--s1) var(--s2)}
+nav a{display:inline-flex;align-items:center;min-height:44px;min-width:44px;padding:var(--s2) var(--s3);text-decoration:none;color:var(--color-text);border-block-end:4px solid transparent}
+nav a:hover{background:var(--color-surface-alt)}
+nav a[aria-current="page"]{font-weight:700;border-block-end-color:var(--color-primary);text-decoration:underline;text-decoration-thickness:2px}
+header.top{border-block-end:1px solid var(--color-border)}
+main{display:block;padding-block:var(--s4) var(--s6)}
+footer{border-block-start:1px solid var(--color-border);padding-block:var(--s4);color:var(--color-text-muted);font-size:var(--fs-s)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--s2);min-height:44px;min-width:44px;padding:var(--s2) var(--s4);font:inherit;font-weight:600;border-radius:var(--radius);border:1px solid var(--color-primary);background:var(--color-surface);color:var(--color-primary);cursor:pointer;text-decoration:none}
+.btn.primary{background:var(--color-primary);color:#fff}
+.btn.danger{background:var(--color-error);border-color:var(--color-error);color:#fff}
+.btn:hover{filter:brightness(.94)}
+.btn[aria-disabled="true"]{opacity:.6;cursor:not-allowed}
+.actions{display:flex;flex-wrap:wrap;gap:var(--s3);margin-block-start:var(--s3)}
+.panel{background:var(--color-surface-alt);border:1px solid var(--color-border);border-radius:var(--radius);padding:var(--s4);margin-block-end:var(--s4)}
+.panel.plain{background:var(--color-surface)}
+.notice{display:flex;gap:var(--s2);align-items:flex-start;border:1px solid var(--color-success);color:var(--color-success);background:#fff;padding:var(--s3);border-radius:var(--radius);margin-block-end:var(--s4);font-weight:600}
+.alert{display:flex;gap:var(--s2);align-items:flex-start;border:1px solid var(--color-error);color:var(--color-error);background:#fff;padding:var(--s4);border-radius:var(--radius);margin-block-end:var(--s4)}
+.alert p{color:var(--color-text)}
+.alert strong{color:var(--color-error)}
+.warn{display:flex;gap:var(--s2);align-items:flex-start;background:var(--color-warning-bg);color:var(--color-warning-text);border:1px solid var(--color-warning-text);padding:var(--s3) var(--s4);border-radius:var(--radius);margin-block-end:var(--s4)}
+.chip{display:inline-flex;align-items:center;gap:6px;min-height:28px;padding:2px 10px;border-radius:14px;border:1px solid currentColor;font-size:var(--fs-s);font-weight:600;background:#fff;vertical-align:middle}
+.chip.success{color:var(--color-success)}
+.chip.info{color:var(--color-primary)}
+.chip.warning{color:var(--color-warning-text);background:var(--color-warning-bg)}
+.chip.neutral{color:var(--color-text);background:var(--color-neutral-chip-bg);border-color:var(--color-border)}
+.chip.error{color:var(--color-error)}
+.method{display:inline-flex;align-items:center;gap:6px;font-weight:600}
+.grid{display:grid;gap:var(--s4);grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr))}
+.card{border:1px solid var(--color-border);border-radius:var(--radius);padding:var(--s4);background:#fff}
+.card h3,.card h4{margin-block-end:var(--s2)}
+dl.kv{display:grid;grid-template-columns:max-content 1fr;gap:var(--s1) var(--s4);margin:var(--s2) 0}
+dl.kv dt{color:var(--color-text-muted)}
+dl.kv dd{margin:0}
+@media (max-width:400px){dl.kv{grid-template-columns:1fr}dl.kv dt{margin-block-start:var(--s2)}.banner{position:static}html{scroll-padding-block-start:0}}
+@media (max-height:500px){.banner{position:static}html{scroll-padding-block-start:0}}
+@media (min-width:768px){.wrap{padding:var(--s5)}.banner{padding-inline:var(--s5)}}
+@media (min-width:1200px){.wrap{padding-inline:var(--s6)}}
+@media (prefers-reduced-motion:no-preference){.btn{transition:filter .1s}}
+.estimate{font-size:var(--fs-l);font-weight:700;line-height:1.25;margin-block-end:var(--s3)}
+.band{position:relative;max-width:36rem;padding-block-start:var(--s2)}
+.band-track{position:relative;height:24px;border:1px solid var(--color-text);background:#fff;border-radius:2px}
+.band-range{position:absolute;inset-block:0;background:repeating-linear-gradient(45deg,var(--color-primary) 0 4px,#9DB8D9 4px 8px);border-inline:2px solid var(--color-primary)}
+.band-est{position:absolute;inset-block:-6px;width:4px;margin-inline-start:-2px;background:var(--color-text)}
+.band-scale{display:flex;justify-content:space-between;font-size:var(--fs-s);color:var(--color-text-muted);margin-block-start:var(--s1)}
+.band-key{font-size:var(--fs-s);color:var(--color-text-muted);margin-block-start:var(--s1)}
+.tw{overflow-x:auto;max-width:100%;margin-block-end:var(--s3)}
+table{border-collapse:collapse;width:100%}
+caption{text-align:start;font-weight:600;padding-block-end:var(--s2)}
+th,td{text-align:start;border:1px solid var(--color-border);padding:var(--s2) var(--s3);vertical-align:top}
+th{background:var(--color-neutral-chip-bg)}
+details{margin-block:var(--s3)}
+summary{cursor:pointer;min-height:44px;display:flex;align-items:center;color:var(--color-primary);font-weight:600}
+.field{margin-block-end:var(--s4);max-width:36rem}
+.field.wide{max-width:50rem}
+label,.lbl{display:block;font-weight:600;margin-block-end:var(--s1)}
+.hint{color:var(--color-text-muted);font-size:var(--fs-s);margin:0 0 var(--s2)}
+input[type=text],select,textarea{width:100%;min-height:44px;font:inherit;padding:var(--s2) var(--s3);border:1px solid var(--color-border);border-radius:var(--radius);background:#fff;color:var(--color-text)}
+textarea.code{font-family:ui-monospace,Consolas,"Courier New",monospace;font-size:var(--fs-s);min-height:12rem;white-space:pre;overflow:auto}
+.field.has-error textarea,.field.has-error select{border:2px solid var(--color-error)}
+.err{color:var(--color-error);font-weight:600;display:flex;gap:var(--s1);margin-block-start:var(--s1)}
+.skel{background:var(--color-neutral-chip-bg);border-radius:var(--radius);height:20px;margin-block-end:var(--s3)}
+.skel.big{height:80px}
+pre.out{margin:0 0 var(--s3);padding:var(--s3);background:#fff;border:1px solid var(--color-border);border-radius:var(--radius);white-space:pre-wrap;overflow-wrap:anywhere;font-family:ui-monospace,Consolas,"Courier New",monospace;font-size:var(--fs-s)}
+.rolecard{border:2px solid var(--color-border);border-radius:var(--radius);padding:var(--s4);background:#fff}
+.rolecard:has(input:checked){border-color:var(--color-primary);background:var(--color-surface-alt)}
+.rolecard .pick{display:flex;gap:var(--s3);align-items:flex-start;min-height:44px;margin-block-end:var(--s2)}
+.rolecard input[type=radio]{width:24px;height:24px;margin:2px 0 0;flex:none}
+.rolecard .pick label{margin:0;font-size:var(--fs-m)}
+.radios label{font-weight:400;display:flex;gap:var(--s2);align-items:flex-start;min-height:44px;padding-block:var(--s2)}
+.radios input{width:24px;height:24px;margin:0;flex:none}
+.radios label.dis{color:var(--color-text-muted)}
+.steps li{display:flex;flex-wrap:wrap;gap:var(--s2) var(--s3);align-items:flex-start;padding-block:var(--s2);border-block-end:1px solid var(--color-neutral-chip-bg)}
+.steps .nm{font-weight:600;min-width:9rem}
+#evlist li{padding-block:var(--s1);border-block-end:1px solid var(--color-neutral-chip-bg)}
+h3.sub{font-size:var(--fs-b);margin-block-end:var(--s2)}
+.instr-head{border-block-start:4px solid var(--color-text-muted);padding-block-start:var(--s4)}
+.overlay{position:fixed;inset:0;background:rgba(26,26,26,.7);display:flex;align-items:center;justify-content:center;padding:var(--s4);z-index:200;overflow:auto}
+.dialog{background:#fff;color:var(--color-text);border:1px solid var(--color-text);border-radius:var(--radius);padding:var(--s5);max-width:32rem;width:100%;max-height:100%;overflow:auto}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/></symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3l10 18H2z"/><path d="M12 10v5"/><path d="M12 18h.01"/></symbol>
+  <symbol id="i-dash" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12h8"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6"/><path d="M12 7.5h.01"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></symbol>
+  <symbol id="i-test" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 12.5l3 3 5-6"/></symbol>
+  <symbol id="i-probe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7"/><path d="M12 17h.01"/></symbol>
+  <symbol id="i-ai" viewBox="0 0 24 24"><path d="M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></symbol>
+  <symbol id="i-person" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-5 15-5 16 0"/></symbol>
+</svg>
+<a class="skip" href="#main">Skip to main content</a>
+<div id="announce" class="sr-only" role="status" aria-live="polite"></div>
+<div id="app">
+<div class="banner"><svg class="ic" aria-hidden="true" focusable="false"><use href="#i-warn"/></svg><span>PROTOTYPE · simulated runner · synthetic data · no real isolation</span></div>
+<header class="top">
+  <div class="wrap site">
+    <p class="name">Crucible sandbox</p>
+    <div class="rolebar" id="rolebar"></div>
+  </div>
+  <nav aria-label="Workspace tabs" id="tabs" class="wrap" style="padding-block:0" hidden></nav>
+</header>
+<main id="main" class="wrap"><noscript><p>This prototype needs JavaScript. It makes no network requests.</p></noscript><div id="view"></div></main>
+
+<section class="wrap instr-head" aria-labelledby="h-ev" id="instr">
+  <h2 id="h-ev">Shell event log</h2>
+  <p class="small muted">Refused navigations and workspace changes. Entries name the role and the action only; no data was requested for a refused page.</p>
+  <p id="ev-empty" class="small"><strong>No shell events yet.</strong></p>
+  <ol id="evlist" role="log" aria-labelledby="h-ev" class="small"></ol>
+
+  <h2 id="h-ctl">Prototype controls</h2>
+  <div class="mockctl">
+    <p class="tag">Prototype control: operator view</p>
+    <div class="field">
+      <p class="hint" id="opt-h">Demo only. Shows simulated runner internals (run id, limits, isolation mode). Off by default. These details are never part of a learner screen.</p>
+      <button type="button" class="btn" id="op-toggle" data-act="toggle-op" aria-pressed="false" aria-controls="operator" aria-describedby="opt-h">Operator view (demo): off</button>
+    </div>
+  </div>
+  <div class="mockctl">
+    <p class="tag">Prototype control: screen state</p>
+    <div class="field">
+      <label for="screen-sel">Show the current tab as</label>
+      <p class="hint" id="screen-h">Previews the loading and error states of a workspace tab. Empty and evaluating states appear on their own.</p>
+      <select id="screen-sel" data-bind="screen" aria-describedby="screen-h">
+        <option value="normal">Normal</option>
+        <option value="loading">Loading</option>
+        <option value="error">Error (could not load)</option>
+      </select>
+    </div>
+  </div>
+</section>
+<section class="wrap" id="operator" aria-labelledby="h-op" hidden>
+  <h2 id="h-op">Operator view (demo): simulated runner</h2>
+  <p class="small muted">Demo only. Not part of any learner tab. Nothing here is a measurement: every step and value is scripted by this prototype.</p>
+  <p id="op-sum" role="status" class="small"><strong>No run yet.</strong></p>
+  <div id="op-body"></div>
+</section>
+<footer><div class="wrap">
+  <p>Prototype scope: learner workspaces only. Role is kept in this browser tab's session storage for the demo; no data leaves this page and no external request is made.</p>
+</div></footer>
+</div>
+<div id="dialog-root"></div>
+
+<script>
+"use strict";
+var $ = function (s) { return document.querySelector(s); };
+var esc = function (s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); };
+var REDUCED = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+var AS_OF = "10 Oct 2026";
+
+/* ---------- vocabulary ---------- */
+var TAB_LABEL = { brief: "Brief", editor: "Editor (Python)", tests: "Tests", output: "Output", data: "Data", sql: "SQL editor", results: "Results", feedback: "Feedback", probe: "Probe", profile: "Profile" };
+var ROLES = {
+  python: {
+    label: "Python developer",
+    tabs: ["brief", "editor", "tests", "output", "feedback", "probe", "profile"],
+    summary: "You write Python in an editor and check it against visible tests.",
+    allows: ["Brief", "Editor (Python)", "Tests (visible tests)", "Output (captured print output and errors, no shell)", "Feedback", "Probe", "Profile"],
+    notAllowed: "Not in this workspace: SQL editor, data tables, results tables, a terminal or a shell."
+  },
+  analyst: {
+    label: "Data analyst",
+    tabs: ["brief", "data", "sql", "results", "feedback", "probe", "profile"],
+    summary: "You explore tables and write SQL queries, then check your results.",
+    allows: ["Brief", "Data (tables and preview)", "SQL editor", "Results (table and text summary)", "Feedback", "Probe", "Profile"],
+    notAllowed: "Not in this workspace: Python editor, test runner, output console, a terminal or a shell."
+  }
+};
+var METHODS = {
+  deterministic_test: { label: "Automated test", ic: "test" },
+  probe: { label: "Understanding probe", ic: "probe" },
+  ai_judged: { label: "AI-assisted judgement", ic: "ai" },
+  live_screening: { label: "Level 4 text session", ic: "chat" },
+  human_review: { label: "Human review", ic: "person" }
+};
+var STEPS = ["create", "start", "run", "collect result", "destroy"];
+var STEP_VIEW = {
+  pending: ["neutral", "dash", "Pending"], active: ["info", "info", "Working"], ok: ["success", "check", "Done"],
+  refused: ["warning", "warn", "Refused"], stopped: ["warning", "warn", "Stopped"], skipped: ["neutral", "dash", "Skipped"], error: ["error", "x", "Error"]
+};
+var LIMITS = [
+  ["Network", "none"],
+  ["Root filesystem", "read-only"],
+  ["User", "non-root (fixed uid:gid)"],
+  ["Capabilities", "all dropped; no privilege escalation"],
+  ["Memory", "256 MB, no swap"],
+  ["CPU", "0.5 core"],
+  ["Processes", "at most 32"],
+  ["Wall clock", "hard deadline 5 s (operator-only; never shown to learners)"],
+  ["Output", "at most 1 MB and 1,000 rows, one result document"]
+];
+
+/* ---------- runner step scripts ---------- */
+var R_OK = [["ok", "Container created from the pinned image (simulated)"], ["ok", "Started with the proposed limits applied"], ["ok", "Submitted work run"], ["ok", "One bounded result document read"], ["ok", "Container removed"]];
+function rRefused(why) { return [["refused", "Request refused at validation: " + why], ["skipped", "No container was created"], ["skipped", "Nothing to run"], ["skipped", "No result to collect"], ["skipped", "No container to remove"]]; }
+function rStop(why) { return [["ok", "Container created from the pinned image (simulated)"], ["ok", "Started with the proposed limits applied"], ["stopped", why], ["skipped", "No result to collect"], ["ok", "Container stopped and removed"]]; }
+var R_DOWN = [["error", "Runner unavailable. The run stays closed: no run, no fallback to in-process mode"], ["skipped", "Not started"], ["skipped", "Nothing to run"], ["skipped", "No result to collect"], ["skipped", "No container to remove"]];
+var R_NET = [["ok", "Container created from the pinned image (simulated)"], ["ok", "Started with the proposed limits applied"], ["ok", "Submitted work run; an outbound connection attempt was refused (network none, proposed)"], ["ok", "One bounded result document read"], ["ok", "Container removed"]];
+
+/* ---------- per-track data: built only after the role is chosen ---------- */
+var TRACK = {
+  python: function () {
+    var nonres = function (kind, message) { return { type: "nonresult", kind: kind, message: message, stdout: "", stderr: "" }; };
+    return {
+      title: "Summarise orders by customer",
+      brief: [
+        "Write summarise(orders). It receives a list of (customer, amount) pairs and returns a dictionary with the total amount per customer.",
+        "Use the Editor to write code, Tests to see the visible tests, and Output to see what your code printed. All data is synthetic."
+      ],
+      starter: 'def summarise(orders):\n    totals = {}\n    for customer, amount in orders:\n        totals[customer] = totals.get(customer, 0) + amount\n    return totals\n\nprint(summarise([("a", 5), ("a", 3), ("b", 3)]))\n',
+      tests: [
+        { id: "t1", name: "One customer", call: 'summarise([("a", 5)])', expect: '{"a": 5}', got: '{"a": 5}' },
+        { id: "t2", name: "Two customers, one repeats", call: 'summarise([("a", 5), ("a", 3), ("b", 3)])', expect: '{"a": 8, "b": 3}', got: '{"a": 5, "b": 3}' },
+        { id: "t3", name: "Empty list", call: "summarise([])", expect: "{}", got: "{}" }
+      ],
+      passMsg: "Scripted result: the visible tests pass. See Tests, Output and Feedback.",
+      notPassMsg: "Scripted result: a visible test is not passing yet. See Tests for the line difference.",
+      links: [["tests", "Tests"], ["output", "Output"], ["feedback", "Feedback"]],
+      scenarios: [
+        { id: "py-pass", label: "Passes the visible tests", exit: "completed", runner: R_OK,
+          out: { type: "result", passed: true, tests: { t1: "pass", t2: "pass", t3: "pass" }, stdout: "{'a': 8, 'b': 3}\n", stderr: "" } },
+        { id: "py-diff", label: "One test not passing, with line difference", exit: "completed", runner: R_OK,
+          out: { type: "result", passed: false, tests: { t1: "pass", t2: "notpass", t3: "pass" }, stdout: "{'a': 5, 'b': 3}\n", stderr: "" } },
+        { id: "py-import", label: "Blocked import (os, subprocess or socket)", exit: "refused_validation", runner: rRefused("import of a system module"),
+          out: nonres("blocked", "That import is not available in your workspace (line 1). Nothing was run. Remove it and run again. Your work is saved.") },
+        { id: "py-net", label: "Network attempt refused", exit: "completed", runner: R_NET,
+          out: { type: "nonresult", kind: "blocked", chip: "Blocked", message: "Network access is not available in your workspace. The attempt was refused. Your work is saved.", stdout: "", stderr: "Network access is not available in your workspace.\n" } },
+        { id: "py-loop", label: "Infinite loop reaches the run limit", exit: "deadline", runner: rStop("Stopped at the hard deadline (proposed limit)"),
+          out: nonres("limit", "Your code took too long to run. Your work is saved. Try a smaller input or check your loop.") },
+        { id: "py-down", label: "Runner unavailable", exit: "runner_unavailable", runner: R_DOWN,
+          out: nonres("down", "We could not run your code right now. Your work is saved. Try again.") }
+      ],
+      probe: {
+        question: 'Your function is called with [("a", 2), ("a", 3), ("b", 1)]. What does it return?',
+        options: ['{"a": 5, "b": 1}', '{"a": 3, "b": 1}', '[("a", 5), ("b", 1)]', "I am not sure"]
+      },
+      est: { v: 0.58, lo: 0.45, hi: 0.70 },
+      competency: "Python: data handling basics"
+    };
+  },
+  analyst: function () {
+    var C = ["customer_id", "amount", "ordered_on"];
+    var EXP = [["cust_003", "240", "2026-09-30"], ["cust_001", "180", "2026-09-27"], ["cust_001", "120", "2026-09-20"]];
+    var nonres = function (kind, message) { return { type: "nonresult", kind: kind, message: message }; };
+    var BLOCK = "That statement type is not available in your workspace. Only a single read query can be run. Your work is saved.";
+    return {
+      title: "North customers with larger orders",
+      brief: [
+        "List the customer, amount and order date for orders over 100 from customers in the North region, newest order first.",
+        "Use Data to look at the tables, the SQL editor to write one read query, and Results to see the rows. All data is synthetic."
+      ],
+      tables: {
+        customers: { cols: ["customer_id", "region"], rows: [["cust_001", "North"], ["cust_002", "South"], ["cust_003", "North"], ["cust_004", "East"], ["cust_005", "North"]] },
+        orders: { cols: ["order_id", "customer_id", "amount", "ordered_on"], rows: [["ord_101", "cust_003", "240", "2026-09-30"], ["ord_102", "cust_001", "180", "2026-09-27"], ["ord_103", "cust_002", "95", "2026-09-26"], ["ord_104", "cust_005", "100", "2026-09-25"], ["ord_105", "cust_001", "120", "2026-09-20"]] }
+      },
+      starter: "SELECT o.customer_id, o.amount, o.ordered_on\nFROM orders o\nJOIN customers c ON c.customer_id = o.customer_id\nWHERE c.region = 'North' AND o.amount > 100\nORDER BY o.ordered_on DESC;\n",
+      passMsg: "Scripted result: the rows match the expected rows. See Results and Feedback.",
+      notPassMsg: "Scripted result: the rows differ from the expected rows. See Results for the row-level difference.",
+      links: [["results", "Results"], ["feedback", "Feedback"]],
+      scenarios: [
+        { id: "an-pass", label: "Correct query", exit: "completed", runner: R_OK,
+          out: { type: "result", passed: true, cols: C, rows: EXP, diff: null } },
+        { id: "an-diff", label: "Wrong rows, with row-level difference", exit: "completed", runner: R_OK,
+          out: { type: "result", passed: false, cols: C, rows: [EXP[0], EXP[1], ["cust_005", "100", "2026-09-25"]],
+            diff: [{ s: "match", r: EXP[0] }, { s: "match", r: EXP[1] }, { s: "extra", r: ["cust_005", "100", "2026-09-25"] }, { s: "missing", r: EXP[2] }] } },
+        { id: "an-attach", label: "Blocked statement: ATTACH", exit: "refused_validation", runner: rRefused("statement type not allowed"), out: nonres("blocked", BLOCK) },
+        { id: "an-drop", label: "Blocked statement: DROP", exit: "refused_validation", runner: rRefused("statement type not allowed"), out: nonres("blocked", BLOCK) },
+        { id: "an-multi", label: "Blocked: multiple statements", exit: "refused_validation", runner: rRefused("more than one statement"),
+          out: nonres("blocked", "Only one query can be run at a time. Remove the extra statements and run again. Your work is saved.") },
+        { id: "an-budget", label: "Runaway query reaches the budget", exit: "deadline", runner: rStop("Stopped at the query budget (proposed limit)"),
+          out: nonres("limit", "Your query took too long to run. Your work is saved. Try a smaller query.") },
+        { id: "an-down", label: "Runner unavailable", exit: "runner_unavailable", runner: R_DOWN,
+          out: nonres("down", "We could not run your query right now. Your work is saved. Try again.") }
+      ],
+      probe: {
+        question: "A new order ord_106 is added: customer cust_005, amount 150, dated 2026-10-01. Which customer_id values does your query return, in order?",
+        options: ["cust_005, cust_003, cust_001, cust_001", "cust_003, cust_001, cust_001", "cust_005, cust_003, cust_001", "I am not sure"]
+      },
+      est: { v: 0.62, lo: 0.48, hi: 0.74 },
+      competency: "SQL: filtering and joins"
+    };
+  }
+};
+
+/* ---------- state ---------- */
+var role = null, data = null, ws = null;
+var current = { tab: null, denied: false };
+var screenState = "normal";
+var events = [], evSeq = 0;
+var runSeq = 0, running = false, token = 0, cur = null, lastSummary = null;
+var choosing = false, resetNotice = false, chooseError = false, probeError = false;
+var store = null;
+try { sessionStorage.setItem("__t", "1"); sessionStorage.removeItem("__t"); store = sessionStorage; } catch (e) { store = null; }
+
+function freshWs() {
+  return { draft: data.starter, scenario: data.scenarios[0].id, last: null, passed: false, fbViewed: false,
+    probe: { answer: null, result: null }, probeOutcome: "confirmed", table: "orders", results: 0 };
+}
+function announce(t) { var a = $("#announce"); a.textContent = ""; setTimeout(function () { a.textContent = t; }, 50); }
+
+/* ---------- small renderers ---------- */
+function icon(id) { return '<svg class="ic" aria-hidden="true" focusable="false"><use href="#i-' + id + '"/></svg>'; }
+function chip(kind, ic, text) { return '<span class="chip ' + kind + '">' + icon(ic) + "<span>" + esc(text) + "</span></span>"; }
+function methodLabel(m) { return '<span class="method">' + icon(METHODS[m].ic) + "<span>" + esc(METHODS[m].label) + "</span></span>"; }
+function table(caption, cols, rows) {
+  return '<div class="tw" tabindex="0" role="region" aria-label="' + esc(caption) + ' (scrollable)"><table><caption>' + esc(caption) + "</caption><thead><tr>" +
+    cols.map(function (c) { return '<th scope="col">' + esc(c) + "</th>"; }).join("") + "</tr></thead><tbody>" +
+    rows.map(function (r) { return "<tr>" + r.map(function (c) { return "<td>" + esc(c) + "</td>"; }).join("") + "</tr>"; }).join("") + "</tbody></table></div>";
+}
+function scripted() {
+  return '<p class="small"><strong>Scripted result.</strong> <span class="muted">This prototype does not run or check your work. The outcome shown comes from the scenario chosen in the prototype controls.</span></p>';
+}
+function logEvent(text) {
+  evSeq++;
+  events.push({ n: evSeq, text: text });
+  var list = $("#evlist");
+  $("#ev-empty").hidden = true;
+  list.insertAdjacentHTML("beforeend", "<li><span class=\"mono\">#" + evSeq + "</span> " + esc(text) + "</li>");
+  while (list.children.length > 50) { list.removeChild(list.firstChild); }
+}
+
+/* ---------- operator view ---------- */
+function renderOp() {
+  var runId = cur ? cur.id : "none yet";
+  var steps = (cur ? cur.steps : STEPS.map(function () { return { st: "pending", note: "" }; })).map(function (s, i) {
+    var v = STEP_VIEW[s.st];
+    return "<li><span class=\"nm\">" + (i + 1) + ". " + esc(STEPS[i]) + "</span>" + chip(v[0], v[1], v[2]) + (s.note ? '<span class="small">' + esc(s.note) + "</span>" : "") + "</li>";
+  }).join("");
+  var limits = LIMITS.map(function (l) { return "<tr><th scope=\"row\">" + esc(l[0]) + "</th><td>" + esc(l[1]) + "</td><td>" + chip("neutral", "info", "Proposed") + "</td></tr>"; }).join("");
+  var py = role === "python" ? '<p class="small muted">Python track: runs need their own image and a stricter profile, to be designed. The values above are starting points, not a decision.</p>' : "";
+  $("#op-body").innerHTML =
+    '<dl class="kv"><dt>Run id</dt><dd class="mono">' + esc(runId) + "</dd>" +
+    "<dt>isolation_mode</dt><dd class=\"mono\">container-simulated</dd>" +
+    "<dt>Last exit reason</dt><dd class=\"mono\">" + esc(cur && cur.exit ? cur.exit : "none yet") + "</dd></dl>" +
+    '<fieldset class="field" style="border:0;padding:0;margin-inline:0"><legend class="lbl">Runner mode</legend><div class="radios">' +
+    '<label><input type="radio" name="mode" checked aria-describedby="mode-h"> <span>Container (default, simulated here)</span></label>' +
+    '<label class="dis"><input type="radio" name="mode" disabled aria-describedby="mode-h"> <span>In-process (manual, reduced isolation): unavailable</span></label></div>' +
+    '<p class="hint" id="mode-h">In-process mode is disabled in this prototype. It would need an explicit operator setting plus a written acknowledgement, would show a banner on every tab, and is never chosen automatically when the container runner is unavailable.</p></fieldset>' +
+    '<h3>Run lifecycle</h3><ol class="steps">' + steps + "</ol>" +
+    '<h3>Limits</h3><div class="tw" tabindex="0" role="region" aria-label="Proposed limits (scrollable)"><table><caption>Proposed limits for each run. Starting points to be measured, not measured behaviour.</caption>' +
+    '<thead><tr><th scope="col">Control</th><th scope="col">Value</th><th scope="col">Status</th></tr></thead><tbody>' + limits + "</tbody></table></div>" + py;
+}
+function setSummary(t) { $("#op-sum").innerHTML = "<strong>" + esc(t) + "</strong>"; }
+
+/* ---------- runner simulation ---------- */
+function launch(sc, onDone) {
+  if (running) { return; }
+  running = true;
+  var tok = ++token;
+  runSeq++;
+  cur = { id: "sim-run-" + String(runSeq).padStart(4, "0"), steps: STEPS.map(function () { return { st: "pending", note: "" }; }), exit: "" };
+  setSummary("Run " + cur.id + " created. Evaluating.");
+  renderOp();
+  renderView();
+  var rb0 = $("#run-btn"); if (rb0) { rb0.focus(); }
+  announce("Evaluating.");
+  var i = 0, d1 = REDUCED ? 0 : 280, d2 = REDUCED ? 0 : 140;
+  function tick() {
+    if (tok !== token) { return; }
+    if (i >= sc.runner.length) {
+      running = false;
+      cur.exit = sc.exit;
+      setSummary("Run " + cur.id + " ended. Exit reason: " + sc.exit + ".");
+      onDone();
+      renderOp();
+      renderView();
+      var b = $("#run-btn");
+      if (b && (document.activeElement === document.body || !document.activeElement)) { b.focus(); }
+      return;
+    }
+    cur.steps[i] = { st: "active", note: "" };
+    renderOp();
+    setTimeout(function () {
+      if (tok !== token) { return; }
+      cur.steps[i] = { st: sc.runner[i][0], note: sc.runner[i][1] };
+      i++;
+      renderOp();
+      setTimeout(tick, d2);
+    }, d1);
+  }
+  tick();
+}
+function doRun() {
+  if (running || !ws) { return; }
+  var sc = data.scenarios.filter(function (s) { return s.id === ws.scenario; })[0];
+  launch(sc, function () {
+    ws.last = { id: sc.id, out: sc.out };
+    if (sc.out.type === "result") { ws.results++; if (sc.out.passed) { ws.passed = true; } }
+    var o = sc.out;
+    announce(o.type === "result" ? (o.passed ? "Run finished. Passed." : "Run finished. Not passed yet.") : o.message);
+  });
+}
+function doProbe() {
+  if (running || !ws) { return; }
+  if (ws.probe.answer === null) { probeError = true; renderView(); var r = $("#probe-opt-0"); if (r) { r.focus(); } return; }
+  probeError = false;
+  launch({ runner: R_OK, exit: "completed" }, function () {
+    ws.probe.result = ws.probeOutcome;
+    announce(ws.probeOutcome === "unconfirmed" ? "Probe finished. Output verified, understanding unconfirmed." : "Probe finished. Understanding confirmed.");
+  });
+}
+
+/* ---------- views ---------- */
+function stepsList() {
+  var items = [["Main task has a passed result", ws.passed], ["Probe answered", !!ws.probe.result], ["Feedback reviewed", ws.fbViewed]];
+  return items;
+}
+function stepsPanel() {
+  return '<section class="panel" aria-labelledby="h-steps"><h2 id="h-steps">Steps to complete</h2><ul>' +
+    stepsList().map(function (s) { return "<li style=\"padding-block:4px\">" + (s[1] ? chip("success", "check", "Done") : chip("neutral", "dash", "To do")) + " " + esc(s[0]) + "</li>"; }).join("") +
+    "</ul><p class=\"small muted\">Your estimate on Profile appears after all steps are done.</p></section>";
+}
+function scenarioControl() {
+  var opts = data.scenarios.map(function (s) { return '<option value="' + s.id + '"' + (s.id === ws.scenario ? " selected" : "") + ">" + esc(s.label) + "</option>"; }).join("");
+  return '<div class="mockctl"><p class="tag">Prototype control: scripted scenario</p><div class="field"><label for="sc">Scenario to play on the next run</label>' +
+    '<p class="hint" id="sc-h">Results are scripted, not computed. Nothing you type is executed or analysed. Retrying repeats the chosen scenario.</p>' +
+    '<select id="sc" data-bind="scenario" aria-describedby="sc-h">' + opts + "</select></div></div>";
+}
+function evaluatingNote() {
+  return running ? '<div class="panel plain" role="status"><p><strong>Evaluating.</strong> Your work is saved. This can take a moment.</p></div>' : "";
+}
+function nonresultPanel(o) {
+  if (o.kind === "down") {
+    return '<div class="alert" role="alert">' + icon("x") + "<div><p><strong>" + esc(o.message) + '</strong></p><p>Nothing was run and no other way of running was used.</p><div class="actions"><button type="button" class="btn primary" data-act="run">Try again</button></div></div></div>';
+  }
+  return '<div class="warn">' + icon("warn") + "<div><p><strong>" + chip("neutral", "dash", o.chip || "Not run") + "</strong></p><p>" + esc(o.message) + "</p><p class=\"small\">This is not a result for any criterion.</p></div></div>";
+}
+function latestPanel() {
+  var l = ws.last;
+  if (!l) { return '<section class="panel plain" aria-labelledby="h-latest"><h2 id="h-latest">Latest result</h2><p><strong>No run yet.</strong> Choose Run to check your work.</p></section>'; }
+  var o = l.out;
+  var inner;
+  if (o.type === "result") {
+    inner = "<p>" + methodLabel("deterministic_test") + " " + (o.passed ? chip("success", "check", "Passed") : chip("neutral", "dash", "Not passed")) + "</p><p>" + esc(o.passed ? data.passMsg : data.notPassMsg) + "</p>" +
+      '<p class="actions" style="margin:0">' + data.links.map(function (k) { return '<a class="btn" href="#/' + k[0] + '">' + esc(k[1]) + "</a>"; }).join("") + "</p>";
+  } else { inner = nonresultPanel(o); }
+  return '<section class="panel plain" aria-labelledby="h-latest"><h2 id="h-latest">Latest result</h2>' + inner + "</section>";
+}
+function runButton(label) {
+  return '<button type="button" id="run-btn" class="btn primary" data-act="run"' + (running ? ' aria-disabled="true"' : "") + ">" + esc(running ? "Evaluating" : label) + "</button>";
+}
+
+function viewBrief() {
+  return '<h1 id="h1" tabindex="-1">Brief</h1><h2>' + esc(data.title) + "</h2>" + data.brief.map(function (p) { return "<p>" + esc(p) + "</p>"; }).join("") +
+    '<section class="panel" aria-labelledby="h-allow"><h2 id="h-allow">What your workspace allows</h2><ul class="bul">' +
+    ROLES[role].allows.map(function (a) { return "<li>" + esc(a) + "</li>"; }).join("") + "</ul><p class=\"small muted\">" + esc(ROLES[role].notAllowed) +
+    " Your role is a learning track. It does not change how your work is assessed.</p></section>" + stepsPanel();
+}
+function viewEditor(isSql) {
+  var h = isSql ? "SQL editor" : "Editor (Python)";
+  return '<h1 id="h1" tabindex="-1">' + h + "</h1>" +
+    '<p class="muted">' + (isSql ? "One read query at a time." : "Python 3, standard library only. Network access and system modules are not available.") + " Prototype: your draft is kept in memory only and is lost on reload. The product autosaves drafts, so the \"Your work is saved\" lines describe the product.</p>" +
+    scenarioControl() +
+    '<div class="field wide"><label for="code">' + (isSql ? "Your query" : "Your code") + '</label><textarea id="code" class="code" data-bind="draft" rows="12" spellcheck="false" autocomplete="off">' + esc(ws.draft) + "</textarea></div>" +
+    '<div class="actions" style="margin-block:0 var(--s4)">' + runButton(isSql ? "Run query" : "Run code") + '<button type="button" class="btn" data-act="reset-draft">Reset to starter</button></div>' +
+    evaluatingNote() + latestPanel();
+}
+function viewTests() {
+  var l = ws.last, out = '<h1 id="h1" tabindex="-1">Tests</h1><p class="muted">Visible tests only. Hidden checks run when you submit, outside this workspace.</p>' + scripted();
+  if (!l) {
+    return out + '<div class="panel"><p><strong>No test results yet.</strong> Run your code in the Editor to see the visible tests.</p><div class="actions"><a class="btn primary" href="#/editor">Go to Editor</a></div></div>';
+  }
+  var o = l.out;
+  if (o.type !== "result") { out += nonresultPanel(o); }
+  out += '<ul class="grid">' + data.tests.map(function (t) {
+    var st = o.type === "result" ? o.tests[t.id] : null;
+    var c = st === "pass" ? chip("success", "check", "Passed") : st === "notpass" ? chip("neutral", "dash", "Not passed") : chip("neutral", "dash", "Not run");
+    var diff = st === "notpass"
+      ? '<h3 class="sub">Line difference</h3><pre class="out">Expected: ' + esc(t.expect) + "\nGot:      " + esc(t.got) + "</pre><p class=\"small\">The returned total for \"a\" is 5. It should be 8: the second \"a\" amount was not added.</p>" : "";
+    return '<li class="card"><h2 style="font-size:var(--fs-m)">' + esc(t.name) + "</h2><p>" + methodLabel("deterministic_test") + " " + c + "</p>" +
+      '<p class="mono">' + esc(t.call) + "</p><p class=\"small muted\">Expected: <span class=\"mono\">" + esc(t.expect) + "</span></p>" + diff + "</li>";
+  }).join("") + "</ul>";
+  return out;
+}
+function viewOutput() {
+  var l = ws.last, h = '<h1 id="h1" tabindex="-1">Output</h1><p class="muted">Captured print output and errors from the last run. This is read-only: there is no shell or terminal in this workspace.</p>';
+  if (!l) { return h + '<div class="panel"><p><strong>No output yet.</strong> Run your code in the Editor.</p><div class="actions"><a class="btn primary" href="#/editor">Go to Editor</a></div></div>'; }
+  var o = l.out;
+  return h + (o.type !== "result" ? nonresultPanel(o) : "") +
+    '<p class="small muted">Scripted text for the chosen scenario. It was not produced by running what you typed.</p>' +
+    '<h2>Standard output</h2><pre class="out">' + esc(o.stdout ? o.stdout : "(no output)") + "</pre>" +
+    '<h2>Errors</h2><pre class="out">' + esc(o.stderr ? o.stderr : "(no errors)") + "</pre>";
+}
+function viewData() {
+  var names = Object.keys(data.tables);
+  var t = data.tables[ws.table];
+  return '<h1 id="h1" tabindex="-1">Data</h1><p class="muted">Synthetic tables for this task. Preview shows up to 5 rows. Read only.</p>' +
+    '<div class="field"><label for="tbl">Table</label><select id="tbl" data-bind="table">' +
+    names.map(function (n) { return '<option value="' + n + '"' + (n === ws.table ? " selected" : "") + ">" + esc(n) + "</option>"; }).join("") + "</select></div>" +
+    '<p>Columns: <span class="mono">' + esc(t.cols.join(", ")) + "</span></p>" +
+    table("Preview of " + ws.table, t.cols, t.rows.slice(0, 5)) +
+    '<div class="actions"><a class="btn primary" href="#/sql">Go to SQL editor</a></div>';
+}
+function viewResults() {
+  var l = ws.last, h = '<h1 id="h1" tabindex="-1">Results</h1><p class="muted">Rows returned by your last query. Scripted for the chosen scenario, not computed.</p>';
+  if (!l) { return h + '<div class="panel"><p><strong>No results yet.</strong> Run a query in the SQL editor.</p><div class="actions"><a class="btn primary" href="#/sql">Go to SQL editor</a></div></div>'; }
+  var o = l.out;
+  if (o.type !== "result") { return h + nonresultPanel(o) + '<div class="panel"><p><strong>No rows to show.</strong></p></div>'; }
+  var counts = {};
+  o.rows.forEach(function (r) { counts[r[0]] = (counts[r[0]] || 0) + 1; });
+  var sum = Object.keys(counts).map(function (k) { return "<li class=\"mono\">" + esc(k) + "  " + "#".repeat(counts[k]) + " (" + counts[k] + ")</li>"; }).join("");
+  var diff = "";
+  if (o.diff) {
+    var lab = { match: "Matches expected", extra: "Extra row (not expected)", missing: "Missing row (expected, not returned)" };
+    diff = '<h2>Row-level difference</h2>' + table("Difference against the expected rows", ["Status"].concat(o.cols), o.diff.map(function (d) { return [lab[d.s]].concat(d.r); }));
+  }
+  return h + "<p>" + methodLabel("deterministic_test") + " " + (o.passed ? chip("success", "check", "Passed") : chip("neutral", "dash", "Not passed")) + "</p>" +
+    table("Query result", o.cols, o.rows) + diff +
+    '<h2>Text summary</h2><p class="small muted">Orders returned per customer. Each # is one row.</p><ul aria-label="Orders returned per customer">' + sum + "</ul>";
+}
+function criterionCard(name, method, chipHtml, body, extra) {
+  return '<li class="card"><h3>' + esc(name) + "</h3><p>" + methodLabel(method) + " " + chipHtml + "</p>" + body + (extra || "") + "</li>";
+}
+function viewFeedback() {
+  var l = ws.last;
+  var h = '<h1 id="h1" tabindex="-1">Feedback</h1>';
+  var legend = '<section class="panel" aria-labelledby="h-leg"><h2 id="h-leg">How results are produced</h2><ul class="grid">' +
+    Object.keys(METHODS).map(function (k) { return '<li class="card">' + methodLabel(k) + "</li>"; }).join("") + "</ul></section>";
+  if (!l || l.out.type !== "result") {
+    return h + legend + '<div class="panel"><p><strong>No feedback yet.</strong> ' + (l ? "Your last run did not produce a result to assess. Nothing was marked." : "Run your work first, then come back.") + '</p><div class="actions"><a class="btn primary" href="#/' + (role === "python" ? "editor" : "sql") + '">Go to ' + (role === "python" ? "Editor" : "SQL editor") + "</a></div></div>";
+  }
+  ws.fbViewed = true;
+  var o = l.out, py = role === "python";
+  var c1 = criterionCard(py ? "Totals are correct per customer" : "Query returns the expected rows", "deterministic_test",
+    o.passed ? chip("success", "check", "Passed") : chip("neutral", "dash", "Not passed"),
+    "<p><strong>Scripted result.</strong> " + esc(o.passed ? (py ? "The visible tests pass." : "The rows match the expected rows.")
+      : (py ? 'One visible test is not passing. Expected {"a": 8, "b": 3} and got {"a": 5, "b": 3}. See Tests for the line difference.'
+        : "1 row was returned that is not expected and 1 expected row was left out. See Results for the row-level difference.")) + "</p>");
+  var c2 = criterionCard(py ? "The approach is clear" : "The query is readable", "ai_judged",
+    o.passed ? chip("success", "check", "Passed") : chip("neutral", "dash", "Partial"),
+    "<p>" + chip("info", "ai", "AI-assisted feedback") + " Confidence: Medium.</p><p>" + esc(o.passed ? "Each step is easy to follow." : "The steps are easy to follow. The result still needs a change.") + "</p>",
+    '<div class="actions"><button type="button" class="btn" data-act="info" data-what="Appeals">Appeal this result</button></div>');
+  var pr = ws.probe.result;
+  var c3 = criterionCard("Predict the output on changed data", "probe",
+    pr === "unconfirmed" ? chip("neutral", "dash", "Output verified, understanding unconfirmed") : pr === "confirmed" ? chip("success", "check", "Understanding confirmed") : chip("neutral", "dash", "Not attempted"),
+    "<p>" + esc(pr === "unconfirmed" ? "The output was verified. We could not confirm understanding. This does not change the result." : pr === "confirmed" ? "Scripted outcome: understanding confirmed." : "Open Probe to try the understanding probe.") + "</p>");
+  var c4 = criterionCard("A person looks at a result", "human_review", chip("neutral", "dash", "Not requested"),
+    "<p>You can ask for a person to look at any result.</p>", '<div class="actions"><button type="button" class="btn" data-act="info" data-what="Human review">Ask for human review</button></div>');
+  return h + '<p class="muted">Each result shows how it was produced. Scripted for this prototype.</p><h2>Criteria</h2><ul class="grid">' + c1 + c2 + c3 + c4 + "</ul>" + legend;
+}
+function viewProbe() {
+  var h = '<h1 id="h1" tabindex="-1">Probe</h1>';
+  if (!ws.passed) {
+    return h + '<div class="panel"><p><strong>Not available yet.</strong> The probe opens after your main task has a passed result.</p><div class="actions"><a class="btn primary" href="#/' + (role === "python" ? "editor" : "sql") + '">Go to ' + (role === "python" ? "Editor" : "SQL editor") + "</a></div></div>";
+  }
+  var p = data.probe, r = ws.probe.result;
+  if (r) {
+    var unc = r === "unconfirmed";
+    return h + '<section class="panel" aria-labelledby="h-pr"><h2 id="h-pr">Probe result</h2>' + scripted() + '<p>' + methodLabel("probe") + " " +
+      (unc ? chip("neutral", "dash", "Output verified, understanding unconfirmed") : chip("success", "check", "Understanding confirmed")) + "</p>" +
+      "<p>" + esc(unc ? "Your answer to the main task is correct and its result is unchanged. We could not confirm you can explain or predict how it works. This is not a finding about your conduct. You can try another probe or ask for a person to look."
+        : "Your answer matched what the changed data produces. Your main result is unchanged.") + "</p>" +
+      '<div class="actions"><button type="button" class="btn primary" data-act="probe-again">Try another probe</button><button type="button" class="btn" data-act="info" data-what="Appeals">Appeal</button></div></section>';
+  }
+  var opts = p.options.map(function (o, i) {
+    return '<label><input type="radio" name="pa" id="probe-opt-' + i + '" value="' + i + '" data-bind="probe-answer"' + (ws.probe.answer === i ? " checked" : "") + (probeError ? ' aria-describedby="pa-err"' : "") + '> <span class="mono">' + esc(o) + "</span></label>";
+  }).join("");
+  return h + '<p class="muted">Answer without running anything. In the product, your own work is then run on slightly changed data. (Simulated here: nothing is run.)</p>' + scripted() +
+    '<div class="mockctl"><p class="tag">Prototype control: scripted probe outcome</p><div class="field"><label for="po">Outcome to play after you answer</label><select id="po" data-bind="probe-outcome">' +
+    '<option value="confirmed"' + (ws.probeOutcome === "confirmed" ? " selected" : "") + ">Understanding confirmed</option>" +
+    '<option value="unconfirmed"' + (ws.probeOutcome === "unconfirmed" ? " selected" : "") + ">Output verified, understanding unconfirmed</option></select></div></div>" +
+    '<form id="probe-form" novalidate><fieldset class="field wide' + (probeError ? " has-error" : "") + '" style="border:0;padding:0;margin-inline:0"><legend class="lbl">' + esc(p.question) + '</legend><div class="radios">' + opts + "</div>" +
+    (probeError ? '<p class="err" id="pa-err" role="alert">' + icon("x") + "<span>Choose an answer to continue.</span></p>" : "") + "</fieldset>" +
+    '<div class="actions">' + runButtonProbe() + "</div></form>" + evaluatingNote();
+}
+function runButtonProbe() {
+  return '<button type="submit" id="run-btn" class="btn primary"' + (running ? ' aria-disabled="true"' : "") + ">" + (running ? "Evaluating" : "Submit answer") + "</button>";
+}
+function bandBlock(e) {
+  var v = e;
+  var f = function (n) { return n.toFixed(2); };
+  var t = f(v.v) + ", likely range " + f(v.lo) + " to " + f(v.hi) + ", as of " + AS_OF;
+  return '<p class="estimate" id="estimate-text">' + esc(t) + "</p>" +
+    '<div class="band" aria-hidden="true"><div class="band-track"><div class="band-range" style="left:' + (v.lo * 100) + "%;width:" + ((v.hi - v.lo) * 100) + '%"></div><div class="band-est" style="left:' + (v.v * 100) + '%"></div></div>' +
+    '<div class="band-scale"><span>0</span><span>0.5</span><span>1</span></div></div>' +
+    '<p class="band-key">Striped bar: likely range. Dark line: estimate. Scale 0 to 1.</p>' +
+    '<details><summary>Show as a table</summary><div class="tw"><table><caption>Estimate band for ' + esc(data.competency) + "</caption><tbody>" +
+    '<tr><th scope="row">Estimate</th><td>' + f(v.v) + "</td></tr><tr><th scope=\"row\">Likely range</th><td>" + f(v.lo) + " to " + f(v.hi) + "</td></tr>" +
+    '<tr><th scope="row">As of</th><td>' + AS_OF + "</td></tr></tbody></table></div></details>";
+}
+function viewProfile() {
+  var done = stepsList().every(function (s) { return s[1]; });
+  var exp = '<div class="panel plain"><p><strong>Experimental: not a validated hiring predictor.</strong></p><p>Some results are AI-assisted. Each one is labelled, and you can appeal any result.</p></div>';
+  var est;
+  if (done) {
+    var unc = ws.probe.result === "unconfirmed";
+    est = '<section aria-labelledby="h-est" class="panel"><h3 id="h-est">Estimate</h3>' + '<p class="small"><strong>Illustrative value.</strong> <span class="muted">Scripted result: the estimate is a fixed example and is not computed from your work. It is the same whatever the probe outcome.</span></p>' + bandBlock(data.est) +
+      '<p class="small muted">Newest evidence is from ' + AS_OF + ". Older evidence widens the likely range.</p>" +
+      '<details><summary>Why does older evidence widen the range?</summary><p>An estimate is less certain when it rests on little evidence or on evidence from a long time ago. The range grows wider until you add new evidence.</p></details></section>';
+  } else {
+    est = '<section aria-labelledby="h-est" class="panel"><h3 id="h-est">Estimate</h3><p><strong>Your estimate updates after all required steps are done.</strong></p><p>The steps still to do are listed below.</p></section>';
+  }
+  var counts = { deterministic_test: ws.results, probe: ws.probe.result ? 1 : 0, ai_judged: ws.fbViewed ? 1 : 0, live_screening: 0, human_review: 0 };
+  var md = Object.keys(METHODS).map(function (k) { return '<li class="card">' + methodLabel(k) + '<p style="margin:4px 0 0">Results: ' + counts[k] + "</p></li>"; }).join("");
+  var und = ws.probe.result === "unconfirmed"
+    ? "<p>" + chip("neutral", "dash", "Output verified, understanding unconfirmed") + "</p><p>Your answer to the main task is correct and its result is unchanged. We could not confirm you can explain or predict how it works. This is not a finding about your conduct.</p>"
+    : ws.probe.result === "confirmed" ? "<p>" + chip("success", "check", "Understanding confirmed") + "</p>" : "<p>" + chip("neutral", "dash", "Understanding probe not attempted") + "</p>";
+  return '<h1 id="h1" tabindex="-1">Profile</h1>' + exp + scripted() +
+    "<h2>" + esc(data.competency) + "</h2>" + est + stepsPanel() +
+    '<section aria-labelledby="h-md" class="panel"><h3 id="h-md">How this evidence was produced</h3><ul class="grid">' + md + "</ul></section>" +
+    '<section aria-labelledby="h-un" class="panel"><h3 id="h-un">Understanding</h3>' + und + "</section>" +
+    '<section class="panel" aria-labelledby="h-who"><h3 id="h-who">Who can see this</h3><p>Only you can see this.</p></section>';
+}
+function viewChoose() {
+  var mk = function (id) {
+    var r = ROLES[id];
+    return '<div class="rolecard"><div class="pick"><input type="radio" name="role" id="r-' + id + '" value="' + id + '" aria-describedby="d-' + id + (chooseError ? " role-err" : "") + '"><label for="r-' + id + '">' + esc(r.label) + "</label></div>" +
+      '<div id="d-' + id + '"><p>' + esc(r.summary) + "</p><p class=\"small\"><strong>Your workspace allows</strong></p><ul class=\"bul small\">" +
+      r.allows.map(function (a) { return "<li>" + esc(a) + "</li>"; }).join("") + '</ul><p class="small muted">' + esc(r.notAllowed) + "</p></div></div>";
+  };
+  return '<h1 id="h1" tabindex="-1">Choose your role</h1>' +
+    (resetNotice ? '<div class="notice" role="status">' + icon("check") + "<span>Your workspace was reset. Drafts, results and probe progress were cleared.</span></div>" : "") +
+    "<p>Your role is your learning track. It selects which tools your workspace shows. It is not a permission level and it does not change how your work is assessed. You can change it later; changing it resets the workspace.</p>" +
+    '<form id="role-form" novalidate><fieldset style="border:0;padding:0;margin:0"><legend class="sr-only">Learning track</legend><div class="grid">' + mk("python") + mk("analyst") + "</div></fieldset>" +
+    (chooseError ? '<p class="err" id="role-err" role="alert">' + icon("x") + "<span>Choose a role to continue.</span></p>" : "") +
+    '<div class="actions"><button type="submit" class="btn primary">Confirm role</button></div></form>';
+}
+function viewDenied() {
+  return '<h1 id="h1" tabindex="-1">Not available in your workspace</h1><p>This page is not part of your workspace.</p>' +
+    '<div class="actions"><a class="btn primary" href="#/brief">Go to Brief</a></div>';
+}
+function viewLoading(text) {
+  return '<h1 id="h1" tabindex="-1">' + esc(text) + '</h1><div role="status"><p class="sr-only">Loading</p></div><div aria-hidden="true"><div class="skel big"></div><div class="skel"></div><div class="skel"></div></div>';
+}
+function viewError() {
+  return '<h1 id="h1" tabindex="-1">This page could not load</h1><div class="alert" role="alert">' + icon("x") +
+    '<div><p><strong>We could not load this page. Your work is saved.</strong></p><p>Try again. If it keeps happening, go back to Brief.</p><div class="actions"><button type="button" class="btn primary" data-act="retry">Try again</button><a class="btn" href="#/brief">Go to Brief</a></div></div></div>';
+}
+
+/* ---------- render ---------- */
+function renderChrome() {
+  var rb = $("#rolebar"), nav = $("#tabs");
+  if (role) {
+    rb.innerHTML = chip("info", "person", "Workspace: " + ROLES[role].label) + '<button type="button" class="btn" data-act="change-role">Change role</button>';
+    nav.hidden = false;
+    nav.innerHTML = "<ul>" + ROLES[role].tabs.map(function (t) {
+      return '<li><a href="#/' + t + '"' + (current.tab === t ? ' aria-current="page"' : "") + ">" + esc(TAB_LABEL[t]) + "</a></li>";
+    }).join("") + "</ul>";
+  } else { rb.innerHTML = '<span class="small muted">No role chosen yet</span>'; nav.hidden = true; nav.innerHTML = ""; }
+}
+var VIEWS = { brief: viewBrief, editor: function () { return viewEditor(false); }, sql: function () { return viewEditor(true); }, tests: viewTests, output: viewOutput, data: viewData, results: viewResults, feedback: viewFeedback, probe: viewProbe, profile: viewProfile };
+function renderView() {
+  var html;
+  if (choosing) { html = viewLoading("Preparing your workspace"); }
+  else if (!role) { html = viewChoose(); }
+  else if (current.denied) { html = viewDenied(); }
+  else if (screenState === "loading") { html = viewLoading("Loading " + TAB_LABEL[current.tab]); }
+  else if (screenState === "error") { html = viewError(); }
+  else { html = VIEWS[current.tab](); }
+  $("#view").innerHTML = html;
+  Array.prototype.forEach.call($("#view").querySelectorAll("ul"), function (u) { u.setAttribute("role", "list"); });
+  document.title = ($("#h1") ? $("#h1").textContent : "Crucible") + " - Crucible sandbox (PROTOTYPE)";
+}
+function render(focus) {
+  renderChrome();
+  renderView();
+  if (focus) { var h = $("#h1"); if (h) { h.focus(); } }
+}
+function hashId() {
+  var h = location.hash.replace(/^#\/?/, "");
+  try { h = decodeURIComponent(h); } catch (e) { /* keep raw */ }
+  return h.split("?")[0].replace(/[^\w\-. ~]/g, "?").slice(0, 40);
+}
+function navigate() {
+  if (!role) { current = { tab: null, denied: false }; }
+  else {
+    var id = hashId() || "brief";
+    if (ROLES[role].tabs.indexOf(id) !== -1) { current = { tab: id, denied: false }; }
+    else {
+      current = { tab: null, denied: true };
+      logEvent("Navigation refused: requested tab is not in the " + ROLES[role].label + " workspace. No data was requested.");
+    }
+  }
+  render(true);
+}
+
+/* ---------- role selection and reset ---------- */
+function confirmRole() {
+  var r = document.querySelector('input[name="role"]:checked');
+  if (!r) { chooseError = true; renderView(); var f = $("#r-python"); if (f) { f.focus(); } return; }
+  chooseError = false; resetNotice = false; choosing = true;
+  renderView(); var h = $("#h1"); if (h) { h.focus(); }
+  announce("Preparing your workspace.");
+  var id = r.value;
+  setTimeout(function () {
+    choosing = false;
+    role = id; data = TRACK[id](); ws = freshWs(); screenState = "normal"; $("#screen-sel").value = "normal";
+    if (store) { store.setItem("smt_demo_role", id); }
+    logEvent("Role chosen: " + ROLES[id].label + ". Workspace manifest loaded with " + ROLES[id].tabs.length + " tabs.");
+    history.replaceState(null, "", "#/brief");
+    navigate();
+    announce(ROLES[id].label + " workspace ready.");
+  }, REDUCED ? 0 : 500);
+}
+function resetWorkspace() {
+  token++; running = false; cur = null;
+  role = null; data = null; ws = null; screenState = "normal"; $("#screen-sel").value = "normal";
+  probeError = false; chooseError = false; resetNotice = true;
+  if (store) { store.removeItem("smt_demo_role"); }
+  logEvent("Role changed. Workspace reset: drafts, results and probe progress cleared.");
+  setSummary("No run yet.");
+  renderOp();
+  history.replaceState(null, "", "#/");
+  navigate();
+  announce("Workspace reset. Choose your role.");
+}
+
+/* ---------- dialog ---------- */
+var dlg = null;
+function openDialog(o) {
+  var root = $("#dialog-root");
+  var opener = document.activeElement;
+  root.innerHTML = '<div class="overlay"><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dlg-t" aria-describedby="dlg-d"><h2 id="dlg-t">' + esc(o.title) + '</h2><div id="dlg-d">' + o.body + '</div><div class="actions">' +
+    o.actions.map(function (a, i) { return '<button type="button" class="btn ' + (a.kind || "") + '" data-dlg="' + i + '">' + esc(a.label) + "</button>"; }).join("") + "</div></div></div>";
+  $("#app").inert = true;
+  dlg = { opener: opener, actions: o.actions };
+  root.querySelector('[data-dlg="' + (o.focus || 0) + '"]').focus();
+}
+function closeDialog() {
+  $("#dialog-root").innerHTML = "";
+  $("#app").inert = false;
+  var op = dlg ? dlg.opener : null;
+  dlg = null;
+  if (op && document.contains(op)) { op.focus(); } else { var h = $("#h1"); if (h) { h.focus(); } }
+}
+function infoDialog(what) {
+  openDialog({ title: "Not built in this prototype", body: "<p>" + esc(what) + " is part of the product design and is not part of this sandbox prototype. Nothing was sent.</p>", actions: [{ label: "Close", kind: "primary" }] });
+}
+
+/* ---------- events ---------- */
+document.addEventListener("click", function (e) {
+  var d = e.target.closest("[data-dlg]");
+  if (d && dlg) { var a = dlg.actions[+d.dataset.dlg]; closeDialog(); if (a && a.onClick) { a.onClick(); } return; }
+  var t = e.target.closest("[data-act]");
+  if (!t) { return; }
+  var act = t.dataset.act;
+  if (act === "toggle-op") {
+    var op = $("#operator"), on = op.hidden;
+    op.hidden = !on;
+    t.setAttribute("aria-pressed", on ? "true" : "false");
+    t.textContent = "Operator view (demo): " + (on ? "on" : "off");
+  }
+  else if (act === "run") { if (t.getAttribute("aria-disabled") !== "true") { doRun(); } }
+  else if (act === "reset-draft") { ws.draft = data.starter; renderView(); var c = $("#code"); if (c) { c.focus(); } announce("Starter restored."); }
+  else if (act === "probe-again") { ws.probe = { answer: null, result: null }; renderView(); var h = $("#h1"); if (h) { h.focus(); } }
+  else if (act === "retry") { screenState = "normal"; $("#screen-sel").value = "normal"; render(true); }
+  else if (act === "info") { infoDialog(t.dataset.what); }
+  else if (act === "change-role") {
+    openDialog({
+      title: "Change your role?",
+      body: "<p>Changing your role resets your workspace. Your draft, run results, feedback and probe progress are cleared, and nothing is carried over to the other role.</p>",
+      actions: [{ label: "Keep my role" }, { label: "Change role and reset", kind: "danger", onClick: resetWorkspace }],
+      focus: 0
+    });
+  }
+});
+document.addEventListener("change", function (e) {
+  var t = e.target, b = t.dataset ? t.dataset.bind : null;
+  if (!b) { return; }
+  if (b === "screen") { screenState = t.value; if (role && !current.denied) { renderView(); } }
+  else if (!ws) { return; }
+  else if (b === "scenario") { ws.scenario = t.value; }
+  else if (b === "table") { ws.table = t.value; renderView(); var s = $("#tbl"); if (s) { s.focus(); } }
+  else if (b === "probe-outcome") { ws.probeOutcome = t.value; }
+  else if (b === "probe-answer") { ws.probe.answer = +t.value; probeError = false; var er = $("#pa-err"); if (er) { er.remove(); } }
+});
+document.addEventListener("input", function (e) {
+  if (e.target.dataset && e.target.dataset.bind === "draft" && ws) { ws.draft = e.target.value; }
+});
+document.addEventListener("submit", function (e) {
+  e.preventDefault();
+  if (e.target.id === "role-form") { confirmRole(); }
+  else if (e.target.id === "probe-form") { if (!running) { doProbe(); } }
+});
+document.addEventListener("keydown", function (e) {
+  if (!dlg) { return; }
+  if (e.key === "Escape") { e.preventDefault(); closeDialog(); return; }
+  if (e.key === "Tab") {
+    var bs = $("#dialog-root").querySelectorAll("button");
+    var first = bs[0], last = bs[bs.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    else if (!$("#dialog-root").contains(document.activeElement)) { e.preventDefault(); first.focus(); }
+  }
+});
+window.addEventListener("hashchange", navigate);
+
+/* ---------- start ---------- */
+(function init() {
+  var saved = store ? store.getItem("smt_demo_role") : null;
+  if (saved && Object.prototype.hasOwnProperty.call(ROLES, saved)) {
+    role = saved; data = TRACK[saved](); ws = freshWs();
+    logEvent("Role restored from this tab's session (demo only): " + ROLES[saved].label + ".");
+  }
+  renderOp();
+  navigate();
+})();
+</script>
+</body>
+</html>

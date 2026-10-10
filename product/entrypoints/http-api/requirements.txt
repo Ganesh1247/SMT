@@ -1,0 +1,8 @@
+# Runtime dependencies (recorded in delivery/G3-solution-design/dependency-register.md)
+fastapi>=0.110
+uvicorn>=0.27
+pydantic>=2.5
+sqlalchemy>=2.0
+# test only
+pytest>=8
+httpx>=0.27

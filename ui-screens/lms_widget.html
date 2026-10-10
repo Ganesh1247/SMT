@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+</head>
+<body class="bg-transparent text-[var(--foreground)] antialiased p-3">
+  <div class="bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)] rounded-2xl p-5 shadow-sm max-w-4xl mx-auto flex flex-col gap-4">
+    
+    <!-- Top Bar: Title & Screen Switcher -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[var(--border)]">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-indigo-600/10 text-indigo-600 flex items-center justify-center font-bold">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h2 class="text-base font-bold text-[var(--foreground)] leading-tight">Pathway LMS Platform</h2>
+            <span class="inline-flex items-center gap-1 text-[10px] bg-emerald-500/15 text-emerald-600 px-2 py-0.5 rounded-full font-bold">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              Firebase Connected
+            </span>
+          </div>
+          <span class="text-xs text-[var(--muted-foreground)]">smta-f918c • Stitch #15271909917709048010</span>
+        </div>
+      </div>
+
+      <!-- Live Screen Tabs -->
+      <div class="flex items-center bg-[var(--background)] p-1 rounded-xl border border-[var(--border)] gap-1 text-xs">
+        <button id="btn-tab-dashboard" onclick="setWidgetScreen('dashboard')" class="px-3 py-1.5 rounded-lg font-semibold bg-indigo-600 text-white shadow-xs transition-all">
+          Dashboard
+        </button>
+        <button id="btn-tab-catalog" onclick="setWidgetScreen('catalog')" class="px-3 py-1.5 rounded-lg font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-all">
+          Course Catalog
+        </button>
+        <button id="btn-tab-path" onclick="setWidgetScreen('path')" class="px-3 py-1.5 rounded-lg font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-all">
+          Learning Path
+        </button>
+      </div>
+    </div>
+
+    <!-- VIEW 1: DASHBOARD -->
+    <div id="view-dashboard" class="widget-view flex flex-col gap-3">
+      <!-- Welcome Hero Strip -->
+      <div class="p-3.5 rounded-xl bg-[var(--background)] border border-[var(--border)] flex items-center justify-between">
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-[10px] font-bold uppercase tracking-wider bg-indigo-500/10 text-indigo-500 px-2 py-0.5 rounded-full">Elena Vance</span>
+            <span class="text-[11px] text-[var(--muted-foreground)]">Cohort #14 • Week 6</span>
+          </div>
+          <span class="text-sm font-bold text-[var(--foreground)] block">Product Strategy & Discovery (68% complete)</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-semibold px-2 py-1 bg-amber-500/10 text-amber-600 rounded-lg">🔥 5-Day Streak</span>
+        </div>
+      </div>
+
+      <!-- 2-Column Quick Peek -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+        <!-- Active Spotlight -->
+        <div class="p-3.5 rounded-xl bg-[var(--card)] border border-[var(--border)] flex flex-col justify-between">
+          <div>
+            <span class="text-[10px] uppercase font-bold text-indigo-500 tracking-wider">Spotlight Module 3 of 5</span>
+            <h4 class="font-bold text-sm text-[var(--foreground)] mt-0.5 mb-2">Customer Interview Insights & Affinity Mapping</h4>
+            <div class="w-full h-1.5 rounded-full bg-[var(--border)] overflow-hidden mb-1">
+              <div class="bg-indigo-600 h-full rounded-full" style="width: 72%"></div>
+            </div>
+            <div class="flex justify-between text-[11px] text-[var(--muted-foreground)]">
+              <span>72% finished</span>
+              <span>18m remaining</span>
+            </div>
+          </div>
+          <div class="mt-3 flex justify-between items-center pt-2 border-t border-[var(--border)]">
+            <span class="text-emerald-600 font-semibold">✓ 2 lessons done</span>
+            <span class="text-indigo-600 font-bold hover:underline cursor-pointer">Resume →</span>
+          </div>
+        </div>
+
+        <!-- Study Goal Radial -->
+        <div class="p-3.5 rounded-xl bg-[var(--card)] border border-[var(--border)] flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="relative w-14 h-14 shrink-0 flex items-center justify-center">
+              <svg class="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" fill="transparent" r="40" stroke="currentColor" class="text-[var(--border)]" stroke-width="12"></circle>
+                <circle cx="50" cy="50" fill="transparent" r="40" stroke="#4338ca" stroke-dasharray="188.5 251.32" stroke-linecap="round" stroke-width="12"></circle>
+              </svg>
+              <span class="absolute text-xs font-bold text-[var(--foreground)]">75%</span>
+            </div>
+            <div>
+              <span class="text-xs font-bold text-[var(--foreground)] block">Weekly Study Pace</span>
+              <span class="text-sm font-extrabold text-[var(--foreground)]">4.5 <span class="text-xs font-normal text-[var(--muted-foreground)]">/ 6.0 hrs</span></span>
+              <span class="text-[10px] text-emerald-600 block mt-0.5">● On track for Friday</span>
+            </div>
+          </div>
+          <button id="inline-rsvp-btn" onclick="toggleInlineRsvp()" class="px-2.5 py-1.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-[11px] font-semibold hover:bg-[var(--border)] transition-colors">
+            RSVP Q&A
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 2: COURSE CATALOG -->
+    <div id="view-catalog" class="widget-view flex flex-col gap-3 hidden">
+      <div class="flex items-center justify-between text-xs">
+        <span class="font-bold text-[var(--foreground)]">Featured Enterprise Tracks (Spring 2025)</span>
+        <span class="text-[var(--muted-foreground)]">250+ courses available</span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
+        <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)] flex flex-col justify-between">
+          <div>
+            <span class="text-[10px] font-bold text-emerald-600 block mb-1">Enrolled • 72%</span>
+            <h4 class="font-bold text-[var(--foreground)] leading-snug">User Discovery & Qualitative Research</h4>
+            <span class="text-[11px] text-[var(--muted-foreground)] block mt-1">Sarah Jenkins (Figma)</span>
+          </div>
+          <div class="mt-2 pt-2 border-t border-[var(--border)] flex justify-between text-[11px]">
+            <span class="text-amber-500 font-bold">★ 4.9</span>
+            <span class="text-[var(--muted-foreground)]">6.5 hrs</span>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)] flex flex-col justify-between">
+          <div>
+            <span class="text-[10px] font-bold text-indigo-600 block mb-1">Path Core</span>
+            <h4 class="font-bold text-[var(--foreground)] leading-snug">Quantitative Product Analytics & A/B Testing</h4>
+            <span class="text-[11px] text-[var(--muted-foreground)] block mt-1">David Park (Principal DS)</span>
+          </div>
+          <div class="mt-2 pt-2 border-t border-[var(--border)] flex justify-between text-[11px]">
+            <span class="text-amber-500 font-bold">★ 4.8</span>
+            <span class="text-[var(--muted-foreground)]">8.0 hrs</span>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)] flex flex-col justify-between">
+          <div>
+            <span class="text-[10px] font-bold text-slate-500 block mb-1">Systems Lab</span>
+            <h4 class="font-bold text-[var(--foreground)] leading-snug">Technical Architecture for Product Managers</h4>
+            <span class="text-[11px] text-[var(--muted-foreground)] block mt-1">Alex Rivera (Head of Eng)</span>
+          </div>
+          <div class="mt-2 pt-2 border-t border-[var(--border)] flex justify-between text-[11px]">
+            <span class="text-amber-500 font-bold">★ 4.9</span>
+            <span class="text-[var(--muted-foreground)]">5.0 hrs</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 3: LEARNING PATH -->
+    <div id="view-path" class="widget-view flex flex-col gap-3 hidden">
+      <div class="p-3 rounded-xl bg-[var(--background)] border border-[var(--border)] flex items-center justify-between text-xs">
+        <div>
+          <span class="font-bold text-[var(--foreground)] block">Product Manager Career Path (24 Wks)</span>
+          <span class="text-[11px] text-[var(--muted-foreground)]">14 of 24 weeks elapsed • Senior PM Target</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-base font-extrabold text-indigo-600">58%</span>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600">On Track</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+        <div class="p-2.5 rounded-lg bg-[var(--card)] border border-[var(--border)] text-center">
+          <span class="text-xs font-bold text-emerald-600 block">Phase 1</span>
+          <span class="text-[10px] text-[var(--muted-foreground)] block">100% Complete</span>
+          <span class="text-[11px] font-semibold text-[var(--foreground)]">PRD Graded 96</span>
+        </div>
+        <div class="p-2.5 rounded-lg bg-[var(--card)] border-2 border-indigo-600 text-center">
+          <span class="text-xs font-bold text-indigo-600 block">Phase 2</span>
+          <span class="text-[10px] text-[var(--muted-foreground)] block">68% Active</span>
+          <span class="text-[11px] font-semibold text-[var(--foreground)]">Discovery Sprint</span>
+        </div>
+        <div class="p-2.5 rounded-lg bg-[var(--card)] border border-[var(--border)] opacity-60 text-center">
+          <span class="text-xs font-bold text-[var(--muted-foreground)] block">Phase 3</span>
+          <span class="text-[10px] text-[var(--muted-foreground)] block">Locked</span>
+          <span class="text-[11px] text-[var(--muted-foreground)]">Roadmapping</span>
+        </div>
+        <div class="p-2.5 rounded-lg bg-[var(--card)] border border-[var(--border)] opacity-60 text-center">
+          <span class="text-xs font-bold text-[var(--muted-foreground)] block">Capstone</span>
+          <span class="text-[10px] text-[var(--muted-foreground)] block">Locked</span>
+          <span class="text-[11px] text-[var(--muted-foreground)]">VP Defense</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function setWidgetScreen(name) {
+      document.querySelectorAll('.widget-view').forEach(v => v.classList.add('hidden'));
+      const active = document.getElementById('view-' + name);
+      if (active) active.classList.remove('hidden');
+
+      ['dashboard', 'catalog', 'path'].forEach(t => {
+        const btn = document.getElementById('btn-tab-' + t);
+        if (t === name) {
+          btn.className = 'px-3 py-1.5 rounded-lg font-semibold bg-indigo-600 text-white shadow-xs transition-all';
+        } else {
+          btn.className = 'px-3 py-1.5 rounded-lg font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-all';
+        }
+      });
+    }
+
+    function toggleInlineRsvp() {
+      const b = document.getElementById('inline-rsvp-btn');
+      if (b.innerText.includes('Confirmed')) {
+        b.innerText = 'RSVP Q&A';
+        b.className = 'px-2.5 py-1.5 rounded-lg bg-[var(--background)] border border-[var(--border)] text-[11px] font-semibold hover:bg-[var(--border)] transition-colors';
+      } else {
+        b.innerText = '✓ Confirmed';
+        b.className = 'px-2.5 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-600 border border-emerald-500/30 text-[11px] font-bold';
+      }
+    }
+  </script>
+</body>
+</html>

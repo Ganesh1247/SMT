@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"on-primary-fixed-variant":"#372abf","on-surface-variant":"#464554","primary-container":"#4338ca","on-secondary":"#ffffff","on-error-container":"#93000a","primary":"#2a14b4","on-surface":"#0d1c2e","on-secondary-container":"#00714e","on-primary-fixed":"#100069","secondary-fixed":"#85f8c4","surface":"#f8f9ff","on-background":"#0d1c2e","primary-fixed-dim":"#c3c0ff","secondary-container":"#82f5c1","surface-dim":"#ccdbf3","on-tertiary-container":"#ffb477","surface-container-low":"#eff4ff","surface-bright":"#f8f9ff","error-container":"#ffdad6","on-secondary-fixed-variant":"#005137","error":"#ba1a1a","on-tertiary-fixed":"#2f1500","on-secondary-fixed":"#002114","secondary":"#006c4a","inverse-on-surface":"#eaf1ff","surface-container-high":"#dce9ff","surface-container-lowest":"#ffffff","surface-tint":"#5148d7","outline":"#777586","surface-container-highest":"#d5e3fc","on-error":"#ffffff","tertiary":"#5c2f00","tertiary-container":"#7d4200","inverse-primary":"#c3c0ff","on-primary":"#ffffff","primary-fixed":"#e3dfff","outline-variant":"#c7c4d7","tertiary-fixed-dim":"#ffb77d","on-primary-container":"#c1beff","surface-container":"#e6eeff","tertiary-fixed":"#ffdcc3","background":"#f8f9ff","inverse-surface":"#233144","secondary-fixed-dim":"#68dba9","surface-variant":"#d5e3fc","on-tertiary-fixed-variant":"#6e3900","on-tertiary":"#ffffff"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"space-xs":"0.25rem","margin":"2rem","margin-mobile":"1rem","space-xl":"2.5rem","space-lg":"1.5rem","space-md":"1rem","gutter-mobile":"1rem","space-sm":"0.5rem","gutter":"1.5rem"},"fontFamily":{"label-sm":["Inter"],"display-lg":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"title-sm":["Plus Jakarta Sans"],"label-md":["Inter"],"body-md":["Inter"],"display-lg-mobile":["Plus Jakarta Sans"],"body-sm":["Inter"],"body-lg":["Inter"],"headline-xl-mobile":["Plus Jakarta Sans"],"headline-xl":["Plus Jakarta Sans"],"code-sm":["Inter"],"headline-md":["Plus Jakarta Sans"]},"fontSize":{"label-sm":["0.75rem",{"lineHeight":"1rem","letterSpacing":"0.02em","fontWeight":"600"}],"display-lg":["3rem",{"lineHeight":"3.5rem","letterSpacing":"-0.03em","fontWeight":"800"}],"headline-lg":["1.5rem",{"lineHeight":"2rem","letterSpacing":"-0.015em","fontWeight":"700"}],"title-sm":["1.125rem",{"lineHeight":"1.5rem","letterSpacing":"-0.005em","fontWeight":"600"}],"label-md":["0.875rem",{"lineHeight":"1.25rem","letterSpacing":"0.01em","fontWeight":"600"}],"body-md":["1rem",{"lineHeight":"1.5rem","fontWeight":"400"}],"display-lg-mobile":["2.25rem",{"lineHeight":"2.75rem","letterSpacing":"-0.025em","fontWeight":"800"}],"body-sm":["0.875rem",{"lineHeight":"1.25rem","fontWeight":"400"}],"body-lg":["1.125rem",{"lineHeight":"1.75rem","fontWeight":"400"}],"headline-xl-mobile":["1.5rem",{"lineHeight":"2rem","letterSpacing":"-0.015em","fontWeight":"700"}],"headline-xl":["2rem",{"lineHeight":"2.5rem","letterSpacing":"-0.02em","fontWeight":"700"}],"code-sm":["0.8125rem",{"lineHeight":"1.25rem","fontWeight":"500"}],"headline-md":["1.25rem",{"lineHeight":"1.75rem","letterSpacing":"-0.01em","fontWeight":"600"}]}}}}</script></head><body class="bg-background font-body-md text-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-72 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-50 flex flex-col justify-between py-space-md transition-all duration-300"><div class="flex flex-col"><div class="px-space-lg py-space-sm flex items-center justify-between"><div class="flex items-center gap-space-sm"><img alt="Pathway LMS Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1WVblzyKJvo9Vk_ELAZm9moin4w8wrS1CJtPFy1bFtUhchxLtjXdmh9WFARI5F6ICDm07CcbEaVLzUx6VyehoDgR5zhrl_3lZFhi9yetNt-r4rX6tdA-VQy6yO3N7-7Zjw143DQojteVNxzsfHvjuuFZa7SEm9uzuC5rdb5gEudjUOvwBXk3ThKmwcTJVR0-IBTGDUXT-fNr-MQzN-RX6nHIgVO3cq-9ptT5Thp_9iBwENYH8Ag633yeDo"/><span class="font-title-sm text-title-sm text-primary">Pathway LMS</span></div><button aria-label="Toggle sidebar" class="text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg p-space-xs transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">menu_open</span></button></div><div class="px-space-lg my-space-md"><div class="relative"><button class="w-full flex items-center justify-between px-space-md py-space-xs rounded-full bg-surface-container-low text-on-surface hover:bg-surface-container transition-colors" type="button"><div class="flex items-center gap-space-sm"><span class="w-2 h-2 rounded-full bg-secondary"></span><span class="font-label-sm text-label-sm uppercase text-on-surface">Learner View</span></div><span class="material-symbols-outlined text-[16px] text-on-surface-variant">unfold_more</span></button></div></div><nav class="flex flex-col px-space-md gap-space-xs" data-active-classes="bg-primary text-on-primary rounded-xl"><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-space-sm font-label-md transition-all bg-primary text-on-primary rounded-xl" data-path="dashboard" href="#"><span class="material-symbols-outlined text-[20px]">dashboard</span><span>Dashboard</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl font-label-md text-label-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="my-learning-path" href="#"><span class="material-symbols-outlined text-[20px]">route</span><span>My Learning Path</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl font-label-md text-label-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="course-catalog" href="#"><span class="material-symbols-outlined text-[20px]">menu_book</span><span>Course Catalog</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl font-label-md text-label-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="assignments-and-practice" href="#"><span class="material-symbols-outlined text-[20px]">assignment_turned_in</span><span>Assignments &amp; Practice</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl font-label-md text-label-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="skills-and-progress" href="#"><span class="material-symbols-outlined text-[20px]">trending_up</span><span>Skills &amp; Progress</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl font-label-md text-label-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="calendar" href="#"><span class="material-symbols-outlined text-[20px]">calendar_today</span><span>Calendar</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl font-label-md text-label-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="certificates-and-badges" href="#"><span class="material-symbols-outlined text-[20px]">verified</span><span>Certificates &amp; Badges</span></a><div class="h-[1px] bg-surface-container-high my-space-sm mx-space-md"></div><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl font-label-md text-label-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="help-and-resources" href="#"><span class="material-symbols-outlined text-[20px]">help</span><span>Help &amp; Resources</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl font-label-md text-label-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="settings" href="#"><span class="material-symbols-outlined text-[20px]">settings</span><span>Settings</span></a></nav></div><div class="px-space-lg pt-space-md"><div class="p-space-md rounded-xl bg-surface-container-low flex flex-col gap-space-xs"><div class="flex items-center justify-between"><span class="font-label-sm text-label-sm text-on-surface">Q1 Target</span><span class="font-code-sm text-code-sm text-primary font-bold">84%</span></div><div class="w-full h-1.5 rounded-full bg-surface-container-high overflow-hidden"><div class="bg-secondary h-full rounded-full w-[84%]"></div></div><p class="font-label-sm text-label-sm text-on-surface-variant">3 milestones remaining</p></div></div></aside><div class="pl-72"><header class="fixed top-0 left-72 right-0 h-16 bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-space-lg"><div class="flex items-center gap-space-md"><nav class="flex items-center gap-space-xs font-label-md text-label-md text-on-surface-variant"><a class="hover:text-on-surface transition-colors" href="#">LMS</a><span class="material-symbols-outlined text-[16px]">chevron_right</span><span class="text-on-surface font-semibold">Overview</span></nav></div><div class="flex items-center gap-space-md"><div class="relative flex items-center"><div class="flex items-center bg-surface-container-lowest px-space-md py-space-xs rounded-xl shadow-[0_1px_4px_rgba(0,0,0,0.04)] text-on-surface-variant hover:text-on-surface transition-all w-64 justify-between"><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-[18px]">search</span><span class="font-body-sm text-body-sm text-on-surface-variant">Quick search...</span></div><kbd class="font-code-sm text-code-sm bg-surface-container-high text-on-surface-variant px-space-xs py-0.5 rounded font-medium">⌘K</kbd></div></div><div class="relative"><button aria-label="Notifications" class="p-space-xs rounded-xl bg-surface-container-lowest hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors relative flex items-center justify-center" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-error"></span></button></div><div class="flex items-center gap-space-sm pl-space-xs pr-space-md py-1 bg-surface-container-lowest rounded-full shadow-[0_1px_4px_rgba(0,0,0,0.04)]"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKnFQ8TgHq-j0qZW0fVwXmBgCL8FA_OJRq3ZXa2Edw7UNt2u0QO94RqAvH-8U5Us5lwvuLwb1w-iwuGbSRAqFIkWaEY0ZspT9zJZn9RwLfpRMjZkWre_TfTCavmV9qNrE1lTqSOaYZggDrC7vl_Oo9mtV3LkDCQiAPgBWJVtT16o46DVLBkctJjxhcSr4qUco58bslOTvqqG_h6j07PwbuKs4Gcbb6EeX03zd0n83_16Gj8DVtGQfbHQ"/><div class="flex flex-col text-left"><span class="font-label-sm text-label-sm text-on-surface font-semibold leading-tight">Elena Vance</span><span class="font-label-sm text-label-sm text-on-surface-variant text-[11px] leading-tight">Workforce Fellow</span></div><span class="material-symbols-outlined text-[16px] text-on-surface-variant ml-space-xs">expand_more</span></div></div></header><main class="w-full pt-16 bg-background px-space-lg py-space-lg min-h-screen"><div class="flex flex-col w-full gap-space-lg">
+<!-- TOP WELCOME BANNER & STAT GLANCE -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container-lowest shadow-sm p-space-lg flex flex-col lg:flex-row lg:items-center justify-between gap-space-lg">
+<!-- Ambient subtle indigo glow accent (contained) -->
+<div class="absolute -right-16 -top-16 w-80 h-80 rounded-full bg-primary/5 pointer-events-none blur-3xl"></div>
+<div class="absolute right-64 -bottom-12 w-64 h-64 rounded-full bg-secondary/5 pointer-events-none blur-2xl"></div>
+<div class="flex flex-col gap-space-xs max-w-2xl relative z-10">
+<div class="flex items-center gap-space-xs">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-primary-fixed text-primary font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+          Associate to Senior PM Track
+        </span>
+<span class="font-code-sm text-code-sm text-on-surface-variant font-medium">Cohort #14 • Week 6</span>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-on-surface tracking-tight">
+        Good morning, Elena 👋
+      </h1>
+<p class="font-body-md text-body-md text-on-surface-variant">
+        You're <span class="font-semibold text-primary">68% through</span> your <strong class="text-on-surface font-semibold">Product Strategy &amp; Discovery</strong> milestone. Next up: User Interview Synthesis. Keep up the momentum!
+      </p>
+</div>
+<!-- Actions & Streak Quick Counter -->
+<div class="flex flex-wrap sm:flex-nowrap items-center gap-space-sm relative z-10">
+<button class="group flex items-center justify-center gap-space-xs px-space-md py-3 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md shadow-sm transition-all transform active:scale-95 whitespace-nowrap" type="button">
+<span class="material-symbols-outlined text-[20px] transition-transform group-hover:scale-110" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+<span>Resume Learning (18m left)</span>
+</button>
+<button class="flex items-center justify-center gap-space-xs px-space-md py-3 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface font-label-md text-label-md transition-colors whitespace-nowrap" type="button">
+<span>View Full Path</span>
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- BENTO CORE SECTION: SPOTLIGHT LEARNING + WEEKLY STUDY RHYTHM -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- PRIMARY SPOTLIGHT: Continue Learning Card (8 cols) -->
+<div class="lg:col-span-8 flex flex-col rounded-xl bg-surface-container-lowest shadow-sm overflow-hidden">
+<!-- Media Header Zone with contextual photograph -->
+<div class="relative h-48 sm:h-56 w-full overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover object-center transform hover:scale-105 transition-transform duration-700" data-alt="Modern collaborative product design room with daylight, whiteboard affinity mapping sketches, UX sticky notes on glass wall, sleek wooden desk with open laptop showing telemetry charts, deep indigo and teal modern office tone, cinematic shallow depth of field" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7zOcsG2X6T6bwdDvFAq28Wtm6VLFebTrGG54g-n4nnXk04li9HQnT-eKlAAlk0EfRUPLYFFsV2QrhP9kW_ZTJ4fuvsX4FVqqI6JDK98Vi9jPeq-t5YOu7DKvqQvzetXsmUEmtzx5RAXwvmdoMzgoQvVy10g9jNFWiegrSkcZxuqGr46wECzx9TYVBGd5knDj0wAMl7AFYMky2h1ajIleJw9wwLxNZsqc5Qn3U61wGMeWuUOemkW8IqQ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/90 via-inverse-surface/40 to-transparent flex flex-col justify-between p-space-md sm:p-space-lg">
+<div class="flex items-center justify-between">
+<span class="px-3 py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur-md font-label-sm text-label-sm text-primary flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-[14px]">school</span>
+              Current Course • Module 3 of 5
+            </span>
+<button aria-label="Bookmark module" class="w-8 h-8 rounded-full bg-surface-container-lowest/80 backdrop-blur-md text-on-surface flex items-center justify-center hover:bg-surface-container-lowest transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">bookmark</span>
+</button>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-primary-fixed-dim">User Discovery &amp; Qualitative Research</span>
+<h2 class="font-headline-lg text-headline-lg text-on-primary line-clamp-1">
+              Synthesizing Customer Interview Insights &amp; Affinity Mapping
+            </h2>
+</div>
+</div>
+</div>
+<!-- Card Core Body -->
+<div class="p-space-lg flex flex-col gap-space-md">
+<!-- Progress Bar & Key Meta Info -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Overall Course Progress</span>
+<span class="font-code-sm text-code-sm text-on-surface-variant">• 4 of 6 Lessons Completed</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="font-headline-md text-headline-md text-primary font-bold">72%</span>
+</div>
+</div>
+<!-- 8px high progress bar -->
+<div class="w-full h-2 rounded-full bg-surface-container-high overflow-hidden">
+<div class="bg-primary h-full rounded-full transition-all duration-500" style="width: 72%;"></div>
+</div>
+<div class="flex items-center justify-between font-label-sm text-label-sm text-on-surface-variant pt-1">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px] text-primary">schedule</span>
+              Estimated 18 mins to finish Module 3
+            </span>
+<span class="text-secondary font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px]">verified_user</span>
+              Preps for Senior PM Benchmark
+            </span>
+</div>
+</div>
+<!-- Interactive Module Checklist Preview -->
+<div class="flex flex-col gap-space-xs pt-space-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Module Breakdown</span>
+<div class="flex flex-col rounded-lg bg-surface-container-low overflow-hidden">
+<!-- Row 1 Completed -->
+<div class="flex items-center justify-between px-space-md py-2.5 bg-surface-container-low hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-space-sm min-w-0">
+<span class="material-symbols-outlined text-secondary text-[20px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-body-sm text-body-sm text-on-surface line-clamp-1">3.1 Structuring Non-Biased Interview Guides</span>
+</div>
+<span class="font-code-sm text-code-sm text-on-surface-variant px-2 py-0.5 rounded bg-surface-container-lowest">14m • Done</span>
+</div>
+<!-- Row 2 Completed -->
+<div class="flex items-center justify-between px-space-md py-2.5 bg-surface-container-low hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-space-sm min-w-0">
+<span class="material-symbols-outlined text-secondary text-[20px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-body-sm text-body-sm text-on-surface line-clamp-1">3.2 Conducting Problem Exploration Calls (Live Teardown)</span>
+</div>
+<span class="font-code-sm text-code-sm text-on-surface-variant px-2 py-0.5 rounded bg-surface-container-lowest">22m • Done</span>
+</div>
+<!-- Row 3 Active / In Progress -->
+<div class="flex items-center justify-between px-space-md py-3 bg-surface-container-lowest shadow-[0_1px_4px_rgba(0,0,0,0.06)] rounded-lg mx-1 my-1">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+<span class="w-2.5 h-2.5 rounded-full bg-primary animate-pulse"></span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-primary font-semibold truncate">3.3 Affinity Mapping &amp; Pain-Point Hierarchy</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Includes interactive Figma template exercise</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs shrink-0">
+<span class="px-2 py-1 rounded bg-primary-fixed text-primary font-code-sm text-code-sm font-semibold">Now</span>
+<button class="px-3 py-1.5 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-sm text-label-sm transition-all shadow-sm" type="button">
+                  Continue
+                </button>
+</div>
+</div>
+<!-- Row 4 Locked/Upcoming -->
+<div class="flex items-center justify-between px-space-md py-2.5 bg-surface-container-low opacity-75">
+<div class="flex items-center gap-space-sm min-w-0">
+<span class="material-symbols-outlined text-outline text-[20px]">lock</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant line-clamp-1">3.4 Translating Insights into User Story Maps</span>
+</div>
+<span class="font-code-sm text-code-sm text-outline px-2 py-0.5">25m</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- SIDE PANEL: STUDY GOAL & STREAK TRACKER (4 cols) -->
+<div class="lg:col-span-4 flex flex-col gap-space-lg">
+<!-- Weekly Study Target Card -->
+<div class="flex flex-col rounded-xl bg-surface-container-lowest shadow-sm p-space-lg gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Weekly Pace</span>
+<h3 class="font-headline-md text-headline-md text-on-surface font-bold">Study Goal</h3>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed-variant font-label-sm text-label-sm font-semibold">
+            On Track
+          </span>
+</div>
+<!-- Metric Ring + Stat Column -->
+<div class="flex items-center gap-space-lg py-2">
+<!-- Inline Radial Gauge SVG (Under 1KB) -->
+<div class="relative w-28 h-28 shrink-0 flex items-center justify-center">
+<svg class="w-full h-full -rotate-90" viewbox="0 0 100 100">
+<!-- Background Circle -->
+<circle cx="50" cy="50" fill="transparent" r="40" stroke="#E2E8F0" stroke-width="9"></circle>
+<!-- Progress Circle (75% of 2 * pi * 40 ≈ 251.32 -> stroke-dasharray="188.5 251.32") -->
+<circle cx="50" cy="50" fill="transparent" r="40" stroke="#4338ca" stroke-dasharray="188.5 251.32" stroke-linecap="round" stroke-width="9"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+<span class="font-headline-lg text-headline-lg font-bold text-on-surface leading-none">75<span class="text-xs text-primary font-bold">%</span></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant text-[11px] mt-0.5">TARGET</span>
+</div>
+</div>
+<div class="flex flex-col gap-1 min-w-0">
+<div class="flex items-baseline gap-1">
+<span class="font-headline-xl text-headline-xl text-on-surface font-extrabold">4.5</span>
+<span class="font-body-md text-body-md text-on-surface-variant font-medium">/ 6.0 hrs</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+              1.5 hours remaining to hit your weekly workforce milestone.
+            </p>
+</div>
+</div>
+<!-- Streak Pill Banner with Micro Animation -->
+<div class="flex items-center justify-between p-space-sm px-space-md rounded-xl bg-surface-container-low">
+<div class="flex items-center gap-space-xs">
+<span class="text-[20px] select-none">🔥</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-bold">5-Day Study Streak</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Personal best: 12 days</span>
+</div>
+</div>
+<span class="font-code-sm text-code-sm px-2 py-0.5 rounded bg-surface-container-highest text-primary font-semibold">+150 XP</span>
+</div>
+<!-- Weekly Activity Bar Chart (Mon-Sun) -->
+<div class="flex flex-col gap-space-xs pt-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Daily Activity (Hours)</span>
+<div class="grid grid-cols-7 gap-2 items-end h-24 pt-2">
+<!-- Mon: 0.8h -->
+<div class="flex flex-col items-center gap-1 h-full justify-end">
+<div class="w-full bg-primary/20 rounded-t h-[40%] hover:bg-primary transition-colors" title="Mon: 0.8 hrs"></div>
+<span class="font-code-sm text-code-sm text-on-surface-variant text-[10px]">M</span>
+</div>
+<!-- Tue: 1.2h -->
+<div class="flex flex-col items-center gap-1 h-full justify-end">
+<div class="w-full bg-primary/30 rounded-t h-[60%] hover:bg-primary transition-colors" title="Tue: 1.2 hrs"></div>
+<span class="font-code-sm text-code-sm text-on-surface-variant text-[10px]">T</span>
+</div>
+<!-- Wed: 1.5h -->
+<div class="flex flex-col items-center gap-1 h-full justify-end">
+<div class="w-full bg-primary rounded-t h-[75%] hover:bg-primary-container transition-colors" title="Wed: 1.5 hrs"></div>
+<span class="font-code-sm text-code-sm text-primary font-bold text-[10px]">W</span>
+</div>
+<!-- Thu: 1.0h -->
+<div class="flex flex-col items-center gap-1 h-full justify-end">
+<div class="w-full bg-primary/40 rounded-t h-[50%] hover:bg-primary transition-colors" title="Thu: 1.0 hr"></div>
+<span class="font-code-sm text-code-sm text-on-surface-variant text-[10px]">T</span>
+</div>
+<!-- Fri (Today): 0.5h -->
+<div class="flex flex-col items-center gap-1 h-full justify-end">
+<div class="w-full bg-secondary rounded-t h-[28%] animate-pulse" title="Fri (Today): 0.5 hrs so far"></div>
+<span class="font-code-sm text-code-sm text-secondary font-bold text-[10px]">F</span>
+</div>
+<!-- Sat: 0h -->
+<div class="flex flex-col items-center gap-1 h-full justify-end">
+<div class="w-full bg-surface-container-high rounded-t h-[4%]"></div>
+<span class="font-code-sm text-code-sm text-on-surface-variant text-[10px]">S</span>
+</div>
+<!-- Sun: 0h -->
+<div class="flex flex-col items-center gap-1 h-full justify-end">
+<div class="w-full bg-surface-container-high rounded-t h-[4%]"></div>
+<span class="font-code-sm text-code-sm text-on-surface-variant text-[10px]">S</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Achievements & Credentials Mini Banner -->
+<div class="flex flex-col rounded-xl bg-surface-container-lowest shadow-sm p-space-md gap-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Credentials Earned</span>
+<a class="font-label-sm text-label-sm text-primary hover:underline" href="#">View all (4)</a>
+</div>
+<div class="flex items-center gap-space-sm p-space-xs rounded-lg bg-surface-container-low">
+<div class="w-10 h-10 rounded-lg bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface font-semibold truncate">User Research Maven</span>
+<span class="font-label-sm text-label-sm text-secondary font-medium">Issued Feb 12 • Level 2 Badge</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm p-space-xs rounded-lg bg-surface-container-low">
+<div class="w-10 h-10 rounded-lg bg-primary-fixed text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface font-semibold truncate">Agile Roadmapping Pro</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Verified Certificate ID #8841</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- LEARNING PATH ROADMAP PREVIEW (FULL HORIZONTAL MILESTONE TRACK) -->
+<div class="flex flex-col rounded-xl bg-surface-container-lowest shadow-sm p-space-lg gap-space-md">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs">
+<div>
+<div class="flex items-center gap-2">
+<h2 class="font-headline-md text-headline-md text-on-surface font-bold">Product Manager Pathway Roadmap</h2>
+<span class="px-2.5 py-0.5 rounded-full bg-primary-fixed text-primary font-code-sm text-code-sm font-semibold">Track 2 of 4</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+          Complete each foundational milestone and cohort evaluation to advance to Senior PM evaluation.
+        </p>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-sm text-label-sm">
+<span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-secondary"></span> Done</span>
+<span class="flex items-center gap-1 ml-2"><span class="w-2.5 h-2.5 rounded-full bg-primary"></span> In-Progress</span>
+<span class="flex items-center gap-1 ml-2"><span class="w-2.5 h-2.5 rounded-full bg-surface-container-highest"></span> Locked</span>
+</div>
+</div>
+<!-- Timeline Steps Container -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-space-md pt-2">
+<!-- Milestone 1 (Completed) -->
+<div class="relative flex flex-col p-space-md rounded-xl bg-surface-container-low transition-all">
+<div class="flex items-center justify-between mb-space-xs">
+<span class="font-code-sm text-code-sm font-bold text-secondary uppercase">Milestone 01</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed-variant font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[14px]">check</span> Complete
+          </span>
+</div>
+<h4 class="font-title-sm text-title-sm text-on-surface font-semibold mb-1">Product Fundamentals &amp; Strategy</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2 mb-space-md">
+          Market analysis, problem sizing, PM operating rhythms, and competitive positioning matrices.
+        </p>
+<div class="mt-auto flex items-center justify-between pt-2">
+<span class="font-label-sm text-label-sm text-secondary font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">grade</span> Score 96%
+          </span>
+<a class="font-label-sm text-label-sm text-primary hover:underline" href="#">Review Archive</a>
+</div>
+</div>
+<!-- Milestone 2 (In-Progress / Active) -->
+<div class="relative flex flex-col p-space-md rounded-xl bg-surface-container-lowest shadow-md ring-2 ring-primary/20 transform -translate-y-0.5">
+<div class="flex items-center justify-between mb-space-xs">
+<span class="font-code-sm text-code-sm font-bold text-primary uppercase">Milestone 02</span>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-primary-fixed text-primary font-label-sm text-label-sm font-semibold">
+<span class="w-2 h-2 rounded-full bg-primary animate-ping"></span> In Progress
+          </span>
+</div>
+<h4 class="font-title-sm text-title-sm text-on-surface font-semibold mb-1">Customer Discovery &amp; Validation</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2 mb-space-sm">
+          User interviews, JTBD frameworks, synthesis, assumption testing, and value proposition testing.
+        </p>
+<div class="w-full h-1.5 rounded-full bg-surface-container-high overflow-hidden my-2">
+<div class="bg-primary h-full rounded-full" style="width: 68%;"></div>
+</div>
+<div class="mt-auto flex items-center justify-between pt-1">
+<span class="font-code-sm text-code-sm text-on-surface-variant">68% Finished</span>
+<button class="px-2.5 py-1 rounded bg-primary text-on-primary font-label-sm text-label-sm font-medium hover:bg-primary-container transition-colors" type="button">
+            Jump in
+          </button>
+</div>
+</div>
+<!-- Milestone 3 (Locked) -->
+<div class="relative flex flex-col p-space-md rounded-xl bg-surface-container-low/70">
+<div class="flex items-center justify-between mb-space-xs">
+<span class="font-code-sm text-code-sm font-bold text-outline uppercase">Milestone 03</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container-highest text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[13px]">lock</span> Locked
+          </span>
+</div>
+<h4 class="font-title-sm text-title-sm text-on-surface-variant font-semibold mb-1">Metrics, Analytics &amp; Experiments</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2 mb-space-md">
+          A/B experiment design, North Star definition, cohort retention models, and funnel diagnostics.
+        </p>
+<div class="mt-auto flex items-center gap-1 text-on-surface-variant font-label-sm text-label-sm pt-2">
+<span class="material-symbols-outlined text-[15px]">info</span>
+<span>Requires Milestone 2 signoff</span>
+</div>
+</div>
+<!-- Milestone 4 (Locked) -->
+<div class="relative flex flex-col p-space-md rounded-xl bg-surface-container-low/70">
+<div class="flex items-center justify-between mb-space-xs">
+<span class="font-code-sm text-code-sm font-bold text-outline uppercase">Milestone 04</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container-highest text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[13px]">lock</span> Locked
+          </span>
+</div>
+<h4 class="font-title-sm text-title-sm text-on-surface-variant font-semibold mb-1">Roadmapping &amp; Stakeholder Influence</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2 mb-space-md">
+          Executive consensus building, trade-off frameworks, delivery handoffs, and Senior PM defense deck.
+        </p>
+<div class="mt-auto flex items-center gap-1 text-on-surface-variant font-label-sm text-label-sm pt-2">
+<span class="material-symbols-outlined text-[15px]">lock_clock</span>
+<span>Capstone • Final Defense</span>
+</div>
+</div>
+</div>
+</div>
+<!-- SPLIT LOWER GRID: UPCOMING SESSIONS & DEADLINES vs RECOMMENDED PRACTICE -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start pb-space-lg">
+<!-- UPCOMING DEADLINES & LIVE SESSIONS (7 cols) -->
+<div class="lg:col-span-7 flex flex-col rounded-xl bg-surface-container-lowest shadow-sm p-space-lg gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[24px]">event_upcoming</span>
+<h3 class="font-headline-md text-headline-md text-on-surface font-bold">Upcoming Deadlines &amp; Live Cohorts</h3>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">2 events this week</span>
+</div>
+<div class="flex flex-col gap-space-sm">
+<!-- Assignment Deadline Card (Urgent Amber accent) -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between p-space-md rounded-xl bg-surface-container-low gap-space-md hover:bg-surface-container transition-colors">
+<div class="flex items-start gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-tertiary-fixed text-on-tertiary-fixed flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">assignment</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="font-label-md text-label-md text-on-surface font-bold">Sprint Assignment: Discovery Deck Review</span>
+<span class="px-2 py-0.5 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm font-semibold">
+                  Due Tomorrow, 11:59 PM
+                </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                Submit raw audio transcripts and affinity clustering boards for review by Mentor Sarah Blake.
+              </p>
+</div>
+</div>
+<div class="flex items-center sm:self-center shrink-0">
+<button class="w-full sm:w-auto px-4 py-2 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-sm text-label-sm transition-colors shadow-sm" type="button">
+              Upload Deck
+            </button>
+</div>
+</div>
+<!-- Live Cohort Workshop with Guest Speaker -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between p-space-md rounded-xl bg-surface-container-low gap-space-md hover:bg-surface-container transition-colors">
+<div class="flex items-start gap-space-sm">
+<div class="relative w-10 h-10 shrink-0">
+<img class="w-10 h-10 rounded-xl object-cover" data-alt="Professional headshot of female tech executive with warm smile, stylish glasses, modern studio ambient lighting, deep navy background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCiOir7o6HC8MAeQ2TnoWO1eo8K6nj95HG57W5BE54PyAPUHHyEhvoW6CoKWMN54IoDROgbroiN-JBsxQQz4CJmoCq0oEjjaSoUf7V5dJ21-pJmBW9bq42aYgJMuNu6t-VD0908Inczez8kiUldt7bOT-w3_UxT0UfKaQxsmuCh5j7Ko9ZG7W0gBInNYywkNE8B7eK4ZO3pm6gGiE6ccYblFkLruagT0lEjXZn4C5-WkLtRPpE_1OX9iQ"/>
+<span class="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-secondary border-2 border-surface-container-lowest"></span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="font-label-md text-label-md text-on-surface font-bold">Live Q&amp;A: Metrics That Matter</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-highest text-primary font-label-sm text-label-sm font-semibold">
+                  Thursday • 2:00 PM EST
+                </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                With <strong class="text-on-surface font-semibold">Melissa Chen</strong>, VP of Product at FinScale. Live teardown of leading KPI trees.
+              </p>
+</div>
+</div>
+<div class="flex items-center gap-space-xs sm:self-center shrink-0" id="rsvp-container">
+<button class="w-full sm:w-auto px-4 py-2 rounded-lg bg-surface-container-lowest hover:bg-surface-container-high text-on-surface font-label-sm text-label-sm transition-colors shadow-sm flex items-center justify-center gap-1.5" onclick="this.innerText = 'RSVP Confirmed ✓'; this.className = 'w-full sm:w-auto px-4 py-2 rounded-lg bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm cursor-default';" type="button">
+<span class="material-symbols-outlined text-[16px]">event_available</span>
+<span>RSVP Seat</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- RECOMMENDED PRACTICE & ACTIONS (5 cols) -->
+<div class="lg:col-span-5 flex flex-col rounded-xl bg-surface-container-lowest shadow-sm p-space-lg gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[24px]">psychology</span>
+<h3 class="font-headline-md text-headline-md text-on-surface font-bold">Practice &amp; Peer Labs</h3>
+</div>
+<span class="px-2 py-0.5 rounded bg-surface-container-low text-on-surface-variant font-code-sm text-code-sm">Optional Boost</span>
+</div>
+<div class="flex flex-col gap-space-sm">
+<!-- Practice Item 1: Skill Quiz -->
+<div class="group flex items-start justify-between p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container transition-all">
+<div class="flex items-start gap-space-sm">
+<div class="w-9 h-9 rounded-lg bg-primary-fixed text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">quiz</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1">
+<span class="font-label-md text-label-md text-on-surface font-bold group-hover:text-primary transition-colors">Product Analytics Rapid Quiz</span>
+<span class="text-xs px-1.5 py-0.2 rounded bg-surface-container-highest text-on-surface-variant font-code-sm">10 min</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                Test your North Star Metric knowledge &amp; retention formula intuition.
+              </p>
+</div>
+</div>
+<button aria-label="Start quiz" class="w-8 h-8 rounded-full bg-surface-container-lowest text-on-surface hover:text-primary hover:bg-surface-container-high flex items-center justify-center transition-colors shrink-0 ml-2" type="button">
+<span class="material-symbols-outlined text-[18px]">play_arrow</span>
+</button>
+</div>
+<!-- Practice Item 2: Peer Review Task -->
+<div class="group flex items-start justify-between p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container transition-all">
+<div class="flex items-start gap-space-sm">
+<div class="w-9 h-9 rounded-lg bg-secondary-fixed text-on-secondary-fixed-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">rate_review</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1">
+<span class="font-label-md text-label-md text-on-surface font-bold group-hover:text-secondary transition-colors">Peer Review Exchange</span>
+<span class="text-xs px-1.5 py-0.2 rounded bg-secondary-fixed text-on-secondary-fixed-variant font-code-sm">+50 XP</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                Review 1 peer discovery interview note set and provide feedback rubric.
+              </p>
+</div>
+</div>
+<button aria-label="Start peer review" class="w-8 h-8 rounded-full bg-surface-container-lowest text-on-surface hover:text-secondary hover:bg-surface-container-high flex items-center justify-center transition-colors shrink-0 ml-2" type="button">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Quick Mentor Tip Callout -->
+<div class="p-space-sm px-space-md rounded-lg bg-surface-container-low flex items-center gap-space-sm mt-auto">
+<span class="material-symbols-outlined text-[18px] text-primary">lightbulb</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">
+          Tip: Completing the peer review before Thursday unlocks early entry to the live workshop breakout rooms.
+        </span>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Simple micro-interaction for checklist progress feedback
+  document.addEventListener('DOMContentLoaded', () => {
+    const resumeBtn = document.querySelector('button[aria-label="Bookmark module"]');
+    if (resumeBtn) {
+      resumeBtn.addEventListener('click', function() {
+        const icon = this.querySelector('.material-symbols-outlined');
+        if (icon) {
+          const isFilled = icon.style.fontVariationSettings?.includes("'FILL' 1");
+          icon.style.fontVariationSettings = isFilled ? "'FILL' 0" : "'FILL' 1";
+          icon.classList.toggle('text-primary');
+        }
+      });
+    }
+  });
+</script></main></div></body></html>

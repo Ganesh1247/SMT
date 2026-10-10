@@ -18,6 +18,7 @@ One line per memory. Find with `python platform/scripts/memory.py search <terms>
 - hackathon-rubric-weights - SAMARTHA/24h hackathon scoring weights per round and key judging principles
 
 ## lesson
+- audit-draft-consistency-2026-10-10 - Parallel authors diverged on score rule and topology; audit gave G1 FAIL, G2 COND, G3 FAIL, G4 FAIL
 - windows-hook-path-testing - Test Claude hooks with Windows-style paths (cygpath -m), not Git Bash /c/ paths
 
 ## preference

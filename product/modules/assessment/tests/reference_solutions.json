@@ -1,0 +1,107 @@
+{
+ "py-l2-01": {
+  "function": "average",
+  "code": "def average(nums):\n    if not nums:\n        return 0.0\n    return sum(nums) / len(nums)\n"
+ },
+ "py-l2-02": {
+  "function": "is_palindrome",
+  "code": "def is_palindrome(s):\n    cleaned = [c.lower() for c in s if c.isalnum()]\n    return cleaned == cleaned[::-1]\n"
+ },
+ "py-l2-03": {
+  "function": "count_words",
+  "code": "def count_words(text):\n    counts = {}\n    for word in text.lower().split():\n        counts[word] = counts.get(word, 0) + 1\n    return counts\n"
+ },
+ "py-l2-04": {
+  "function": "second_largest",
+  "code": "def second_largest(nums):\n    distinct = sorted(set(nums))\n    if len(distinct) < 2:\n        return None\n    return distinct[-2]\n"
+ },
+ "py-l2-05": {
+  "function": "remove_duplicates",
+  "code": "def remove_duplicates(items):\n    seen = set()\n    out = []\n    for item in items:\n        if item not in seen:\n            seen.add(item)\n            out.append(item)\n    return out\n"
+ },
+ "py-l2-06": {
+  "function": "fizzbuzz",
+  "code": "def fizzbuzz(n):\n    out = []\n    for i in range(1, n + 1):\n        if i % 15 == 0:\n            out.append(\"FizzBuzz\")\n        elif i % 3 == 0:\n            out.append(\"Fizz\")\n        elif i % 5 == 0:\n            out.append(\"Buzz\")\n        else:\n            out.append(str(i))\n    return out\n"
+ },
+ "py-l2-07": {
+  "function": "chunk",
+  "code": "def chunk(items, size):\n    out = []\n    for i in range(0, len(items), size):\n        out.append(items[i:i + size])\n    return out\n"
+ },
+ "py-l3-01:base": {
+  "function": "top_k_frequent",
+  "code": "from collections import Counter\n\n\ndef top_k_frequent(words, k):\n    counts = Counter(words)\n    return [w for w, _ in sorted(counts.items(), key=lambda p: (-p[1], p[0]))][:k]\n"
+ },
+ "py-l3-01:mutated": {
+  "function": "top_k_frequent",
+  "code": "from collections import Counter\n\n\ndef top_k_frequent(words, k):\n    counts = Counter(w.lower() for w in words if len(w) >= 3)\n    return [w for w, _ in sorted(counts.items(), key=lambda p: (-p[1], p[0]))][:k]\n"
+ },
+ "py-l3-02:base": {
+  "function": "merge_intervals",
+  "code": "def merge_intervals(intervals):\n    out = []\n    for s, e in sorted(intervals):\n        if out and s <= out[-1][1]:\n            out[-1][1] = max(out[-1][1], e)\n        else:\n            out.append([s, e])\n    return out\n"
+ },
+ "py-l3-02:mutated": {
+  "function": "merge_intervals",
+  "code": "def merge_intervals(intervals, gap):\n    out = []\n    for s, e in sorted(intervals):\n        if out and s <= out[-1][1] + gap:\n            out[-1][1] = max(out[-1][1], e)\n        else:\n            out.append([s, e])\n    return out\n"
+ },
+ "py-l3-03:base": {
+  "function": "final_balance",
+  "code": "def final_balance(transactions):\n    bal = 0\n    for kind, amount in transactions:\n        bal += amount if kind == 'deposit' else -amount\n    return bal\n"
+ },
+ "py-l3-03:mutated": {
+  "function": "final_balance",
+  "code": "def final_balance(transactions):\n    bal = 0\n    rejected = 0\n    for kind, amount in transactions:\n        if kind == 'deposit':\n            bal += amount\n        elif amount <= bal:\n            bal -= amount\n        else:\n            rejected += 1\n    return [bal, rejected]\n"
+ },
+ "py-l3-04:base": {
+  "function": "normalize_scores",
+  "code": "def normalize_scores(scores):\n    if not scores:\n        return []\n    lo, hi = min(scores), max(scores)\n    if hi == lo:\n        return [0.0 for _ in scores]\n    return [round((s - lo) / (hi - lo), 2) for s in scores]\n"
+ },
+ "py-l3-04:mutated": {
+  "function": "normalize_scores",
+  "code": "def normalize_scores(scores):\n    vals = [s for s in scores if s is not None]\n    if not vals:\n        return [None for _ in scores]\n    lo, hi = min(vals), max(vals)\n    if hi == lo:\n        return [None if s is None else 0.0 for s in scores]\n    return [None if s is None else round((s - lo) / (hi - lo), 2) for s in scores]\n"
+ },
+ "da-l2-01": {
+  "sql": "SELECT c.name, COUNT(o.id) AS n FROM customers c LEFT JOIN orders o ON o.customer_id = c.id AND o.status = 'completed' GROUP BY c.id, c.name ORDER BY c.name"
+ },
+ "da-l2-02": {
+  "sql": "SELECT c.region, SUM(o.amount) AS revenue FROM customers c JOIN orders o ON o.customer_id = c.id WHERE o.status = 'completed' AND c.region IS NOT NULL GROUP BY c.region HAVING SUM(o.amount) > 500 ORDER BY c.region"
+ },
+ "da-l2-03": {
+  "sql": "SELECT name FROM customers WHERE region IS NULL ORDER BY name"
+ },
+ "da-l2-04": {
+  "sql": "SELECT c.name, COUNT(o.amount) AS n FROM customers c LEFT JOIN orders o ON o.customer_id = c.id GROUP BY c.id, c.name ORDER BY c.name"
+ },
+ "da-l2-05": {
+  "sql": "SELECT COUNT(DISTINCT customer_id) AS buyers FROM orders WHERE status = 'completed'"
+ },
+ "da-l2-06": {
+  "sql": "SELECT c.name, SUM(o.amount) AS revenue FROM customers c JOIN orders o ON o.customer_id = c.id WHERE o.status = 'completed' GROUP BY c.id, c.name ORDER BY revenue DESC, c.name LIMIT 3"
+ },
+ "da-l2-07": {
+  "sql": "SELECT id FROM orders WHERE ordered_at >= '2026-03-01' AND ordered_at < '2026-04-01' ORDER BY id"
+ },
+ "da-l3-01:base": {
+  "sql": "SELECT c.name, SUM(COALESCE(o.amount, 0)) AS revenue FROM customers c JOIN orders o ON o.customer_id = c.id WHERE o.status = 'completed' GROUP BY c.id, c.name ORDER BY revenue DESC, c.name"
+ },
+ "da-l3-01:mutated": {
+  "sql": "SELECT c.name, SUM(o.amount) AS revenue, COUNT(*) AS n_orders FROM customers c JOIN orders o ON o.customer_id = c.id WHERE o.status = 'completed' AND o.amount >= 50 GROUP BY c.id, c.name HAVING COUNT(*) >= 2 ORDER BY revenue DESC, c.name"
+ },
+ "da-l3-02:base": {
+  "sql": "SELECT name, order_id, amount FROM (SELECT c.name AS name, o.id AS order_id, o.amount AS amount, ROW_NUMBER() OVER (PARTITION BY c.id ORDER BY o.ordered_at DESC, o.id DESC) AS rn FROM customers c JOIN orders o ON o.customer_id = c.id) WHERE rn = 1 ORDER BY name"
+ },
+ "da-l3-02:mutated": {
+  "sql": "SELECT name, order_id, amount FROM (SELECT c.name AS name, o.id AS order_id, o.amount AS amount, o.ordered_at AS ordered_at, ROW_NUMBER() OVER (PARTITION BY c.id ORDER BY o.ordered_at DESC, o.id DESC) AS rn FROM customers c JOIN orders o ON o.customer_id = c.id) WHERE rn <= 2 ORDER BY name, ordered_at DESC, order_id DESC"
+ },
+ "da-l3-03:base": {
+  "sql": "SELECT e.name, e.dept, e.salary FROM employees e WHERE e.salary IS NOT NULL AND e.salary > (SELECT AVG(salary) FROM employees x WHERE x.dept = e.dept) ORDER BY e.dept, e.name"
+ },
+ "da-l3-03:mutated": {
+  "sql": "SELECT e.name, e.dept, e.salary FROM employees e WHERE e.salary IS NOT NULL AND e.salary > (SELECT AVG(salary) FROM employees) AND e.dept IN (SELECT dept FROM employees WHERE salary IS NOT NULL GROUP BY dept HAVING COUNT(*) >= 3) ORDER BY e.dept, e.name"
+ },
+ "da-l3-04:base": {
+  "sql": "SELECT COUNT(DISTINCT v.user_id) AS users FROM events v JOIN events p ON p.user_id = v.user_id AND p.kind = 'purchase' WHERE v.kind = 'view'"
+ },
+ "da-l3-04:mutated": {
+  "sql": "SELECT COUNT(DISTINCT v.user_id) AS users FROM events v JOIN events p ON p.user_id = v.user_id AND p.kind = 'purchase' WHERE v.kind = 'view' AND p.day - v.day BETWEEN 0 AND 7"
+ }
+}

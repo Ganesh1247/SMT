@@ -33,8 +33,8 @@ code,.mono{font-family:ui-monospace,Consolas,"Courier New",monospace;font-size:v
 .skip:focus{inset-block-start:var(--s2)}
 .ic{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vertical-align:-4px}
 /* mock-up banner */
-.banner{position:sticky;inset-block-start:0;z-index:50;background:var(--color-warning-bg);color:var(--color-warning-text);border-block-end:3px solid var(--color-warning-text);padding:var(--s2) var(--s4);font-weight:700;display:flex;gap:var(--s2);align-items:flex-start}
-.mockctl{border:2px dashed var(--color-text-muted);background:var(--color-surface-alt);padding:var(--s3) var(--s4);margin:var(--s4);border-radius:var(--radius)}
+.banner{position:sticky;inset-block-start:0;z-index:50;background:var(--color-warning-bg);color:var(--color-warning-text);border-block-end:1px solid var(--color-warning-text);padding:var(--s2) var(--s4);font-weight:700;display:flex;gap:var(--s2);align-items:flex-start}
+.mockctl{border:1px dashed var(--color-text-muted);background:var(--color-surface-alt);padding:var(--s3) var(--s4);margin:var(--s4);border-radius:var(--radius)}
 .mockctl .tag{font-weight:700;margin:0 0 var(--s2);font-size:var(--fs-s)}
 .wrap{max-width:75rem;margin-inline:auto;padding:var(--s4)}
 .site{display:flex;flex-wrap:wrap;gap:var(--s2) var(--s5);align-items:center;justify-content:space-between;padding-block:var(--s3)}
@@ -47,19 +47,19 @@ header.top{border-block-end:1px solid var(--color-border)}
 main{display:block;padding-block:var(--s4) var(--s6)}
 footer{border-block-start:1px solid var(--color-border);padding-block:var(--s4);color:var(--color-text-muted);font-size:var(--fs-s)}
 /* components */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--s2);min-height:44px;min-width:44px;padding:var(--s2) var(--s4);font:inherit;font-weight:600;border-radius:var(--radius);border:2px solid var(--color-primary);background:var(--color-surface);color:var(--color-primary);cursor:pointer;text-decoration:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--s2);min-height:44px;min-width:44px;padding:var(--s2) var(--s4);font:inherit;font-weight:600;border-radius:var(--radius);border:1px solid var(--color-primary);background:var(--color-surface);color:var(--color-primary);cursor:pointer;text-decoration:none}
 .btn.primary{background:var(--color-primary);color:#fff}
 .btn.danger{background:var(--color-error);border-color:var(--color-error);color:#fff}
 .btn:hover{filter:brightness(.94)}
 .actions{display:flex;flex-wrap:wrap;gap:var(--s3);margin-block-start:var(--s3)}
 .panel{background:var(--color-surface-alt);border:1px solid var(--color-border);border-radius:var(--radius);padding:var(--s4);margin-block-end:var(--s4)}
 .panel.plain{background:var(--color-surface)}
-.notice{display:flex;gap:var(--s2);align-items:flex-start;border:2px solid var(--color-success);color:var(--color-success);background:#fff;padding:var(--s3);border-radius:var(--radius);margin-block-end:var(--s4);font-weight:600}
+.notice{display:flex;gap:var(--s2);align-items:flex-start;border:1px solid var(--color-success);color:var(--color-success);background:#fff;padding:var(--s3);border-radius:var(--radius);margin-block-end:var(--s4);font-weight:600}
 .notice:empty{display:none}
-.alert{display:flex;gap:var(--s2);align-items:flex-start;border:2px solid var(--color-error);color:var(--color-error);background:#fff;padding:var(--s4);border-radius:var(--radius);margin-block-end:var(--s4)}
+.alert{display:flex;gap:var(--s2);align-items:flex-start;border:1px solid var(--color-error);color:var(--color-error);background:#fff;padding:var(--s4);border-radius:var(--radius);margin-block-end:var(--s4)}
 .alert p{color:var(--color-text)}
 .alert strong{color:var(--color-error)}
-.warn{display:flex;gap:var(--s2);align-items:flex-start;background:var(--color-warning-bg);color:var(--color-warning-text);border:2px solid var(--color-warning-text);padding:var(--s3) var(--s4);border-radius:var(--radius);margin-block-end:var(--s4)}
+.warn{display:flex;gap:var(--s2);align-items:flex-start;background:var(--color-warning-bg);color:var(--color-warning-text);border:1px solid var(--color-warning-text);padding:var(--s3) var(--s4);border-radius:var(--radius);margin-block-end:var(--s4)}
 .chip{display:inline-flex;align-items:center;gap:6px;min-height:28px;padding:2px 10px;border-radius:14px;border:1px solid currentColor;font-size:var(--fs-s);font-weight:600;background:#fff;vertical-align:middle}
 .chip.success{color:var(--color-success)}
 .chip.info{color:var(--color-primary)}
@@ -73,7 +73,9 @@ footer{border-block-start:1px solid var(--color-border);padding-block:var(--s4);
 dl.kv{display:grid;grid-template-columns:max-content 1fr;gap:var(--s1) var(--s4);margin:var(--s2) 0}
 dl.kv dt{color:var(--color-text-muted)}
 dl.kv dd{margin:0}
-@media (max-width:480px){dl.kv{grid-template-columns:1fr}dl.kv dt{margin-block-start:var(--s2)}}
+@media (max-width:360px){dl.kv{grid-template-columns:1fr}dl.kv dt{margin-block-start:var(--s2)}}
+@media (max-width:400px),(max-height:500px){.banner{position:static}html{scroll-padding-block-start:0}}
+@media (min-width:1200px){.wrap{padding-inline:var(--s6)}}
 .estimate{font-size:var(--fs-l);font-weight:700;line-height:1.25;margin-block-end:var(--s3)}
 .band{position:relative;max-width:36rem;padding-block-start:var(--s2)}
 .band-track{position:relative;height:24px;border:1px solid var(--color-text);background:#fff;border-radius:2px}
@@ -93,7 +95,7 @@ label,.lbl{display:block;font-weight:600;margin-block-end:var(--s1)}
 .req{font-weight:400;color:var(--color-text-muted)}
 input[type=text],input[type=date],select,textarea{width:100%;min-height:44px;font:inherit;padding:var(--s2) var(--s3);border:1px solid var(--color-border);border-radius:var(--radius);background:#fff;color:var(--color-text)}
 textarea{min-height:8rem}
-.field.has-error input,.field.has-error select,.field.has-error textarea{border:2px solid var(--color-error)}
+.field.has-error input,.field.has-error select,.field.has-error textarea{border:1px solid var(--color-error)}
 .err{color:var(--color-error);font-weight:600;display:flex;gap:var(--s1);margin-block-start:var(--s1)}
 .check{display:flex;gap:var(--s3);align-items:flex-start;min-height:44px}
 .check input{width:24px;height:24px;margin:10px 0 0;flex:none}
@@ -104,7 +106,7 @@ textarea{min-height:8rem}
 .preview ul{list-style:disc;padding-inline-start:var(--s5)}
 /* dialog */
 .overlay{position:fixed;inset:0;background:rgba(26,26,26,.7);display:flex;align-items:center;justify-content:center;padding:var(--s4);z-index:200;overflow:auto}
-.dialog{background:#fff;color:var(--color-text);border:2px solid var(--color-text);border-radius:var(--radius);padding:var(--s5);max-width:32rem;width:100%;max-height:100%;overflow:auto}
+.dialog{background:#fff;color:var(--color-text);border:1px solid var(--color-text);border-radius:var(--radius);padding:var(--s5);max-width:32rem;width:100%;max-height:100%;overflow:auto}
 @media (min-width:768px){.wrap{padding:var(--s5)}.banner{padding-inline:var(--s5)}}
 @media (prefers-reduced-motion:no-preference){.btn{transition:filter .1s}}
 </style>
@@ -139,6 +141,7 @@ textarea{min-height:8rem}
       <label for="state-sel">Show state</label>
       <select id="state-sel">
         <option value="normal">Normal</option>
+        <option value="partial">Partial progress</option>
         <option value="empty">Empty</option>
         <option value="loading">Loading</option>
         <option value="error">Error</option>
@@ -163,6 +166,7 @@ textarea{min-height:8rem}
   </header>
   <main id="main" class="wrap">
     <div id="notice" class="notice" role="status"></div>
+    <div id="live" class="sr-only" role="status"></div>
     <div id="view"></div>
   </main>
   <footer>
@@ -283,12 +287,18 @@ function currentProfile() {
     p.understanding_status = "unconfirmed";
     p.evidence_items.forEach(i => { if (i.method === "probe") i.understanding_status = "unconfirmed"; });
   }
+  if (state === "partial") {
+    p.levels_passed = [1, 2, 3];
+    p.evidence_items = p.evidence_items.filter(i => i.method !== "live_screening");
+    p.method_counts.live_screening = 0;
+    p.assessor_report_ref = undefined;
+  }
   return p;
 }
 function pathStatus() {
-  const passed = state === "empty" ? [] : MOCK.profile.levels_passed;
-  const inProg = state === "empty" ? 1 : 0;
-  return { passed, inProg };
+  if (state === "empty") return { passed: [], inProg: 0 };
+  if (state === "partial") return { passed: [1, 2, 3], inProg: 0 };
+  return { passed: MOCK.profile.levels_passed, inProg: 0 };
 }
 
 function setNotice(text) {
@@ -301,7 +311,7 @@ function mockAction(what) { setNotice("Mock-up only: " + what + " is not part of
 /* ---------------- views ---------------- */
 function loadingView(title) {
   return '<h1 tabindex="-1" id="h1">' + esc(title) + "</h1>" +
-    '<div role="status" class="panel plain"><p><strong id="load-msg">Loading your results</strong></p></div>' +
+    '<div class="panel plain"><p><strong id="load-msg">Loading your results</strong></p></div>' +
     '<div aria-hidden="true"><div class="skel big"></div><div class="skel"></div><div class="skel"></div><div class="skel big"></div></div>';
 }
 function errorView(title) {
@@ -319,7 +329,7 @@ function viewMyPath() {
     const passed = ps.passed.includes(l.n);
     const locked = l.n === 4 && !l123;
     const inprog = !passed && !locked && ps.inProg === l.n;
-    const attempts = state === "empty" ? 0 : l.attempts;
+    const attempts = state === "empty" ? 0 : (state === "partial" && l.n === 4 ? 0 : l.attempts);
     let status, action = "";
     if (passed) { status = chip("success", "check", "Passed"); action = '<button type="button" class="btn" data-mock="the task screen">Open<span class="sr-only"> Level ' + l.n + "</span></button>"; }
     else if (locked) { status = chip("neutral", "lock", "Locked"); }
@@ -332,7 +342,7 @@ function viewMyPath() {
   return '<h1 tabindex="-1" id="h1">My path</h1>' +
     "<p>Four levels. Each level uses your own data. You can leave and come back; your work is saved.</p>" +
     '<ul class="grid" aria-label="Levels">' + cards + "</ul>" +
-    '<p class="muted" style="margin-block-start:var(--s4)">Passed levels stay recorded. There are no timers on any level.</p>';
+    '<p class="muted" style="margin-block-start:var(--s4)">Passed levels stay recorded.</p>';
 }
 
 function bandBlock(pr) {
@@ -358,9 +368,13 @@ function evidenceCard(it) {
     ai = '<p>' + chip("info", "ai", "AI-assisted feedback") + " <span>Confidence: " + (lowConf ? "Low" : esc(conf ? conf.words : "Medium")) + "</span></p>" +
       "<details><summary>Show the confidence number</summary><p>" + (lowConf ? "0.38" : esc(conf ? conf.number : "0.60")) + "</p></details>";
   }
-  const und = it.method === "probe" ? "<p>" + understandingChip(it.understanding_status) + "</p>" : "";
+  const unconf = it.method === "probe" && it.understanding_status === "unconfirmed";
+  const und = it.method === "probe"
+    ? "<p>" + understandingChip(it.understanding_status) + "</p>" +
+      (unconf ? "<p>The output was verified. We could not confirm understanding. This does not change the result. You can try another probe or appeal.</p>" : "")
+    : "";
   return '<li class="card"><h4>' + esc(name) + "</h4>" +
-    "<p>" + methodLabel(it.method) + " " + outcomeChip(it.outcome, it.method) + "</p>" + und + ai +
+    "<p>" + methodLabel(it.method) + " " + (unconf ? chip("success", "check", "Output verified") : outcomeChip(it.outcome, it.method)) + "</p>" + und + ai +
     '<dl class="kv"><dt>Evidence from</dt><dd>' + fmt(it.occurred_at) + "</dd>" +
     "<dt>Task version</dt><dd>" + esc(it.task_version) + "</dd><dt>Rubric version</dt><dd>" + esc(it.rubric_version) + "</dd></dl>" +
     '<div class="actions"><a class="btn" href="#/appeals?criterion=' + esc(it.criterion_id) + '">Appeal this result<span class="sr-only">: ' + esc(name) + "</span></a></div></li>";
@@ -375,15 +389,16 @@ function viewProfile() {
       '<div class="panel"><p><strong>No evidence yet.</strong> Complete Level 1 to start your profile.</p><div class="actions"><a class="btn primary" href="#/my-path">Go to My path</a></div></div>';
   }
   const pr = p.proficiency;
+  const showEst = [1, 2, 3, 4].every(n => p.levels_passed.includes(n));
   const age = "Newest evidence is from " + fmt(p.last_evidence_at) + ". Older evidence widens the likely range.";
-  const lowNote = state === "low"
+  const lowNote = state === "low" && showEst
     ? '<div class="warn">' + icon("warn") + "<div><p><strong>We are not sure about this result. A person will check it.</strong></p><p>The range is wide because there is little or older evidence. Result: Pending review. Confidence: Low.</p></div></div>"
     : "";
   const lv = p.levels_passed.map(n => "<li>" + chip("success", "check", "Level " + n + " passed") + "</li>").join("");
   const counts = Object.keys(METHODS).map(k => "<li class=\"card\">" + methodLabel(k) + '<p style="margin:var(--s1) 0 0">Results: ' + p.method_counts[k] + "</p></li>").join("");
   let undBlock = "<p>" + understandingChip(p.understanding_status) + "</p>";
   if (p.understanding_status === "unconfirmed") {
-    undBlock += "<p>Your answer to the main task is correct and your score for it is unchanged. We could not confirm you can explain or predict how it works. This is not a finding of misconduct. You can try another probe or ask for a person to look.</p>" +
+    undBlock += "<p>Your answer to the main task is correct and its result is unchanged. We could not confirm you can explain or predict how it works. This is not a finding about your conduct. You can try another probe or ask for a person to look.</p>" +
       '<div class="actions"><button type="button" class="btn primary" data-mock="the probe">Try another probe</button><a class="btn" href="#/appeals?criterion=crt_predict_output">Appeal</a></div>';
   }
   const g = grants[0];
@@ -393,9 +408,13 @@ function viewProfile() {
   const items = p.evidence_items.slice().sort((a, b) => b.occurred_at.localeCompare(a.occurred_at)).map(evidenceCard).join("");
   return '<h1 tabindex="-1" id="h1">Profile</h1>' + exp + lowNote +
     "<h2>" + esc(MOCK.ui_extras.competency_name) + ' <span class="muted mono" style="font-weight:400">' + esc(p.competency_id) + "</span></h2>" +
-    '<section aria-labelledby="h-est" class="panel"><h3 id="h-est">Estimate</h3>' + bandBlock(pr) +
-    '<p class="small muted">' + (state === "low" ? "" : "Updated just now. ") + esc(age) + "</p>" +
-    '<details><summary>Why does older evidence widen the range?</summary><p>An estimate is less certain when it rests on little evidence or on evidence from a long time ago. The range grows wider until you add new evidence.</p></details></section>' +
+    (showEst
+      ? '<section aria-labelledby="h-est" class="panel"><h3 id="h-est">Estimate</h3>' + bandBlock(pr) +
+        '<p class="small muted">' + (state === "low" ? "" : "Updated just now. ") + esc(age) + "</p>" +
+        '<details><summary>Why does older evidence widen the range?</summary><p>An estimate is less certain when it rests on little evidence or on evidence from a long time ago. The range grows wider until you add new evidence.</p></details></section>'
+      : '<section aria-labelledby="h-est" class="panel"><h3 id="h-est">Estimate</h3><p><strong>Your estimate updates after all four levels are passed.</strong></p>' +
+        "<p>Levels passed so far are listed below. Level 4 is still to do.</p>" +
+        '<div class="actions"><a class="btn primary" href="#/my-path">Go to My path</a></div></section>') +
     '<section aria-labelledby="h-lv" class="panel"><h3 id="h-lv">Levels passed</h3><ul style="display:flex;flex-wrap:wrap;gap:var(--s2)">' + lv + "</ul></section>" +
     '<section aria-labelledby="h-md" class="panel"><h3 id="h-md">How this evidence was produced</h3><ul class="grid">' + counts + "</ul></section>" +
     '<section aria-labelledby="h-un" class="panel"><h3 id="h-un">Understanding</h3>' + undBlock + "</section>" +
@@ -451,6 +470,7 @@ function viewAppeals() {
   const names = MOCK.ui_extras.criterion_names;
   const q = new URLSearchParams((location.hash.split("?")[1] || ""));
   const pre = q.get("criterion") || "";
+  const hasResult = state !== "empty";
   const list = appeals.length
     ? '<ul class="grid">' + appeals.map(a =>
       '<li class="card"><h3>' + esc(names[a.criterion_id] || a.criterion_id) + "</h3><p>" + appealPill(a.status) + "</p>" +
@@ -458,12 +478,16 @@ function viewAppeals() {
       "<p>" + esc(a.text) + "</p>" +
       (a.status === "decided" ? '<div class="panel plain"><p><strong>Decision by a person: ' + esc(a.decision) + "</strong></p><p>" + esc(a.reason) + '</p><p class="small muted">Decided ' + fmt(a.decided_at) + "</p></div>" : "") + "</li>").join("") + "</ul>"
     : '<div class="panel"><p><strong>You have no appeals.</strong></p></div>';
-  const crit = Object.keys(names).map(k => '<option value="' + k + '"' + (k === pre ? " selected" : "") + ">" + esc(names[k]) + "</option>").join("");
+  const cp = currentProfile();
+  const withResult = cp ? cp.evidence_items.map(i => i.criterion_id) : [];
+  const crit = Object.keys(names).filter(k => withResult.includes(k)).map(k => '<option value="' + k + '"' + (k === pre ? " selected" : "") + ">" + esc(names[k]) + "</option>").join("");
   return '<h1 tabindex="-1" id="h1">Appeals</h1>' +
     "<p>If a result looks wrong, you can ask a person to look at it. Your current result stays visible until they decide.</p>" +
     '<section aria-labelledby="h-al"><h2 id="h-al">Your appeals</h2>' + list + "</section>" +
-    '<section aria-labelledby="h-na" style="margin-block-start:var(--s5)"><h2 id="h-na">New appeal</h2><div id="form-errors"></div>' +
-    '<form id="appeal-form" novalidate>' +
+    '<section aria-labelledby="h-na" style="margin-block-start:var(--s5)"><h2 id="h-na">New appeal</h2>' +
+    (hasResult ? "" : '<div class="panel"><p>You can appeal a result once you have one. Complete Level 1 first.</p><div class="actions"><a class="btn primary" href="#/my-path">Go to My path</a></div></div>') +
+    '<div id="form-errors"></div>' +
+    '<form id="appeal-form" novalidate' + (hasResult ? "" : " hidden") + ">" +
     '<div class="field"><label for="a-crit">Which result? <span class="req">(required)</span></label><select id="a-crit">' + crit + "</select></div>" +
     '<div class="panel plain" id="a-current" style="max-width:36rem"></div>' +
     '<div class="field" id="fld-text"><label for="a-text">What do you think is wrong? <span class="req">(required)</span></label>' +
@@ -513,13 +537,15 @@ const TITLES = { "my-path": "My path", profile: "Profile", sharing: "Sharing", a
 function render(opts) {
   opts = opts || {};
   clearTimeout(loadTimer);
+  $("#live").textContent = "";
   const r = routeName();
   document.querySelectorAll("nav a").forEach(a => { if (a.dataset.route === r) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
   document.title = TITLES[r] + " · Crucible learner dashboard (MOCK-UP)";
   const view = $("#view");
   if (state === "loading") {
     view.innerHTML = loadingView(TITLES[r]);
-    loadTimer = setTimeout(() => { const m = $("#load-msg"); if (m) m.textContent = "Still loading. Your work is saved."; }, 5000);
+    $("#live").textContent = "Loading your results";
+    loadTimer = setTimeout(() => { const m = $("#load-msg"); if (m) m.textContent = "Still loading. Your work is saved."; $("#live").textContent = "Still loading. Your work is saved."; }, 5000);
   } else if (state === "error") {
     view.innerHTML = errorView(TITLES[r]);
     $("#retry").addEventListener("click", () => { $("#state-sel").value = "normal"; setState("normal"); setNotice("Loaded. Showing the Normal state."); });
@@ -527,6 +553,7 @@ function render(opts) {
     view.innerHTML = { "my-path": viewMyPath, profile: viewProfile, sharing: viewSharing, appeals: viewAppeals }[r]();
     wire(r);
   }
+  document.querySelectorAll("ul").forEach(u => u.setAttribute("role", "list"));
   if (opts.focus !== false) { const h = $("#h1"); if (h) h.focus(); window.scrollTo(0, 0); }
 }
 
@@ -561,7 +588,7 @@ function wire(r) {
         $("#f-exp").setAttribute("aria-invalid", "true");
         $("#f-exp").setAttribute("aria-describedby", "f-exp-h f-exp-m");
         $("#f-exp-e").innerHTML = '<p class="err" id="f-exp-m">' + icon("alert") + "<span>" + esc(msg) + "</span></p>";
-        $("#form-errors").innerHTML = '<div class="alert" role="alert" tabindex="-1" id="err-sum">' + icon("alert") + '<div><p><strong>Please fix this before sharing.</strong></p><p><a href="#f-exp" id="err-link">' + esc(msg) + "</a></p></div></div>";
+        $("#form-errors").innerHTML = '<div class="alert" tabindex="-1" id="err-sum">' + icon("alert") + '<div><p><strong>Please fix this before sharing.</strong></p><p><a href="#f-exp" id="err-link">' + esc(msg) + "</a></p></div></div>";
         $("#err-link").addEventListener("click", ev => { ev.preventDefault(); $("#f-exp").focus(); });
         $("#err-sum").focus();
         return;
@@ -604,7 +631,7 @@ function wire(r) {
         $("#a-text").setAttribute("aria-invalid", "true");
         $("#a-text").setAttribute("aria-describedby", "a-text-h a-text-m");
         $("#a-text-e").innerHTML = '<p class="err" id="a-text-m">' + icon("alert") + "<span>Tell us what you think is wrong.</span></p>";
-        $("#form-errors").innerHTML = '<div class="alert" role="alert" tabindex="-1" id="err-sum">' + icon("alert") + '<div><p><strong>Please fix this before sending.</strong></p><p><a href="#a-text" id="err-link">Tell us what you think is wrong.</a></p></div></div>';
+        $("#form-errors").innerHTML = '<div class="alert" tabindex="-1" id="err-sum">' + icon("alert") + '<div><p><strong>Please fix this before sending.</strong></p><p><a href="#a-text" id="err-link">Tell us what you think is wrong.</a></p></div></div>';
         $("#err-link").addEventListener("click", ev => { ev.preventDefault(); $("#a-text").focus(); });
         $("#err-sum").focus();
         return;

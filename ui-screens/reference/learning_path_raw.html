@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"on-primary-fixed-variant":"#372abf","on-surface-variant":"#464554","primary-container":"#4338ca","on-secondary":"#ffffff","on-error-container":"#93000a","primary":"#2a14b4","on-surface":"#0d1c2e","on-secondary-container":"#00714e","on-primary-fixed":"#100069","secondary-fixed":"#85f8c4","surface":"#f8f9ff","on-background":"#0d1c2e","primary-fixed-dim":"#c3c0ff","secondary-container":"#82f5c1","surface-dim":"#ccdbf3","on-tertiary-container":"#ffb477","surface-container-low":"#eff4ff","surface-bright":"#f8f9ff","error-container":"#ffdad6","on-secondary-fixed-variant":"#005137","error":"#ba1a1a","on-tertiary-fixed":"#2f1500","on-secondary-fixed":"#002114","secondary":"#006c4a","inverse-on-surface":"#eaf1ff","surface-container-high":"#dce9ff","surface-container-lowest":"#ffffff","surface-tint":"#5148d7","outline":"#777586","surface-container-highest":"#d5e3fc","on-error":"#ffffff","tertiary":"#5c2f00","tertiary-container":"#7d4200","inverse-primary":"#c3c0ff","on-primary":"#ffffff","primary-fixed":"#e3dfff","outline-variant":"#c7c4d7","tertiary-fixed-dim":"#ffb77d","on-primary-container":"#c1beff","surface-container":"#e6eeff","tertiary-fixed":"#ffdcc3","background":"#f8f9ff","inverse-surface":"#233144","secondary-fixed-dim":"#68dba9","surface-variant":"#d5e3fc","on-tertiary-fixed-variant":"#6e3900","on-tertiary":"#ffffff"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"space-xs":"0.25rem","margin":"2rem","margin-mobile":"1rem","space-xl":"2.5rem","space-lg":"1.5rem","space-md":"1rem","gutter-mobile":"1rem","space-sm":"0.5rem","gutter":"1.5rem"},"fontFamily":{"label-sm":["Inter"],"display-lg":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"title-sm":["Plus Jakarta Sans"],"label-md":["Inter"],"body-md":["Inter"],"display-lg-mobile":["Plus Jakarta Sans"],"body-sm":["Inter"],"body-lg":["Inter"],"headline-xl-mobile":["Plus Jakarta Sans"],"headline-xl":["Plus Jakarta Sans"],"code-sm":["Inter"],"headline-md":["Plus Jakarta Sans"]},"fontSize":{"label-sm":["0.75rem",{"lineHeight":"1rem","letterSpacing":"0.02em","fontWeight":"600"}],"display-lg":["3rem",{"lineHeight":"3.5rem","letterSpacing":"-0.03em","fontWeight":"800"}],"headline-lg":["1.5rem",{"lineHeight":"2rem","letterSpacing":"-0.015em","fontWeight":"700"}],"title-sm":["1.125rem",{"lineHeight":"1.5rem","letterSpacing":"-0.005em","fontWeight":"600"}],"label-md":["0.875rem",{"lineHeight":"1.25rem","letterSpacing":"0.01em","fontWeight":"600"}],"body-md":["1rem",{"lineHeight":"1.5rem","fontWeight":"400"}],"display-lg-mobile":["2.25rem",{"lineHeight":"2.75rem","letterSpacing":"-0.025em","fontWeight":"800"}],"body-sm":["0.875rem",{"lineHeight":"1.25rem","fontWeight":"400"}],"body-lg":["1.125rem",{"lineHeight":"1.75rem","fontWeight":"400"}],"headline-xl-mobile":["1.5rem",{"lineHeight":"2rem","letterSpacing":"-0.015em","fontWeight":"700"}],"headline-xl":["2rem",{"lineHeight":"2.5rem","letterSpacing":"-0.02em","fontWeight":"700"}],"code-sm":["0.8125rem",{"lineHeight":"1.25rem","fontWeight":"500"}],"headline-md":["1.25rem",{"lineHeight":"1.75rem","letterSpacing":"-0.01em","fontWeight":"600"}]}}}}</script></head><body class="bg-background font-body-md text-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-72 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-50 flex flex-col justify-between py-space-md transition-all duration-300"><div class="flex flex-col"><div class="px-space-lg py-space-sm flex items-center justify-between"><div class="flex items-center gap-space-sm"><img alt="Pathway LMS Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1WVblzyKJvo9Vk_ELAZm9moin4w8wrS1CJtPFy1bFtUhchxLtjXdmh9WFARI5F6ICDm07CcbEaVLzUx6VyehoDgR5zhrl_3lZFhi9yetNt-r4rX6tdA-VQy6yO3N7-7Zjw143DQojteVNxzsfHvjuuFZa7SEm9uzuC5rdb5gEudjUOvwBXk3ThKmwcTJVR0-IBTGDUXT-fNr-MQzN-RX6nHIgVO3cq-9ptT5Thp_9iBwENYH8Ag633yeDo"/><span class="font-title-sm text-title-sm text-primary">Pathway LMS</span></div><button aria-label="Toggle sidebar" class="text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg p-space-xs transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">menu_open</span></button></div><div class="px-space-lg my-space-md"><div class="relative"><button class="w-full flex items-center justify-between px-space-md py-space-xs rounded-full bg-surface-container-low text-on-surface hover:bg-surface-container transition-colors" type="button"><div class="flex items-center gap-space-sm"><span class="w-2 h-2 rounded-full bg-secondary"></span><span class="font-label-sm text-label-sm uppercase text-on-surface">Learner View</span></div><span class="material-symbols-outlined text-[16px] text-on-surface-variant">unfold_more</span></button></div></div><nav class="flex flex-col px-space-md gap-space-xs" data-active-classes="bg-primary text-on-primary rounded-xl"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl font-label-md text-label-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="dashboard" href="#"><span class="material-symbols-outlined text-[20px]">dashboard</span><span>Dashboard</span></a><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-space-sm font-label-md transition-all bg-primary text-on-primary rounded-xl" data-path="my-learning-path" href="#"><span class="material-symbols-outlined text-[20px]">route</span><span>My Learning Path</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl font-label-md text-label-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="course-catalog" href="#"><span class="material-symbols-outlined text-[20px]">menu_book</span><span>Course Catalog</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl font-label-md text-label-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="assignments-and-practice" href="#"><span class="material-symbols-outlined text-[20px]">assignment_turned_in</span><span>Assignments &amp; Practice</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl font-label-md text-label-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="skills-and-progress" href="#"><span class="material-symbols-outlined text-[20px]">trending_up</span><span>Skills &amp; Progress</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl font-label-md text-label-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="calendar" href="#"><span class="material-symbols-outlined text-[20px]">calendar_today</span><span>Calendar</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl font-label-md text-label-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="certificates-and-badges" href="#"><span class="material-symbols-outlined text-[20px]">verified</span><span>Certificates &amp; Badges</span></a><div class="h-[1px] bg-surface-container-high my-space-sm mx-space-md"></div><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl font-label-md text-label-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="help-and-resources" href="#"><span class="material-symbols-outlined text-[20px]">help</span><span>Help &amp; Resources</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl font-label-md text-label-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="settings" href="#"><span class="material-symbols-outlined text-[20px]">settings</span><span>Settings</span></a></nav></div><div class="px-space-lg pt-space-md"><div class="p-space-md rounded-xl bg-surface-container-low flex flex-col gap-space-xs"><div class="flex items-center justify-between"><span class="font-label-sm text-label-sm text-on-surface">Q1 Target</span><span class="font-code-sm text-code-sm text-primary font-bold">84%</span></div><div class="w-full h-1.5 rounded-full bg-surface-container-high overflow-hidden"><div class="bg-secondary h-full rounded-full w-[84%]"></div></div><p class="font-label-sm text-label-sm text-on-surface-variant">3 milestones remaining</p></div></div></aside><div class="pl-72"><header class="fixed top-0 left-72 right-0 h-16 bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-space-lg"><div class="flex items-center gap-space-md"><nav class="flex items-center gap-space-xs font-label-md text-label-md text-on-surface-variant"><a class="hover:text-on-surface transition-colors" href="#">LMS</a><span class="material-symbols-outlined text-[16px]">chevron_right</span><span class="text-on-surface font-semibold">Overview</span></nav></div><div class="flex items-center gap-space-md"><div class="relative flex items-center"><div class="flex items-center bg-surface-container-lowest px-space-md py-space-xs rounded-xl shadow-[0_1px_4px_rgba(0,0,0,0.04)] text-on-surface-variant hover:text-on-surface transition-all w-64 justify-between"><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-[18px]">search</span><span class="font-body-sm text-body-sm text-on-surface-variant">Quick search...</span></div><kbd class="font-code-sm text-code-sm bg-surface-container-high text-on-surface-variant px-space-xs py-0.5 rounded font-medium">⌘K</kbd></div></div><div class="relative"><button aria-label="Notifications" class="p-space-xs rounded-xl bg-surface-container-lowest hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors relative flex items-center justify-center" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-error"></span></button></div><div class="flex items-center gap-space-sm pl-space-xs pr-space-md py-1 bg-surface-container-lowest rounded-full shadow-[0_1px_4px_rgba(0,0,0,0.04)]"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKnFQ8TgHq-j0qZW0fVwXmBgCL8FA_OJRq3ZXa2Edw7UNt2u0QO94RqAvH-8U5Us5lwvuLwb1w-iwuGbSRAqFIkWaEY0ZspT9zJZn9RwLfpRMjZkWre_TfTCavmV9qNrE1lTqSOaYZggDrC7vl_Oo9mtV3LkDCQiAPgBWJVtT16o46DVLBkctJjxhcSr4qUco58bslOTvqqG_h6j07PwbuKs4Gcbb6EeX03zd0n83_16Gj8DVtGQfbHQ"/><div class="flex flex-col text-left"><span class="font-label-sm text-label-sm text-on-surface font-semibold leading-tight">Elena Vance</span><span class="font-label-sm text-label-sm text-on-surface-variant text-[11px] leading-tight">Workforce Fellow</span></div><span class="material-symbols-outlined text-[16px] text-on-surface-variant ml-space-xs">expand_more</span></div></div></header><main class="w-full pt-16 bg-background px-space-lg py-space-lg min-h-screen"><div class="flex flex-col w-full">
+<!-- Top Ambient Glow Decorator -->
+<div class="relative w-full">
+<div class="absolute -top-10 left-1/3 w-96 h-48 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute -top-8 right-10 w-72 h-40 bg-secondary/10 rounded-full blur-2xl pointer-events-none"></div>
+<!-- Hero Header Unit -->
+<div class="relative bg-surface-container-lowest rounded-xl shadow-sm p-space-lg mb-space-lg">
+<div class="flex flex-col lg:flex-row lg:items-start justify-between gap-space-lg">
+<div class="flex-1 min-w-0">
+<!-- Overline & Meta Badges -->
+<div class="flex flex-wrap items-center gap-space-sm mb-space-xs">
+<span class="inline-flex items-center gap-1.5 px-space-sm py-0.5 rounded-full bg-surface-container-low text-primary font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+              Curated Workforce Path
+            </span>
+<span class="inline-flex items-center gap-1 px-space-sm py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">verified</span>
+              Enterprise Endorsed
+            </span>
+<span class="font-code-sm text-code-sm text-on-surface-variant">ID: PM-TRACK-2025</span>
+</div>
+<!-- Main Title & Narrative -->
+<h1 class="font-headline-xl text-headline-xl text-on-surface tracking-tight mb-space-xs">
+            Product Manager Career Path
+          </h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-3xl mb-space-md">
+            A curated 6-month industry path from Associate to Senior Product Manager, verified by industry mentors with real-world case simulations.
+          </p>
+<!-- Path Parameters Grid -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-space-sm p-space-sm rounded-xl bg-surface-container-low max-w-2xl">
+<div class="flex flex-col px-space-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Target Role</span>
+<span class="font-title-sm text-title-sm text-on-surface font-semibold truncate">Product Manager</span>
+</div>
+<div class="flex flex-col px-space-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Seniority Level</span>
+<span class="font-title-sm text-title-sm text-on-surface font-semibold">Mid-Level</span>
+</div>
+<div class="flex flex-col px-space-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Duration</span>
+<span class="font-title-sm text-title-sm text-on-surface font-semibold">24 Wks (~120h)</span>
+</div>
+<div class="flex flex-col px-space-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Velocity</span>
+<span class="font-title-sm text-title-sm text-secondary font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">bolt</span> On Track
+              </span>
+</div>
+</div>
+</div>
+<!-- Header Actions & Primary Jump -->
+<div class="flex flex-col sm:flex-row lg:flex-col items-stretch lg:items-end gap-space-xs shrink-0 pt-space-xs">
+<button class="inline-flex items-center justify-center gap-space-xs px-space-md py-space-sm rounded-lg bg-primary text-on-primary hover:bg-primary-container font-label-md text-label-md shadow-sm transition-all transform active:scale-95" type="button">
+<span class="material-symbols-outlined text-[18px]">play_circle</span>
+<span>Continue Active Course</span>
+</button>
+<div class="flex items-center gap-space-xs">
+<button class="flex-1 inline-flex items-center justify-center gap-1.5 px-space-sm py-space-xs rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">tune</span>
+<span>Customize</span>
+</button>
+<button class="flex-1 inline-flex items-center justify-center gap-1.5 px-space-sm py-space-xs rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">download</span>
+<span>Syllabus PDF</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Overall Progress & Competencies Overview Section -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg mb-space-lg">
+<!-- Macro Progress Metric Card (5 cols) -->
+<div class="lg:col-span-5 bg-surface-container-lowest rounded-xl shadow-sm p-space-lg flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-space-sm">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Overall Velocity</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Curriculum Progress</h2>
+</div>
+<span class="inline-flex items-center gap-1 px-space-xs py-0.5 rounded-full bg-secondary-fixed/50 text-secondary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> +14% this month
+          </span>
+</div>
+<!-- Big Metric Callout with Inline SVG Ring & Linear Breakdown -->
+<div class="flex items-center gap-space-lg my-space-md">
+<div class="relative w-24 h-24 shrink-0 flex items-center justify-center">
+<!-- SVG Progress Donut -->
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 96 96">
+<circle class="text-surface-container" cx="48" cy="48" fill="transparent" r="40" stroke="currentColor" stroke-width="8"></circle>
+<!-- Circumference = 2 * PI * 40 = 251.327 -> 58% is 145.77 -->
+<circle class="text-primary transition-all duration-1000" cx="48" cy="48" fill="transparent" r="40" stroke="currentColor" stroke-dasharray="251.32" stroke-dashoffset="105.5" stroke-linecap="round" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-headline-lg text-headline-lg text-on-surface leading-none font-bold">58%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant text-[10px]">TOTAL</span>
+</div>
+</div>
+<div class="flex-1 flex flex-col gap-space-xs">
+<div class="w-full h-2 rounded-full bg-surface-container overflow-hidden flex">
+<div class="bg-secondary h-full" style="width: 54%" title="Completed"></div>
+<div class="bg-primary h-full" style="width: 15%" title="In Progress"></div>
+<div class="bg-surface-container-high h-full" style="width: 31%" title="Upcoming"></div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+              14 of 24 weeks elapsed. Estimated completion: <span class="font-semibold text-on-surface">May 18, 2025</span>.
+            </p>
+</div>
+</div>
+</div>
+<!-- Course Count Badges -->
+<div class="grid grid-cols-3 gap-space-xs pt-space-md">
+<div class="p-space-xs rounded-lg bg-surface-container-low flex flex-col items-center text-center">
+<span class="font-headline-md text-headline-md text-secondary leading-tight">7</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Completed</span>
+</div>
+<div class="p-space-xs rounded-lg bg-surface-container-low flex flex-col items-center text-center">
+<span class="font-headline-md text-headline-md text-primary leading-tight">2</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">In Progress</span>
+</div>
+<div class="p-space-xs rounded-lg bg-surface-container-low flex flex-col items-center text-center">
+<span class="font-headline-md text-headline-md text-on-surface-variant leading-tight">4</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Upcoming</span>
+</div>
+</div>
+</div>
+<!-- Core Skills Tracked Matrix (7 cols) -->
+<div class="lg:col-span-7 bg-surface-container-lowest rounded-xl shadow-sm p-space-lg flex flex-col justify-between">
+<div class="flex items-center justify-between mb-space-sm">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Skill Mastery Target</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Verified Competencies</h2>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-semibold flex items-center gap-1 cursor-pointer hover:underline">
+<span class="material-symbols-outlined text-[16px]">radar</span> Assessment Radar
+        </span>
+</div>
+<!-- Skill Linear Meters -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-x-space-lg gap-y-space-md py-space-xs">
+<!-- Skill 1 -->
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-center">
+<span class="font-label-md text-label-md text-on-surface">Agile Execution</span>
+<span class="font-code-sm text-code-sm text-secondary font-bold">90%</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full rounded-full bg-secondary" style="width: 90%;"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant text-[11px]">Sprint rituals, backlog grooming, PRDs</span>
+</div>
+<!-- Skill 2 -->
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-center">
+<span class="font-label-md text-label-md text-on-surface">User Research</span>
+<span class="font-code-sm text-code-sm text-secondary font-bold">85%</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full rounded-full bg-secondary" style="width: 85%;"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant text-[11px]">Discovery interviews, persona validation</span>
+</div>
+<!-- Skill 3 -->
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-center">
+<span class="font-label-md text-label-md text-on-surface">Product Strategy</span>
+<span class="font-code-sm text-code-sm text-primary font-bold">70%</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full rounded-full bg-primary" style="width: 70%;"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant text-[11px]">TAM sizing, moat definitions, positioning</span>
+</div>
+<!-- Skill 4 -->
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-center">
+<span class="font-label-md text-label-md text-on-surface">Data Analysis &amp; SQL</span>
+<span class="font-code-sm text-code-sm text-primary font-bold">60%</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full rounded-full bg-primary" style="width: 60%;"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant text-[11px]">Funnel metrics, A/B design, cohort retention</span>
+</div>
+<!-- Skill 5 (spans across or single) -->
+<div class="flex flex-col gap-1 md:col-span-2">
+<div class="flex justify-between items-center">
+<span class="font-label-md text-label-md text-on-surface">Stakeholder Management &amp; Exec Alignment</span>
+<span class="font-code-sm text-code-sm text-tertiary-container font-bold">40%</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full rounded-full bg-tertiary-fixed-dim" style="width: 40%;"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant text-[11px]">C-suite consensus, trade-off communication (Unlocks in Phase 3)</span>
+</div>
+</div>
+<!-- Micro Milestone note -->
+<div class="mt-space-xs pt-space-xs flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-secondary">check_circle</span>
+          3 of 5 Core Competency thresholds unlocked
+        </span>
+<span class="font-code-sm text-code-sm">Target: 80% Min for Placement</span>
+</div>
+</div>
+</div>
+<!-- Main Content Split: Interactive Roadmap (Left 8) + Path Insights Sidebar (Right 4) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- Left Column: The Roadmap (Phases 1, 2, 3) -->
+<div class="lg:col-span-8 flex flex-col gap-space-lg">
+<!-- ================= PHASE 1 (COMPLETED) ================= -->
+<section class="bg-surface-container-lowest rounded-xl shadow-sm p-space-lg transition-all hover:shadow-md">
+<!-- Phase Header Banner -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs pb-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-full bg-secondary-fixed/50 text-secondary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">check</span>
+</div>
+<div>
+<div class="flex items-center gap-space-xs">
+<span class="font-label-sm text-label-sm uppercase tracking-wide text-secondary font-bold">Phase 1</span>
+<span class="px-space-xs py-0.5 rounded-full bg-secondary-fixed/30 text-secondary font-label-sm text-label-sm font-medium">Completed</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Foundations of Product Management</h3>
+</div>
+</div>
+<div class="text-left sm:text-right">
+<span class="font-code-sm text-code-sm text-secondary font-bold">100% Complete</span>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Weeks 1 – 8 (40 Hours)</p>
+</div>
+</div>
+<!-- Phase 1 Item Stack -->
+<div class="flex flex-col gap-space-sm pt-space-sm">
+<!-- Course 1 -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col md:flex-row md:items-center justify-between gap-space-sm">
+<div class="flex items-start gap-space-sm min-w-0">
+<span class="material-symbols-outlined text-secondary text-[22px] mt-0.5 shrink-0">check_circle</span>
+<div class="min-w-0">
+<div class="flex items-center gap-space-xs flex-wrap">
+<h4 class="font-title-sm text-title-sm text-on-surface font-semibold">Course 1: Product Sense &amp; Core Frameworks</h4>
+<span class="inline-flex items-center gap-0.5 px-space-xs py-0.5 rounded-full bg-surface-container-highest text-on-surface-variant font-label-sm text-label-sm text-[11px]">
+<span class="material-symbols-outlined text-[13px] text-secondary">workspace_premium</span> Credential Issued
+                  </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">
+                  First-principles product intuition, Kano models, CIRCLES method, and Jobs-to-be-Done mapping.
+                </p>
+</div>
+</div>
+<div class="flex items-center gap-space-sm self-end md:self-center shrink-0">
+<span class="font-code-sm text-code-sm text-on-surface-variant">Score: 98%</span>
+<button class="px-space-sm py-1 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-label-sm flex items-center gap-1 transition-colors" type="button">
+<span class="material-symbols-outlined text-[15px]">visibility</span> Review
+              </button>
+</div>
+</div>
+<!-- Course 2 -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col md:flex-row md:items-center justify-between gap-space-sm">
+<div class="flex items-start gap-space-sm min-w-0">
+<span class="material-symbols-outlined text-secondary text-[22px] mt-0.5 shrink-0">check_circle</span>
+<div class="min-w-0">
+<div class="flex items-center gap-space-xs flex-wrap">
+<h4 class="font-title-sm text-title-sm text-on-surface font-semibold">Course 2: Agile Product Ownership &amp; User Stories</h4>
+<span class="px-space-xs py-0.5 rounded-full bg-secondary-fixed/40 text-secondary font-label-sm text-label-sm text-[11px]">Verified</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">
+                  Writing high-impact acceptance criteria, dual-track agile, sprint planning, and engineering sync.
+                </p>
+</div>
+</div>
+<div class="flex items-center gap-space-sm self-end md:self-center shrink-0">
+<span class="font-code-sm text-code-sm text-on-surface-variant">Score: 94%</span>
+<button class="px-space-sm py-1 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-label-sm flex items-center gap-1 transition-colors" type="button">
+<span class="material-symbols-outlined text-[15px]">visibility</span> Review
+              </button>
+</div>
+</div>
+<!-- Phase 1 Capstone Project -->
+<div class="p-space-md rounded-xl bg-surface-container-lowest shadow-sm flex flex-col gap-space-xs">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-xs">
+<div class="flex items-center gap-space-sm">
+<div class="p-1 rounded-lg bg-secondary-fixed/50 text-secondary flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">military_tech</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-semibold">Phase Capstone Project</span>
+<h4 class="font-title-sm text-title-sm text-on-surface font-semibold">Problem Brief &amp; PRD v1</h4>
+</div>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="px-space-sm py-0.5 rounded-full bg-secondary-fixed/60 text-secondary font-code-sm text-code-sm font-bold">Graded: 96 / 100</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Evaluated by Marcus Chen</span>
+</div>
+</div>
+<div class="p-space-sm rounded-lg bg-surface-container-low text-on-surface-variant font-body-sm text-body-sm italic flex items-start gap-space-xs mt-space-xs">
+<span class="material-symbols-outlined text-secondary text-[18px] shrink-0 not-italic">chat_bubble</span>
+<span>“Exceptional edge-case analysis in section 3.2. User story dependencies demonstrate senior-level foresight.”</span>
+</div>
+</div>
+</div>
+</section>
+<!-- ================= PHASE 2 (ACTIVE) ================= -->
+<section class="bg-surface-container-lowest rounded-xl shadow-md p-space-lg relative overflow-hidden">
+<!-- Active Accent Pill Indicator -->
+<div class="absolute top-0 left-0 right-0 h-1.5 bg-primary"></div>
+<!-- Phase Header Banner -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs pb-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-full bg-primary-fixed text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">timelapse</span>
+</div>
+<div>
+<div class="flex items-center gap-space-xs">
+<span class="font-label-sm text-label-sm uppercase tracking-wide text-primary font-bold">Phase 2</span>
+<span class="px-space-xs py-0.5 rounded-full bg-primary-fixed text-primary font-label-sm text-label-sm font-semibold">Current Active Phase</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Customer Discovery &amp; Market Validation</h3>
+</div>
+</div>
+<div class="text-left sm:text-right">
+<span class="font-code-sm text-code-sm text-primary font-bold">48% Completed</span>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Weeks 9 – 16 (Current Week: 14)</p>
+</div>
+</div>
+<!-- Phase 2 Item Stack -->
+<div class="flex flex-col gap-space-sm pt-space-sm">
+<!-- Course 3 (In Progress - Highlighted Card) -->
+<div class="p-space-md rounded-xl bg-surface-container-low shadow-sm flex flex-col gap-space-sm">
+<div class="flex flex-col md:flex-row md:items-start justify-between gap-space-sm">
+<div class="flex items-start gap-space-sm min-w-0">
+<span class="material-symbols-outlined text-primary text-[24px] mt-0.5 shrink-0 animate-spin" style="animation-duration: 6s;">autorenew</span>
+<div>
+<div class="flex items-center gap-space-xs flex-wrap">
+<h4 class="font-title-sm text-title-sm text-on-surface font-bold">Course 3: User Discovery &amp; Qualitative Research</h4>
+<span class="px-space-xs py-0.5 rounded-full bg-primary text-on-primary font-label-sm text-label-sm">Active Now</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                    Module 4: Synthesizing 10 Customer Problem Interviews with Empathy Diagrams &amp; Jobs Trees.
+                  </p>
+</div>
+</div>
+<div class="shrink-0 flex items-center gap-space-sm self-end md:self-start">
+<button class="inline-flex items-center gap-1.5 px-space-md py-1.5 rounded-lg bg-primary text-on-primary hover:bg-primary-container font-label-md text-label-md shadow-sm transition-transform active:scale-95" type="button">
+<span class="material-symbols-outlined text-[18px]">play_arrow</span> Resume
+                </button>
+</div>
+</div>
+<!-- Progress Meter within Course 3 -->
+<div class="flex flex-col gap-1 pt-space-xs">
+<div class="flex justify-between items-center font-label-sm text-label-sm">
+<span class="text-on-surface-variant">Progress (11 of 15 lessons completed)</span>
+<span class="font-code-sm text-code-sm text-primary font-bold">72%</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full rounded-full bg-primary" style="width: 72%;"></div>
+</div>
+</div>
+</div>
+<!-- Course 4 (Available / Ready to Start) -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col md:flex-row md:items-center justify-between gap-space-sm">
+<div class="flex items-start gap-space-sm min-w-0">
+<span class="material-symbols-outlined text-on-surface-variant text-[22px] mt-0.5 shrink-0">radio_button_unchecked</span>
+<div class="min-w-0">
+<div class="flex items-center gap-space-xs flex-wrap">
+<h4 class="font-title-sm text-title-sm text-on-surface font-semibold">Course 4: Quantitative Product Analytics &amp; Experimentation</h4>
+<span class="px-space-xs py-0.5 rounded-full bg-surface-container-highest text-on-surface font-label-sm text-label-sm text-[11px]">Available</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">
+                  Amplitude funnels, hypothesis prioritization using ICE, minimum sample size calculations, and metric guardrails.
+                </p>
+</div>
+</div>
+<div class="shrink-0 self-end md:self-center">
+<button class="px-space-md py-1.5 rounded-lg bg-surface-container-lowest hover:bg-surface-container text-primary font-label-md text-label-md transition-colors shadow-sm" type="button">
+                Start Course
+              </button>
+</div>
+</div>
+<!-- Phase 2 Capstone Project (Upcoming Deadline) -->
+<div class="p-space-md rounded-xl bg-surface-container-lowest shadow-sm flex flex-col gap-space-xs">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-xs">
+<div class="flex items-center gap-space-sm">
+<div class="p-1 rounded-lg bg-primary-fixed text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">assignment</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-semibold">Phase Capstone Project</span>
+<h4 class="font-title-sm text-title-sm text-on-surface font-semibold">User Interview Synthesis &amp; Hypothesis Matrix</h4>
+</div>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="inline-flex items-center gap-1 px-space-sm py-0.5 rounded-full bg-tertiary-fixed text-tertiary font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[14px]">alarm</span> Draft due in 4 days
+                </span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+              Deliver a formalized hypothesis matrix based on 5 simulated interview transcripts. Requires 1 interactive prototype walkthrough recording.
+            </p>
+</div>
+</div>
+</section>
+<!-- ================= PHASE 3 (LOCKED) ================= -->
+<section class="bg-surface-container-lowest rounded-xl shadow-sm p-space-lg opacity-80 hover:opacity-100 transition-opacity">
+<!-- Phase Header Banner -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs pb-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-full bg-surface-container text-on-surface-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">lock</span>
+</div>
+<div>
+<div class="flex items-center gap-space-xs">
+<span class="font-label-sm text-label-sm uppercase tracking-wide text-on-surface-variant font-bold">Phase 3</span>
+<span class="px-space-xs py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm">Locked</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Go-To-Market &amp; Executive Alignment</h3>
+</div>
+</div>
+<div class="text-left sm:text-right">
+<span class="font-code-sm text-code-sm text-on-surface-variant font-medium">Unlocks after Phase 2</span>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Weeks 17 – 24 (40 Hours)</p>
+</div>
+</div>
+<!-- Phase 3 Item Stack -->
+<div class="flex flex-col gap-space-sm pt-space-sm">
+<!-- Course 5 -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col md:flex-row md:items-center justify-between gap-space-sm">
+<div class="flex items-start gap-space-sm min-w-0">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px] mt-0.5 shrink-0">lock</span>
+<div class="min-w-0">
+<h4 class="font-title-sm text-title-sm text-on-surface font-medium">Course 5: Pricing, Positioning &amp; Product-Led Growth</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">
+                  Packaging tiers, value-metric identification, self-serve onboarding loops, and monetization analytics.
+                </p>
+</div>
+</div>
+<div class="shrink-0">
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-on-surface-variant bg-surface-container px-space-xs py-0.5 rounded">
+                Prereq: Course 3 &amp; 4
+              </span>
+</div>
+</div>
+<!-- Course 6 -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col md:flex-row md:items-center justify-between gap-space-sm">
+<div class="flex items-start gap-space-sm min-w-0">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px] mt-0.5 shrink-0">lock</span>
+<div class="min-w-0">
+<h4 class="font-title-sm text-title-sm text-on-surface font-medium">Course 6: Roadmapping &amp; Cross-Functional Leadership</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">
+                  Now-Next-Later frameworks, handling engineering pushback, executive narrative decks, and board presentations.
+                </p>
+</div>
+</div>
+<div class="shrink-0">
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-on-surface-variant bg-surface-container px-space-xs py-0.5 rounded">
+                Prereq: Course 5
+              </span>
+</div>
+</div>
+<!-- Final Career Capstone -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col md:flex-row md:items-center justify-between gap-space-sm">
+<div class="flex items-start gap-space-sm min-w-0">
+<div class="p-1 rounded-lg bg-surface-container text-on-surface-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[18px]">verified_user</span>
+</div>
+<div class="min-w-0">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-semibold">Comprehensive Graduation Defense</span>
+<h4 class="font-title-sm text-title-sm text-on-surface font-medium">End-to-End Product Launch Portfolio</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">
+                  Live presentation to 2 VP Product panel judges. Unlocks enterprise career certification credentials.
+                </p>
+</div>
+</div>
+<div class="shrink-0 self-end md:self-center">
+<span class="material-symbols-outlined text-on-surface-variant text-[24px]">lock_clock</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Path Context, Advisor Note & Milestone Badges (Sidebar 4) -->
+<div class="lg:col-span-4 flex flex-col gap-space-lg">
+<!-- Diagnostic Rationale Card -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-md flex flex-col gap-space-sm">
+<div class="flex items-center gap-space-xs">
+<div class="p-1.5 rounded-lg bg-primary-fixed text-primary">
+<span class="material-symbols-outlined text-[18px]">psychology</span>
+</div>
+<div>
+<h3 class="font-title-sm text-title-sm text-on-surface font-semibold">Diagnostic Calibration</h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Baseline Test: Jan 12, 2025</span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+          Your onboarding assessment showed strong technical instincts and Scrum basics, but flagged gaps in <strong class="text-on-surface">qualitative interview framing</strong> and <strong class="text-on-surface">GTM pricing psychology</strong>.
+        </p>
+<div class="p-space-sm rounded-lg bg-surface-container-low flex flex-col gap-1">
+<div class="flex items-center justify-between text-on-surface font-label-sm text-label-sm">
+<span>Core Frameworks</span>
+<span class="text-secondary font-semibold">Exempt (Fast-Tracked)</span>
+</div>
+<div class="flex items-center justify-between text-on-surface font-label-sm text-label-sm">
+<span>Discovery Module</span>
+<span class="text-primary font-semibold">Deep Dive Added (+12h)</span>
+</div>
+</div>
+</div>
+<!-- Assigned Mentor Note Card -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-md flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<img class="w-10 h-10 rounded-full object-cover shrink-0" data-alt="Close up professional portrait of a senior tech mentor with glasses and warm smile in an office studio with soft lighting, wearing a navy blazer and slate blue shirt." src="https://lh3.googleusercontent.com/aida-public/AB6AXuALbxSt5egzOdoe_zVLF3uiqP7yeFttg-sNSTJ1PyZaUH9mCdNIGchZXimnU-lE3kXBc4aTwmTdpH7UbaaZ7SYHckjaYq-P_tSbrQyaKgZlzNhaq_6cbWsRfq8MBbpDm7IOgz5hS8cP9MKSGiDH8AafglpyHFUgNPeP4w01dZ0okNGWHNi1h757vI5_htpTk8lrrxFzG1ZDdw1s19B53z1aulPe7u0sBdB3qfN_sf-tanhZXTuusHo8HA"/>
+<div class="flex flex-col">
+<span class="font-title-sm text-title-sm text-on-surface font-semibold leading-tight">Marcus Chen</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant text-[11px]">Staff PM at FinEdge • Path Mentor</span>
+</div>
+</div>
+<button aria-label="Message Mentor" class="p-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+</button>
+</div>
+<div class="relative bg-surface-container-low p-space-sm rounded-xl">
+<div class="font-body-sm text-body-sm text-on-surface italic">
+            “Elena, your focus in Course 3 needs to be on open-ended bias avoidance. Don't lead the customer during interview simulations. Book 15 min with me once your hypothesis matrix draft is uploaded.”
+          </div>
+<div class="flex items-center justify-between pt-space-xs mt-space-xs text-on-surface-variant font-label-sm text-label-sm">
+<span>Posted Yesterday at 4:15 PM</span>
+<span class="text-primary font-semibold hover:underline cursor-pointer">Schedule 1:1</span>
+</div>
+</div>
+</div>
+<!-- Milestone Badges & Credential Vault Preview -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-md flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<h3 class="font-title-sm text-title-sm text-on-surface font-semibold">Path Badges</h3>
+<span class="font-label-sm text-label-sm text-primary font-semibold">3 of 6 Earned</span>
+</div>
+<div class="grid grid-cols-3 gap-space-xs pt-1">
+<!-- Badge 1: Earned -->
+<div class="p-space-xs rounded-xl bg-surface-container-low flex flex-col items-center text-center group cursor-pointer hover:bg-surface-container transition-colors">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed/50 text-secondary flex items-center justify-center mb-1 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[20px]">psychology_alt</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface font-semibold text-[11px] leading-tight">Product Sense</span>
+<span class="font-label-sm text-label-sm text-secondary text-[10px]">Earned Jan 22</span>
+</div>
+<!-- Badge 2: Earned -->
+<div class="p-space-xs rounded-xl bg-surface-container-low flex flex-col items-center text-center group cursor-pointer hover:bg-surface-container transition-colors">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed/50 text-secondary flex items-center justify-center mb-1 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[20px]">sprint</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface font-semibold text-[11px] leading-tight">Agile Driver</span>
+<span class="font-label-sm text-label-sm text-secondary text-[10px]">Earned Feb 10</span>
+</div>
+<!-- Badge 3: Earned -->
+<div class="p-space-xs rounded-xl bg-surface-container-low flex flex-col items-center text-center group cursor-pointer hover:bg-surface-container transition-colors">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed/50 text-secondary flex items-center justify-center mb-1 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[20px]">description</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface font-semibold text-[11px] leading-tight">PRD Author</span>
+<span class="font-label-sm text-label-sm text-secondary text-[10px]">Earned Feb 24</span>
+</div>
+<!-- Badge 4: Pending / In Progress -->
+<div class="p-space-xs rounded-xl bg-surface-container-low flex flex-col items-center text-center opacity-70 group hover:opacity-100 transition-opacity">
+<div class="w-10 h-10 rounded-full bg-primary-fixed text-primary flex items-center justify-center mb-1">
+<span class="material-symbols-outlined text-[20px]">record_voice_over</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface font-medium text-[11px] leading-tight">Discovery Pro</span>
+<span class="font-label-sm text-label-sm text-primary text-[10px]">72% Ready</span>
+</div>
+<!-- Badge 5: Locked -->
+<div class="p-space-xs rounded-xl bg-surface-container flex flex-col items-center text-center opacity-40">
+<div class="w-10 h-10 rounded-full bg-surface-container-high text-on-surface-variant flex items-center justify-center mb-1">
+<span class="material-symbols-outlined text-[20px]">query_stats</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface font-medium text-[11px] leading-tight">Experimenter</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant text-[10px]">Locked</span>
+</div>
+<!-- Badge 6: Locked Final -->
+<div class="p-space-xs rounded-xl bg-surface-container flex flex-col items-center text-center opacity-40">
+<div class="w-10 h-10 rounded-full bg-surface-container-high text-on-surface-variant flex items-center justify-center mb-1">
+<span class="material-symbols-outlined text-[20px]">diamond</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface font-medium text-[11px] leading-tight">Staff Master</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant text-[10px]">Locked</span>
+</div>
+</div>
+</div>
+<!-- Quick Resources & Community Study Pod -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-md flex flex-col gap-space-sm">
+<h3 class="font-title-sm text-title-sm text-on-surface font-semibold">Cohort Study Pod (PM-2025B)</h3>
+<div class="flex items-center justify-between p-space-xs rounded-lg bg-surface-container-low">
+<div class="flex -space-x-2 overflow-hidden py-1 pl-1">
+<img class="inline-block h-7 w-7 rounded-full ring-2 ring-surface-container-lowest object-cover" data-alt="Professional headshot of a female software engineer smiling outdoors with blurred architectural campus background, natural sunlight and modern creative vibes." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCALQRGdh53OCn2IGW9MpqLJWSi5y76MB8_RAkwPdCli2unsHoyZj4JqrZF30Y3WtnfeCV7YKFhO_mbxRu9f7VDshsPFdsbEtRUexj0-bw5N7Acc9xYKHnzljaC4YvmJ3Pk4rBKv3gFAVp8U1CJhHNcQuZ6q8SnJrGBICxAjoDbtV0qbwJRFhvAdJfipWIayA7yBOMtLb00-Xqsa8vtQhr61FDTSC_LCQfJ9MJFCKv3MqosG3FVSh8LvA"/>
+<img class="inline-block h-7 w-7 rounded-full ring-2 ring-surface-container-lowest object-cover" data-alt="Professional headshot of a male product designer with dark glasses and casual black sweater, studio warm amber lighting and crisp focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDu9Rw2GtfkRBK4KpYd2EG9A6QTTUj8pH4iyVwM9bhymFmQm3C6WFt9L5O8q37dhtaTnEbkbVblfpwyBdzpzWXBtOqPf5f9ITPyTX3EA1AYLaeKdxHMYPV71SO6B2EzOTS7FbHTQT4s3LMrqtcKyliAUtWkhyHTYtqAieuxrcXo1l66mOp9a5G-5LwDQbBNuxft0ZIxQNO7JaYe9lcNqg6qm20aIWoNFcU3c9Zy5Oyp7dWC3DvlYqrP_A"/>
+<div class="inline-flex h-7 w-7 rounded-full bg-primary text-on-primary items-center justify-center font-label-sm text-label-sm text-[10px] ring-2 ring-surface-container-lowest">
+              +14
+            </div>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-medium hover:underline cursor-pointer">
+            Join Sync (Thu 6 PM)
+          </span>
+</div>
+<div class="flex flex-col gap-1 pt-space-xs text-on-surface-variant font-body-sm text-body-sm text-[13px]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-secondary">forum</span>
+<span>24 active discussions on Phase 2 Capstone</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-primary">folder_shared</span>
+<span>Shared Figma PRD Templates available</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Inline Client-side Behavior for Micro-Interactions -->
+<script>
+    (function initPathInteractions() {
+      // Dynamic button click response & visual feedback
+      const buttons = document.querySelectorAll('button');
+      buttons.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          if (!this.getAttribute('data-has-ripple')) {
+            this.setAttribute('data-has-ripple', 'true');
+          }
+        });
+      });
+    })();
+  </script>
+</div></main></div></body></html>

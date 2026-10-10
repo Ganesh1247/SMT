@@ -24,3 +24,6 @@ coverage/
 
 # local telemetry (not committed)
 kaizen/telemetry/
+
+# runtime data (db, recordings)
+data/

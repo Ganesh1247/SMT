@@ -1,0 +1,348 @@
+{
+ "track": "python",
+ "level": 1,
+ "version": "1.0.0",
+ "rubric_id": "rbr_python_l1",
+ "items": [
+  {
+   "id": "py-l1-01",
+   "kind": "single",
+   "prompt": "What does this program print?",
+   "code": "x = [1, 2, 3]\ny = x\ny.append(4)\nprint(len(x))",
+   "options": [
+    {
+     "id": "a",
+     "text": "3"
+    },
+    {
+     "id": "b",
+     "text": "4"
+    },
+    {
+     "id": "c",
+     "text": "7"
+    },
+    {
+     "id": "d",
+     "text": "It raises an error"
+    }
+   ],
+   "answer": [
+    "b"
+   ],
+   "variants": [
+    {
+     "code": "x = [1, 2, 3]\ny = x\ny.extend([4, 5])\nprint(len(x))",
+     "options": [
+      {
+       "id": "a",
+       "text": "3"
+      },
+      {
+       "id": "b",
+       "text": "4"
+      },
+      {
+       "id": "c",
+       "text": "5"
+      },
+      {
+       "id": "d",
+       "text": "It raises an error"
+      }
+     ],
+     "answer": [
+      "c"
+     ]
+    }
+   ],
+   "competency": "python"
+  },
+  {
+   "id": "py-l1-02",
+   "kind": "single",
+   "prompt": "What is the type of the value of 3 / 2 in Python 3?",
+   "options": [
+    {
+     "id": "a",
+     "text": "int"
+    },
+    {
+     "id": "b",
+     "text": "float"
+    },
+    {
+     "id": "c",
+     "text": "decimal"
+    },
+    {
+     "id": "d",
+     "text": "str"
+    }
+   ],
+   "answer": [
+    "b"
+   ],
+   "competency": "python"
+  },
+  {
+   "id": "py-l1-03",
+   "kind": "single",
+   "prompt": "What does this program print?",
+   "code": "def f(a, b=[]):\n    b.append(a)\n    return b\n\nf(1)\nprint(f(2))",
+   "options": [
+    {
+     "id": "a",
+     "text": "[2]"
+    },
+    {
+     "id": "b",
+     "text": "[1, 2]"
+    },
+    {
+     "id": "c",
+     "text": "[1]"
+    },
+    {
+     "id": "d",
+     "text": "[]"
+    }
+   ],
+   "answer": [
+    "b"
+   ],
+   "competency": "python"
+  },
+  {
+   "id": "py-l1-04",
+   "kind": "short",
+   "prompt": "What number does this print?",
+   "code": "print(len({1, 2, 2, 3}))",
+   "accepted": [
+    "3"
+   ],
+   "variants": [
+    {
+     "code": "print(len({1, 2, 2, 3, 3, 4}))",
+     "accepted": [
+      "4"
+     ]
+    }
+   ],
+   "competency": "python"
+  },
+  {
+   "id": "py-l1-05",
+   "kind": "multi",
+   "prompt": "Select every immutable built-in type.",
+   "options": [
+    {
+     "id": "a",
+     "text": "tuple"
+    },
+    {
+     "id": "b",
+     "text": "list"
+    },
+    {
+     "id": "c",
+     "text": "str"
+    },
+    {
+     "id": "d",
+     "text": "dict"
+    },
+    {
+     "id": "e",
+     "text": "frozenset"
+    }
+   ],
+   "answer": [
+    "a",
+    "c",
+    "e"
+   ],
+   "competency": "python"
+  },
+  {
+   "id": "py-l1-06",
+   "kind": "single",
+   "prompt": "What does [x * x for x in range(4)] produce?",
+   "options": [
+    {
+     "id": "a",
+     "text": "[0, 1, 4, 9]"
+    },
+    {
+     "id": "b",
+     "text": "[1, 4, 9, 16]"
+    },
+    {
+     "id": "c",
+     "text": "[0, 1, 2, 3]"
+    },
+    {
+     "id": "d",
+     "text": "[0, 2, 4, 6]"
+    }
+   ],
+   "answer": [
+    "a"
+   ],
+   "competency": "python"
+  },
+  {
+   "id": "py-l1-07",
+   "kind": "short",
+   "prompt": "What does this print?",
+   "code": "print(\"abc\"[::-1])",
+   "accepted": [
+    "cba"
+   ],
+   "variants": [
+    {
+     "code": "print(\"xyz\"[::-1])",
+     "accepted": [
+      "zyx"
+     ]
+    },
+    {
+     "code": "print(\"hello\"[1:4])",
+     "accepted": [
+      "ell"
+     ]
+    }
+   ],
+   "competency": "python"
+  },
+  {
+   "id": "py-l1-08",
+   "kind": "single",
+   "prompt": "What does this program print?",
+   "code": "a = 5\n\ndef g():\n    a = 10\n\ng()\nprint(a)",
+   "options": [
+    {
+     "id": "a",
+     "text": "5"
+    },
+    {
+     "id": "b",
+     "text": "10"
+    },
+    {
+     "id": "c",
+     "text": "None"
+    },
+    {
+     "id": "d",
+     "text": "It raises an error"
+    }
+   ],
+   "answer": [
+    "a"
+   ],
+   "competency": "python"
+  },
+  {
+   "id": "py-l1-09",
+   "kind": "multi",
+   "prompt": "Select every expression that evaluates to True.",
+   "options": [
+    {
+     "id": "a",
+     "text": "bool(\"\")"
+    },
+    {
+     "id": "b",
+     "text": "bool(\"0\")"
+    },
+    {
+     "id": "c",
+     "text": "bool([0])"
+    },
+    {
+     "id": "d",
+     "text": "bool(0.0)"
+    }
+   ],
+   "answer": [
+    "b",
+    "c"
+   ],
+   "competency": "python"
+  },
+  {
+   "id": "py-l1-10",
+   "kind": "single",
+   "prompt": "In Python, what does the `is` operator compare?",
+   "options": [
+    {
+     "id": "a",
+     "text": "Values for equality"
+    },
+    {
+     "id": "b",
+     "text": "Object identity"
+    },
+    {
+     "id": "c",
+     "text": "Types only"
+    },
+    {
+     "id": "d",
+     "text": "Hash values"
+    }
+   ],
+   "answer": [
+    "b"
+   ],
+   "competency": "python"
+  },
+  {
+   "id": "py-l1-11",
+   "kind": "short",
+   "prompt": "What number does this print?",
+   "code": "print(7 // 2 + 7 % 2)",
+   "accepted": [
+    "4"
+   ],
+   "variants": [
+    {
+     "code": "print(9 // 2 + 9 % 2)",
+     "accepted": [
+      "5"
+     ]
+    }
+   ],
+   "competency": "python"
+  },
+  {
+   "id": "py-l1-12",
+   "kind": "single",
+   "prompt": "What does this return?",
+   "code": "d = {\"a\": 1}\nd.get(\"b\", 0)",
+   "options": [
+    {
+     "id": "a",
+     "text": "0"
+    },
+    {
+     "id": "b",
+     "text": "None"
+    },
+    {
+     "id": "c",
+     "text": "KeyError"
+    },
+    {
+     "id": "d",
+     "text": "1"
+    }
+   ],
+   "answer": [
+    "a"
+   ],
+   "competency": "python"
+  }
+ ]
+}

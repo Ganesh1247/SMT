@@ -1,0 +1,400 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Crucible: Proof-of-Skill Sandbox",
+    "subtitle": "Low-to-high system design: browser to modular monolith to isolated runner and trust ledger",
+    "output": "crucible-architecture.html",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "exam-path",
+        "label": "Exam attempt path",
+        "focus": [
+          "browser",
+          "web",
+          "api",
+          "assessment",
+          "runner",
+          "docker"
+        ],
+        "note": "A learner's submission travels from the browser through the modular monolith into an isolated, ephemeral container and back."
+      },
+      {
+        "id": "trust-and-evidence",
+        "label": "Scoring and trust",
+        "focus": [
+          "assessment",
+          "scoring",
+          "evidence",
+          "review"
+        ],
+        "note": "The score updates only after all four levels pass, then the ledger records and verifies every decision."
+      },
+      {
+        "id": "integrity-and-ai",
+        "label": "Integrity capture and intelligence",
+        "focus": [
+          "api",
+          "integrity",
+          "intelligence",
+          "assessment"
+        ],
+        "note": "Consent-based capture and the stub/Anthropic feedback layer sit beside the exam path without gating it."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "browser",
+      "type": "external",
+      "label": "Browser",
+      "sublabel": "Learner · Reviewer · HR · Auditor",
+      "pos": [
+        30,
+        330
+      ],
+      "size": [
+        150,
+        70
+      ]
+    },
+    {
+      "id": "web",
+      "type": "frontend",
+      "label": "Exam Web App",
+      "sublabel": "React 18 + Vite",
+      "pos": [
+        230,
+        330
+      ],
+      "size": [
+        150,
+        70
+      ]
+    },
+    {
+      "id": "api",
+      "type": "backend",
+      "label": "HTTP API",
+      "sublabel": "FastAPI :8000",
+      "pos": [
+        460,
+        330
+      ],
+      "size": [
+        150,
+        70
+      ],
+      "tag": "composition root"
+    },
+    {
+      "id": "identity",
+      "type": "backend",
+      "label": "Identity",
+      "sublabel": "sessions, server-side roles",
+      "pos": [
+        700,
+        100
+      ],
+      "size": [
+        160,
+        68
+      ]
+    },
+    {
+      "id": "assessment",
+      "type": "backend",
+      "label": "Assessment Engine",
+      "sublabel": "4-level state machine",
+      "pos": [
+        700,
+        330
+      ],
+      "size": [
+        170,
+        70
+      ]
+    },
+    {
+      "id": "scoring",
+      "type": "backend",
+      "label": "Scoring",
+      "sublabel": "estimate, band, gated update",
+      "pos": [
+        700,
+        560
+      ],
+      "size": [
+        170,
+        70
+      ]
+    },
+    {
+      "id": "integrity",
+      "type": "security",
+      "label": "Integrity Capture",
+      "sublabel": "consent, events, recording",
+      "pos": [
+        960,
+        100
+      ],
+      "size": [
+        170,
+        68
+      ]
+    },
+    {
+      "id": "intelligence",
+      "type": "backend",
+      "label": "Intelligence Layer",
+      "sublabel": "feedback + L4 interviewer",
+      "pos": [
+        960,
+        250
+      ],
+      "size": [
+        180,
+        68
+      ],
+      "tag": "stub + optional AI adapter"
+    },
+    {
+      "id": "review",
+      "type": "backend",
+      "label": "Review & HR",
+      "sublabel": "queue, appeals, coverage",
+      "pos": [
+        960,
+        460
+      ],
+      "size": [
+        170,
+        68
+      ]
+    },
+    {
+      "id": "runner",
+      "type": "security",
+      "label": "Sandboxed Runner",
+      "sublabel": "closed request schema",
+      "pos": [
+        1220,
+        330
+      ],
+      "size": [
+        170,
+        70
+      ]
+    },
+    {
+      "id": "docker",
+      "type": "cloud",
+      "label": "Container",
+      "sublabel": "no network, read-only, non-root",
+      "pos": [
+        1460,
+        330
+      ],
+      "size": [
+        170,
+        70
+      ],
+      "tag": "spawned per run, then destroyed"
+    },
+    {
+      "id": "evidence",
+      "type": "database",
+      "label": "Evidence Ledger",
+      "sublabel": "hash-chained, append-only",
+      "pos": [
+        1220,
+        560
+      ],
+      "size": [
+        180,
+        70
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "product/entrypoints",
+      "wraps": [
+        "web",
+        "api"
+      ],
+      "pad": 18
+    },
+    {
+      "kind": "region",
+      "label": "product/modules (modular monolith, one deployable unit)",
+      "wraps": [
+        "identity",
+        "assessment",
+        "scoring",
+        "integrity",
+        "intelligence",
+        "review"
+      ],
+      "pad": 22
+    },
+    {
+      "kind": "security-group",
+      "label": "Per-run sandbox (SR-01, SR-22)",
+      "wraps": [
+        "runner",
+        "docker"
+      ],
+      "pad": 18
+    },
+    {
+      "kind": "region",
+      "label": "Trust boundary",
+      "wraps": [
+        "evidence"
+      ],
+      "pad": 16
+    }
+  ],
+  "connections": [
+    {
+      "id": "browser-web",
+      "from": "browser",
+      "to": "web",
+      "label": "HTTPS",
+      "variant": "emphasis"
+    },
+    {
+      "id": "web-api",
+      "from": "web",
+      "to": "api",
+      "label": "/api (same-origin)"
+    },
+    {
+      "id": "api-identity",
+      "from": "api",
+      "to": "identity",
+      "label": "authenticate"
+    },
+    {
+      "id": "api-assessment",
+      "from": "api",
+      "to": "assessment",
+      "label": "attempt lifecycle",
+      "variant": "emphasis"
+    },
+    {
+      "id": "api-integrity",
+      "from": "api",
+      "to": "integrity",
+      "label": "consent + events"
+    },
+    {
+      "id": "api-review",
+      "from": "api",
+      "to": "review",
+      "label": "queue, HR, appeals",
+      "via": [
+        [
+          460,
+          460
+        ],
+        [
+          960,
+          460
+        ]
+      ]
+    },
+    {
+      "id": "assessment-runner",
+      "from": "assessment",
+      "to": "runner",
+      "label": "run request (run_id, task_id, dataset_id)",
+      "variant": "emphasis"
+    },
+    {
+      "id": "runner-docker",
+      "from": "runner",
+      "to": "docker",
+      "label": "spawn, execute, destroy"
+    },
+    {
+      "id": "assessment-intelligence",
+      "from": "assessment",
+      "to": "intelligence",
+      "label": "rubric feedback, L4 turns"
+    },
+    {
+      "id": "assessment-scoring",
+      "from": "assessment",
+      "to": "scoring",
+      "label": "gated: all 4 levels passed",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "scoring-evidence",
+      "from": "scoring",
+      "to": "evidence",
+      "label": "append + verify"
+    },
+    {
+      "id": "review-evidence",
+      "from": "review",
+      "to": "evidence",
+      "label": "decisions, verify receipt"
+    },
+    {
+      "id": "review-scoring",
+      "from": "review",
+      "to": "scoring",
+      "label": "coverage & evidence query",
+      "variant": "dashed"
+    },
+    {
+      "id": "review-integrity",
+      "from": "review",
+      "to": "integrity",
+      "label": "recording playback",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "bottom"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Entry points",
+      "items": [
+        "React exam web app: lobby, exam shell, Level 4 live screening, profile, reviewer/HR/auditor consoles",
+        "FastAPI composition root wires all 10 modules and owns transport only"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Modular monolith",
+      "items": [
+        "One deployable unit; cross-module calls only through each module's api/",
+        "Identity assigns roles server-side; track (Python/SQL) is a preference, not a privilege"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Sandboxed execution",
+      "items": [
+        "Runner accepts a closed request schema only \u2014 no paths or container args from callers (SR-01)",
+        "Learner code runs in a container with no network, read-only root, dropped capabilities, and is destroyed after each run"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Trust and evidence",
+      "items": [
+        "Score updates only after all four levels pass and the ledger verifies",
+        "Append-only hash-chained ledger; reviewer decisions and receipts are independently verifiable"
+      ]
+    }
+  ]
+}

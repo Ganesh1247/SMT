@@ -1,0 +1,124 @@
+import type * as T from './types';
+
+export class ApiError extends Error {
+  readonly status: number;
+  readonly reference: string;
+  constructor(status: number, reference: string) {
+    super(`HTTP ${status}`);
+    this.name = 'ApiError';
+    this.status = status;
+    this.reference = reference;
+  }
+}
+
+export type FetchLike = (input: string, init?: RequestInit) => Promise<Response>;
+
+let fetchImpl: FetchLike = (input, init) => fetch(input, init);
+/** Test seam: unit tests inject a fake fetch. Never used to ship mock data. */
+export function setFetch(f: FetchLike | null): void {
+  fetchImpl = f ?? ((input, init) => fetch(input, init));
+}
+
+const BASE = '/api';
+
+async function request<R>(method: string, path: string, body?: unknown, raw?: BodyInit): Promise<R> {
+  const headers: Record<string, string> = { Accept: 'application/json' };
+  let payload: BodyInit | undefined;
+  if (raw !== undefined) {
+    payload = raw;
+    headers['Content-Type'] = 'application/octet-stream';
+  } else if (body !== undefined) {
+    payload = JSON.stringify(body);
+    headers['Content-Type'] = 'application/json';
+  }
+  const res = await fetchImpl(BASE + path, {
+    method,
+    headers,
+    body: payload,
+    credentials: 'same-origin',
+  });
+  if (!res.ok) {
+    const ref = res.headers.get('x-request-id') ?? '';
+    throw new ApiError(res.status, ref);
+  }
+  if (res.status === 204) return undefined as R;
+  const text = await res.text();
+  return (text ? JSON.parse(text) : undefined) as R;
+}
+
+const enc = encodeURIComponent;
+
+export const api = {
+  // auth
+  register: (b: { email: string; password: string; display_name?: string }) => request<T.Me>('POST', '/auth/register', b),
+  login: (b: { email: string; password: string }) => request<T.Me>('POST', '/auth/login', b),
+  logout: () => request<void>('POST', '/auth/logout'),
+  me: () => request<T.Me>('GET', '/me'),
+  setTrack: (track: T.Track) => request<T.Me>('PUT', '/me/track', { track }),
+
+  // prechecks
+  precheckReport: (b: T.PrecheckReportBody) => request<T.PrecheckReportResponse>('POST', '/precheck/report', b),
+
+  // attempts
+  progress: () => request<T.Progress>('GET', '/me/progress'),
+  createAttempt: (level: T.Level) => request<T.AttemptCreated>('POST', '/attempts', { level }),
+  attempt: (id: string) => request<T.Attempt>('GET', `/attempts/${enc(id)}`),
+  consent: (id: string, b: { version: string; scopes: string[] }) => request<void>('POST', `/attempts/${enc(id)}/consent`, b),
+  start: (id: string) => request<T.Attempt>('POST', `/attempts/${enc(id)}/start`, {}),
+  submitItem: (id: string, b: { item_id: string; answer: string | string[]; explanation?: string }) =>
+    request<{ accepted: boolean }>('POST', `/attempts/${enc(id)}/submit-item`, b),
+  run: (id: string, b: { task_id: string; code: string }) => request<T.RunResult>('POST', `/attempts/${enc(id)}/run`, b),
+  finish: (id: string) => request<T.AttemptResult>('POST', `/attempts/${enc(id)}/finish`, {}),
+  events: (id: string, events: T.IntegrityEvent[]) =>
+    request<{ flagged?: boolean } | undefined>('POST', `/attempts/${enc(id)}/events`, events),
+  chunk: (id: string, stream: 'camera' | 'screen', seq: number, data: Blob) =>
+    request<void>('POST', `/attempts/${enc(id)}/chunks/${stream}/${seq}`, undefined, data),
+  finalizeRecording: (id: string) => request<void>('POST', `/attempts/${enc(id)}/recording/finalize`, {}),
+  interviewTurn: (id: string, answer_text: string) =>
+    request<T.InterviewTurnResponse>('POST', `/interview/${enc(id)}/turn`, { answer_text }),
+
+  // learner
+  profile: () => request<T.Profile>('GET', '/me/profile'),
+  evidence: () => request<T.EvidenceOverview>('GET', '/me/evidence'),
+  createGrant: (b: T.GrantRequest) => request<T.Grant>('POST', '/me/grants', b),
+  revokeGrant: (grant_id: string) => request<void>('DELETE', '/me/grants', { grant_id }),
+  appeals: () => request<{ appeals: T.Appeal[] }>('GET', '/me/appeals'),
+  createAppeal: (b: { event_id?: string; text: string }) => request<T.Appeal>('POST', '/me/appeals', b),
+
+  // reviewer
+  reviewQueue: () => request<{ cases: T.QueueCase[] }>('GET', '/review/queue'),
+  reviewCase: (id: string) => request<T.ReviewCase>('GET', `/review/cases/${enc(id)}`),
+  decide: (id: string, b: { outcome: T.DecisionOutcome; reason: string }) =>
+    request<T.DecisionRecorded>('POST', `/review/cases/${enc(id)}/decision`, b),
+  recordingUrl: (attemptId: string, stream: 'camera' | 'screen') =>
+    `${BASE}/review/attempts/${enc(attemptId)}/recording/${stream}`,
+
+  // recruiter
+  roles: () => request<{ roles: T.RoleRequirement[] }>('GET', '/hr/roles'),
+  createRole: (b: T.RoleDraft) => request<T.RoleRequirement>('POST', '/hr/roles', b),
+  roleResults: (id: string) => request<T.RoleResults>('GET', `/hr/roles/${enc(id)}/results`),
+  sharedEvidence: (alias: string, competency: string) =>
+    request<T.SharedEvidence>('GET', `/hr/evidence/${enc(alias)}/${enc(competency)}`),
+  verifyReceipt: (receipt_hash: string) => request<T.ReceiptResult>('POST', '/hr/receipts/verify', { receipt_hash }),
+
+  // auditor
+  verifyLedger: () => request<T.LedgerVerify>('GET', '/audit/ledger/verify'),
+};
+
+// Raw helpers for the speed test (binary bodies, timing is measured by the caller).
+export async function fetchPrecheckPayload(size: number, f: FetchLike = fetchImpl): Promise<number> {
+  const res = await f(`${BASE}/precheck/payload?size=${size}`, { credentials: 'same-origin' });
+  if (!res.ok) throw new ApiError(res.status, '');
+  const buf = await res.arrayBuffer();
+  return buf.byteLength;
+}
+export async function postPrecheckEcho(body: Blob | ArrayBuffer, f: FetchLike = fetchImpl): Promise<void> {
+  const res = await f(`${BASE}/precheck/echo`, {
+    method: 'POST',
+    body: body as BodyInit,
+    headers: { 'Content-Type': 'application/octet-stream' },
+    credentials: 'same-origin',
+  });
+  if (!res.ok) throw new ApiError(res.status, '');
+  await res.arrayBuffer();
+}

@@ -1,0 +1,348 @@
+{
+ "track": "data_analyst",
+ "level": 1,
+ "version": "1.0.0",
+ "rubric_id": "rbr_sql_l1",
+ "items": [
+  {
+   "id": "da-l1-01",
+   "kind": "single",
+   "prompt": "Table t has one column x holding the rows 1, NULL, 3. What does SELECT COUNT(x) FROM t return?",
+   "options": [
+    {
+     "id": "a",
+     "text": "1"
+    },
+    {
+     "id": "b",
+     "text": "2"
+    },
+    {
+     "id": "c",
+     "text": "3"
+    },
+    {
+     "id": "d",
+     "text": "NULL"
+    }
+   ],
+   "answer": [
+    "b"
+   ],
+   "variants": [
+    {
+     "prompt": "Table t has one column x holding the rows 2, NULL, NULL, 4, 5. What does SELECT COUNT(x) FROM t return?",
+     "options": [
+      {
+       "id": "a",
+       "text": "2"
+      },
+      {
+       "id": "b",
+       "text": "3"
+      },
+      {
+       "id": "c",
+       "text": "5"
+      },
+      {
+       "id": "d",
+       "text": "NULL"
+      }
+     ],
+     "answer": [
+      "b"
+     ]
+    }
+   ],
+   "competency": "sql"
+  },
+  {
+   "id": "da-l1-02",
+   "kind": "single",
+   "prompt": "Table t has one column x holding the rows 1, NULL, 3. What does SELECT COUNT(*) FROM t return?",
+   "options": [
+    {
+     "id": "a",
+     "text": "1"
+    },
+    {
+     "id": "b",
+     "text": "2"
+    },
+    {
+     "id": "c",
+     "text": "3"
+    },
+    {
+     "id": "d",
+     "text": "NULL"
+    }
+   ],
+   "answer": [
+    "c"
+   ],
+   "competency": "sql"
+  },
+  {
+   "id": "da-l1-03",
+   "kind": "single",
+   "prompt": "Which join returns every row of the left table, with NULLs where the right table has no match?",
+   "options": [
+    {
+     "id": "a",
+     "text": "INNER JOIN"
+    },
+    {
+     "id": "b",
+     "text": "LEFT JOIN"
+    },
+    {
+     "id": "c",
+     "text": "CROSS JOIN"
+    },
+    {
+     "id": "d",
+     "text": "SELF JOIN"
+    }
+   ],
+   "answer": [
+    "b"
+   ],
+   "competency": "sql"
+  },
+  {
+   "id": "da-l1-04",
+   "kind": "multi",
+   "prompt": "In which parts of a query can an aggregate such as SUM(x) appear?",
+   "options": [
+    {
+     "id": "a",
+     "text": "HAVING"
+    },
+    {
+     "id": "b",
+     "text": "WHERE"
+    },
+    {
+     "id": "c",
+     "text": "SELECT list"
+    },
+    {
+     "id": "d",
+     "text": "ORDER BY"
+    }
+   ],
+   "answer": [
+    "a",
+    "c",
+    "d"
+   ],
+   "competency": "sql"
+  },
+  {
+   "id": "da-l1-05",
+   "kind": "single",
+   "prompt": "In SQLite, what does SELECT 10 / 4 return?",
+   "options": [
+    {
+     "id": "a",
+     "text": "2"
+    },
+    {
+     "id": "b",
+     "text": "2.5"
+    },
+    {
+     "id": "c",
+     "text": "3"
+    },
+    {
+     "id": "d",
+     "text": "NULL"
+    }
+   ],
+   "answer": [
+    "a"
+   ],
+   "competency": "sql"
+  },
+  {
+   "id": "da-l1-06",
+   "kind": "short",
+   "prompt": "Table t has one column x holding the rows 5, 5, 7. What number does SELECT COUNT(DISTINCT x) FROM t return?",
+   "accepted": [
+    "2"
+   ],
+   "variants": [
+    {
+     "prompt": "Table t has one column x holding the rows 5, 5, 7, 7, 9. What number does SELECT COUNT(DISTINCT x) FROM t return?",
+     "accepted": [
+      "3"
+     ]
+    }
+   ],
+   "competency": "sql"
+  },
+  {
+   "id": "da-l1-07",
+   "kind": "single",
+   "prompt": "What does the expression NULL = NULL evaluate to in SQL?",
+   "options": [
+    {
+     "id": "a",
+     "text": "TRUE"
+    },
+    {
+     "id": "b",
+     "text": "FALSE"
+    },
+    {
+     "id": "c",
+     "text": "NULL (unknown)"
+    },
+    {
+     "id": "d",
+     "text": "An error"
+    }
+   ],
+   "answer": [
+    "c"
+   ],
+   "competency": "sql"
+  },
+  {
+   "id": "da-l1-08",
+   "kind": "single",
+   "prompt": "Which keyword removes duplicate rows from a query's output?",
+   "options": [
+    {
+     "id": "a",
+     "text": "UNIQUE"
+    },
+    {
+     "id": "b",
+     "text": "DISTINCT"
+    },
+    {
+     "id": "c",
+     "text": "GROUP"
+    },
+    {
+     "id": "d",
+     "text": "SINGLE"
+    }
+   ],
+   "answer": [
+    "b"
+   ],
+   "competency": "sql"
+  },
+  {
+   "id": "da-l1-09",
+   "kind": "multi",
+   "prompt": "Select every aggregate function.",
+   "options": [
+    {
+     "id": "a",
+     "text": "COUNT"
+    },
+    {
+     "id": "b",
+     "text": "SUM"
+    },
+    {
+     "id": "c",
+     "text": "UPPER"
+    },
+    {
+     "id": "d",
+     "text": "AVG"
+    },
+    {
+     "id": "e",
+     "text": "ROUND"
+    }
+   ],
+   "answer": [
+    "a",
+    "b",
+    "d"
+   ],
+   "competency": "sql"
+  },
+  {
+   "id": "da-l1-10",
+   "kind": "short",
+   "prompt": "Table t has one column x holding the rows 2, 4, 6, NULL. What number does SELECT AVG(x) FROM t return?",
+   "accepted": [
+    "4",
+    "4.0"
+   ],
+   "variants": [
+    {
+     "prompt": "Table t has one column x holding the rows 1, 3, NULL, 8. What number does SELECT AVG(x) FROM t return?",
+     "accepted": [
+      "4",
+      "4.0"
+     ]
+    }
+   ],
+   "competency": "sql"
+  },
+  {
+   "id": "da-l1-11",
+   "kind": "single",
+   "prompt": "What does ORDER BY score DESC LIMIT 1 return?",
+   "options": [
+    {
+     "id": "a",
+     "text": "The row with the smallest score"
+    },
+    {
+     "id": "b",
+     "text": "The row with the largest score"
+    },
+    {
+     "id": "c",
+     "text": "A random row"
+    },
+    {
+     "id": "d",
+     "text": "The first inserted row"
+    }
+   ],
+   "answer": [
+    "b"
+   ],
+   "competency": "sql"
+  },
+  {
+   "id": "da-l1-12",
+   "kind": "single",
+   "prompt": "Which condition correctly finds rows where region has no value?",
+   "options": [
+    {
+     "id": "a",
+     "text": "region = NULL"
+    },
+    {
+     "id": "b",
+     "text": "region == ''"
+    },
+    {
+     "id": "c",
+     "text": "region IS NULL"
+    },
+    {
+     "id": "d",
+     "text": "region NOT EXISTS"
+    }
+   ],
+   "answer": [
+    "c"
+   ],
+   "competency": "sql"
+  }
+ ]
+}

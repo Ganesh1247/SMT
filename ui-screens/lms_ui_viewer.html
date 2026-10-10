@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pathway LMS Platform Dashboard — Stitch UI</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    /* Custom theme tokens matching Stitch */
+    :root {
+      --primary: #4338ca;
+      --primary-hover: #3730a3;
+      --secondary: #006c4a;
+      --tertiary: #d97706;
+      --surface: #f8f9ff;
+      --card-bg: #ffffff;
+      --border-color: #e2e8f0;
+      --text-main: #0d1c2e;
+      --text-muted: #64748b;
+    }
+    body {
+      background-color: var(--surface);
+      color: var(--text-main);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+</head>
+<body class="bg-[#f8f9ff] text-[#0d1c2e] antialiased">
+
+  <!-- TOP SHELL / APP CONTAINER -->
+  <div class="flex min-h-screen">
+    
+    <!-- LEFT SIDEBAR -->
+    <aside class="w-72 bg-white border-r border-[#e2e8f0] flex flex-col justify-between py-4 fixed left-0 top-0 h-full z-30 shadow-sm">
+      <div class="flex flex-col">
+        <!-- Logo -->
+        <div class="px-6 py-2 flex items-center justify-between">
+          <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('dashboard')">
+            <div class="w-9 h-9 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-700 font-bold shadow-xs">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"/>
+              </svg>
+            </div>
+            <span class="font-bold text-lg text-indigo-700 tracking-tight">Pathway LMS</span>
+          </div>
+          <button class="text-slate-400 hover:text-slate-700 p-1 rounded-lg hover:bg-slate-100 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Learner View Pill -->
+        <div class="px-6 my-4">
+          <div class="w-full flex items-center justify-between px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
+              <span class="text-xs uppercase font-bold text-slate-800 tracking-wider">Learner View</span>
+            </div>
+            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <nav class="flex flex-col px-3 space-y-1">
+          <button id="nav-dashboard" onclick="switchTab('dashboard')" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl font-semibold text-sm transition-all text-left bg-indigo-700 text-white shadow-sm">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+            </svg>
+            <span>Dashboard</span>
+          </button>
+
+          <button id="nav-my-learning-path" onclick="switchTab('my-learning-path')" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium text-sm transition-all text-left text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
+            </svg>
+            <span>My Learning Path</span>
+          </button>
+
+          <button id="nav-course-catalog" onclick="switchTab('course-catalog')" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium text-sm transition-all text-left text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+            </svg>
+            <span>Course Catalog</span>
+          </button>
+
+          <div class="h-px bg-slate-200 my-2 mx-2"></div>
+
+          <button class="w-full flex items-center gap-3 px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100 transition-colors text-left">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span>Assignments</span>
+          </button>
+
+          <button class="w-full flex items-center gap-3 px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100 transition-colors text-left">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+            </svg>
+            <span>Skills & Progress</span>
+          </button>
+
+          <button class="w-full flex items-center gap-3 px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100 transition-colors text-left">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+            <span>Calendar</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- Target Progress Box in Sidebar -->
+      <div class="px-6 pt-4">
+        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col gap-2">
+          <div class="flex items-center justify-between text-xs font-semibold">
+            <span class="text-slate-700">Q1 Target</span>
+            <span class="text-indigo-700 font-bold">84%</span>
+          </div>
+          <div class="w-full h-1.5 rounded-full bg-slate-200 overflow-hidden">
+            <div class="bg-emerald-600 h-full rounded-full" style="width: 84%"></div>
+          </div>
+          <span class="text-[11px] text-slate-500">3 milestones remaining</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN RIGHT CONTENT WRAPPER -->
+    <div class="pl-72 flex-1 flex flex-col">
+      
+      <!-- TOP HEADER -->
+      <header class="h-16 bg-white/90 backdrop-blur-md border-b border-[#e2e8f0] px-8 flex items-center justify-between sticky top-0 z-20">
+        <div class="flex items-center gap-2 text-sm text-slate-500">
+          <span class="hover:text-slate-800 cursor-pointer" onclick="switchTab('dashboard')">LMS</span>
+          <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          <span id="breadcrumb-title" class="font-semibold text-slate-900">Overview</span>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <!-- Search input -->
+          <div class="flex items-center bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 w-64 justify-between">
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              <input type="text" placeholder="Quick search..." class="bg-transparent text-xs text-slate-800 placeholder-slate-400 outline-none w-36"/>
+            </div>
+            <kbd class="bg-slate-200 text-slate-600 text-[10px] font-semibold px-1.5 py-0.5 rounded">⌘K</kbd>
+          </div>
+
+          <!-- Notification Bell -->
+          <div class="relative">
+            <button class="p-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 hover:bg-slate-100 transition-colors">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+              <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-red-600 ring-2 ring-white"></span>
+            </button>
+          </div>
+
+          <!-- Profile Badge -->
+          <div class="flex items-center gap-2.5 pl-1 pr-3 py-1 bg-slate-50 border border-slate-200 rounded-full cursor-pointer hover:bg-slate-100 transition-colors">
+            <img class="w-7 h-7 rounded-full object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=faces" alt="Elena Vance"/>
+            <div class="flex flex-col text-left">
+              <span class="text-xs font-bold text-slate-800 leading-tight">Elena Vance</span>
+              <span class="text-[10px] text-slate-500 leading-tight">Workforce Fellow</span>
+            </div>
+            <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </div>
+        </div>
+      </header>
+
+      <!-- SCREEN 1: LEARNER DASHBOARD -->
+      <section id="screen-dashboard" class="screen-view p-8 flex flex-col gap-6">
+        
+        <!-- Welcome Banner -->
+        <div class="relative overflow-hidden rounded-2xl bg-white border border-[#e2e8f0] p-6 shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          <div class="max-w-2xl">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 text-xs font-semibold flex items-center gap-1.5 border border-indigo-100">
+                <span class="w-1.5 h-1.5 rounded-full bg-indigo-700"></span>
+                Associate to Senior PM Track
+              </span>
+              <span class="text-xs text-slate-500 font-medium">Cohort #14 • Week 6</span>
+            </div>
+            <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Good morning, Elena 👋</h1>
+            <p class="text-sm text-slate-600 mt-1 leading-relaxed">
+              You're <span class="font-semibold text-indigo-700">68% through</span> your <strong class="text-slate-900 font-semibold">Product Strategy & Discovery</strong> milestone. Next up: User Interview Synthesis. Keep up the momentum!
+            </p>
+          </div>
+
+          <div class="flex items-center gap-3 shrink-0">
+            <button class="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-700 hover:bg-indigo-800 text-white font-semibold text-sm shadow-sm transition-all active:scale-95">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/></svg>
+              <span>Resume Learning (18m left)</span>
+            </button>
+            <button onclick="switchTab('my-learning-path')" class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold text-sm transition-colors border border-slate-200">
+              <span>View Full Path</span>
+              <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Bento Grid: Spotlight & Side Goal -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          
+          <!-- Spotlight Card (8 cols) -->
+          <div class="lg:col-span-8 bg-white rounded-2xl border border-[#e2e8f0] overflow-hidden shadow-xs">
+            <div class="relative h-52 bg-slate-800 overflow-hidden">
+              <img class="w-full h-full object-cover opacity-85" src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=1000&h=400&fit=crop" alt="Discovery Research"/>
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent p-6 flex flex-col justify-between">
+                <div class="flex items-center justify-between">
+                  <span class="px-3 py-1 rounded-full bg-white/90 backdrop-blur-md text-xs font-bold text-indigo-700 flex items-center gap-1.5 shadow-sm">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/></svg>
+                    Current Course • Module 3 of 5
+                  </span>
+                  <button class="w-8 h-8 rounded-full bg-white/80 backdrop-blur-md flex items-center justify-center text-slate-700 hover:bg-white transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+                  </button>
+                </div>
+                <div>
+                  <span class="text-xs uppercase tracking-wider text-indigo-200 font-semibold">User Discovery & Qualitative Research</span>
+                  <h2 class="text-xl font-bold text-white line-clamp-1">Synthesizing Customer Interview Insights & Affinity Mapping</h2>
+                </div>
+              </div>
+            </div>
+
+            <!-- Spotlight Content -->
+            <div class="p-6 flex flex-col gap-5">
+              <div>
+                <div class="flex items-center justify-between mb-1.5 text-sm">
+                  <span class="font-bold text-slate-800">Overall Course Progress</span>
+                  <span class="font-bold text-indigo-700">72%</span>
+                </div>
+                <div class="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
+                  <div class="bg-indigo-700 h-full rounded-full transition-all duration-700" style="width: 72%"></div>
+                </div>
+                <div class="flex items-center justify-between text-xs text-slate-500 mt-2">
+                  <span>⏱ Estimated 18 mins left in Module 3</span>
+                  <span class="text-emerald-700 font-medium">✓ Preps for Senior PM Benchmark</span>
+                </div>
+              </div>
+
+              <!-- Checklist -->
+              <div class="flex flex-col gap-2">
+                <span class="text-xs uppercase font-bold text-slate-400 tracking-wider">Module Breakdown</span>
+                <div class="flex flex-col rounded-xl border border-slate-200 overflow-hidden text-sm">
+                  <div class="flex items-center justify-between p-3 bg-slate-50/70 border-b border-slate-200">
+                    <div class="flex items-center gap-2.5">
+                      <svg class="w-5 h-5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                      <span class="text-slate-800">3.1 Structuring Non-Biased Interview Guides</span>
+                    </div>
+                    <span class="text-xs bg-white border border-slate-200 px-2 py-0.5 rounded text-slate-500">14m • Done</span>
+                  </div>
+
+                  <div class="flex items-center justify-between p-3 bg-slate-50/70 border-b border-slate-200">
+                    <div class="flex items-center gap-2.5">
+                      <svg class="w-5 h-5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                      <span class="text-slate-800">3.2 Conducting Problem Exploration Calls</span>
+                    </div>
+                    <span class="text-xs bg-white border border-slate-200 px-2 py-0.5 rounded text-slate-500">22m • Done</span>
+                  </div>
+
+                  <div class="flex items-center justify-between p-3 bg-white border-2 border-indigo-200 rounded-lg m-1 shadow-xs">
+                    <div class="flex items-center gap-2.5">
+                      <div class="w-5 h-5 rounded-full bg-indigo-100 flex items-center justify-center">
+                        <span class="w-2.5 h-2.5 rounded-full bg-indigo-700 animate-pulse"></span>
+                      </div>
+                      <div>
+                        <span class="font-bold text-indigo-700">3.3 Affinity Mapping & Pain-Point Hierarchy</span>
+                        <span class="block text-xs text-slate-500">Includes Figma template exercise</span>
+                      </div>
+                    </div>
+                    <button class="px-3 py-1 rounded-lg bg-indigo-700 hover:bg-indigo-800 text-white text-xs font-semibold shadow-xs">
+                      Continue
+                    </button>
+                  </div>
+
+                  <div class="flex items-center justify-between p-3 bg-slate-50/50 text-slate-400">
+                    <div class="flex items-center gap-2.5">
+                      <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                      <span>3.4 Translating Insights into User Story Maps</span>
+                    </div>
+                    <span class="text-xs">25m</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Goal & Streak (4 cols) -->
+          <div class="lg:col-span-4 flex flex-col gap-6">
+            <div class="bg-white rounded-2xl border border-[#e2e8f0] p-6 shadow-xs flex flex-col gap-5">
+              <div class="flex items-center justify-between">
+                <div>
+                  <span class="text-xs uppercase font-bold text-slate-400 tracking-wider">Weekly Pace</span>
+                  <h3 class="text-lg font-bold text-slate-900">Study Goal</h3>
+                </div>
+                <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold">On Track</span>
+              </div>
+
+              <!-- Radial Gauge -->
+              <div class="flex items-center gap-5">
+                <div class="relative w-24 h-24 shrink-0 flex items-center justify-center">
+                  <svg class="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" fill="transparent" r="40" stroke="#e2e8f0" stroke-width="9"></circle>
+                    <circle cx="50" cy="50" fill="transparent" r="40" stroke="#4338ca" stroke-dasharray="188.5 251.32" stroke-linecap="round" stroke-width="9"></circle>
+                  </svg>
+                  <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                    <span class="text-xl font-bold text-slate-900 leading-none">75<span class="text-xs text-indigo-700 font-bold">%</span></span>
+                    <span class="text-[10px] text-slate-400 font-bold mt-0.5">TARGET</span>
+                  </div>
+                </div>
+                <div>
+                  <div class="text-2xl font-extrabold text-slate-900">4.5 <span class="text-sm font-normal text-slate-500">/ 6.0 hrs</span></div>
+                  <p class="text-xs text-slate-500 mt-1">1.5 hours remaining to hit your weekly milestone.</p>
+                </div>
+              </div>
+
+              <!-- Streak Pill -->
+              <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="text-xl">🔥</span>
+                  <div>
+                    <span class="text-xs font-bold text-slate-900 block">5-Day Study Streak</span>
+                    <span class="text-[11px] text-slate-500 block">Personal best: 12 days</span>
+                  </div>
+                </div>
+                <span class="bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-bold px-2 py-0.5 rounded">+150 XP</span>
+              </div>
+
+              <!-- Bar Chart -->
+              <div>
+                <span class="text-xs font-semibold text-slate-600 block mb-2">Daily Activity (Hours)</span>
+                <div class="grid grid-cols-7 gap-2 items-end h-20 pt-2 border-b border-slate-100 pb-1">
+                  <div class="flex flex-col items-center gap-1 h-full justify-end">
+                    <div class="w-full bg-indigo-200 rounded-t h-[40%]"></div>
+                    <span class="text-[10px] text-slate-400">M</span>
+                  </div>
+                  <div class="flex flex-col items-center gap-1 h-full justify-end">
+                    <div class="w-full bg-indigo-300 rounded-t h-[60%]"></div>
+                    <span class="text-[10px] text-slate-400">T</span>
+                  </div>
+                  <div class="flex flex-col items-center gap-1 h-full justify-end">
+                    <div class="w-full bg-indigo-700 rounded-t h-[75%]"></div>
+                    <span class="text-[10px] text-indigo-700 font-bold">W</span>
+                  </div>
+                  <div class="flex flex-col items-center gap-1 h-full justify-end">
+                    <div class="w-full bg-indigo-300 rounded-t h-[50%]"></div>
+                    <span class="text-[10px] text-slate-400">T</span>
+                  </div>
+                  <div class="flex flex-col items-center gap-1 h-full justify-end">
+                    <div class="w-full bg-emerald-600 rounded-t h-[28%] animate-pulse"></div>
+                    <span class="text-[10px] text-emerald-700 font-bold">F</span>
+                  </div>
+                  <div class="flex flex-col items-center gap-1 h-full justify-end">
+                    <div class="w-full bg-slate-200 rounded-t h-[5%]"></div>
+                    <span class="text-[10px] text-slate-400">S</span>
+                  </div>
+                  <div class="flex flex-col items-center gap-1 h-full justify-end">
+                    <div class="w-full bg-slate-200 rounded-t h-[5%]"></div>
+                    <span class="text-[10px] text-slate-400">S</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Credentials -->
+            <div class="bg-white rounded-2xl border border-[#e2e8f0] p-5 shadow-xs flex flex-col gap-3">
+              <div class="flex items-center justify-between text-xs font-semibold">
+                <span class="uppercase tracking-wider text-slate-400 font-bold">Credentials Earned</span>
+                <span class="text-indigo-700 hover:underline cursor-pointer">View all (4)</span>
+              </div>
+              <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">★</div>
+                <div>
+                  <span class="text-xs font-bold text-slate-900 block">User Research Maven</span>
+                  <span class="text-[11px] text-emerald-700 block">Issued Feb 12 • Level 2 Badge</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Roadmap Timeline 4 Cards -->
+        <div class="bg-white rounded-2xl border border-[#e2e8f0] p-6 shadow-xs flex flex-col gap-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-lg font-bold text-slate-900">Product Manager Pathway Roadmap</h2>
+              <p class="text-xs text-slate-500">Complete foundational milestones to unlock Senior PM defense review.</p>
+            </div>
+            <span class="px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold border border-indigo-100">Track 2 of 4</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+            <!-- M1 -->
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-xs font-bold text-emerald-700 uppercase">Milestone 01</span>
+                  <span class="text-[11px] bg-emerald-100 text-emerald-800 font-semibold px-2 py-0.5 rounded-full">✓ Complete</span>
+                </div>
+                <h4 class="font-bold text-sm text-slate-900 mb-1">Product Fundamentals</h4>
+                <p class="text-xs text-slate-500 leading-relaxed">Market analysis, sizing, and competitive matrices.</p>
+              </div>
+              <div class="mt-4 pt-3 border-t border-slate-200 flex justify-between items-center text-xs">
+                <span class="text-emerald-700 font-bold">Score 96%</span>
+                <span class="text-indigo-700 hover:underline cursor-pointer font-semibold">Review</span>
+              </div>
+            </div>
+
+            <!-- M2 Active -->
+            <div class="p-4 rounded-xl bg-white border-2 border-indigo-600 shadow-sm flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-xs font-bold text-indigo-700 uppercase">Milestone 02</span>
+                  <span class="text-[11px] bg-indigo-100 text-indigo-700 font-bold px-2 py-0.5 rounded-full">● Active</span>
+                </div>
+                <h4 class="font-bold text-sm text-slate-900 mb-1">Customer Discovery</h4>
+                <p class="text-xs text-slate-500 leading-relaxed">Interviews, JTBD, synthesis, and hypothesis tests.</p>
+                <div class="w-full h-1.5 rounded-full bg-slate-100 overflow-hidden my-3">
+                  <div class="bg-indigo-700 h-full rounded-full" style="width: 68%"></div>
+                </div>
+              </div>
+              <div class="mt-1 flex justify-between items-center text-xs">
+                <span class="text-slate-500 font-medium">68% Done</span>
+                <button class="bg-indigo-700 text-white px-2.5 py-1 rounded text-xs font-semibold">Jump in</button>
+              </div>
+            </div>
+
+            <!-- M3 Locked -->
+            <div class="p-4 rounded-xl bg-slate-50/70 border border-slate-200 flex flex-col justify-between opacity-80">
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-xs font-bold text-slate-400 uppercase">Milestone 03</span>
+                  <span class="text-[11px] bg-slate-200 text-slate-600 font-semibold px-2 py-0.5 rounded-full">Locked</span>
+                </div>
+                <h4 class="font-bold text-sm text-slate-700 mb-1">Metrics & A/B Testing</h4>
+                <p class="text-xs text-slate-500 leading-relaxed">Cohort retention models and funnel diagnostics.</p>
+              </div>
+              <span class="text-[11px] text-slate-400 mt-4 pt-3 border-t border-slate-200">Requires M2 signoff</span>
+            </div>
+
+            <!-- M4 Locked -->
+            <div class="p-4 rounded-xl bg-slate-50/70 border border-slate-200 flex flex-col justify-between opacity-80">
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-xs font-bold text-slate-400 uppercase">Milestone 04</span>
+                  <span class="text-[11px] bg-slate-200 text-slate-600 font-semibold px-2 py-0.5 rounded-full">Locked</span>
+                </div>
+                <h4 class="font-bold text-sm text-slate-700 mb-1">Executive Roadmapping</h4>
+                <p class="text-xs text-slate-500 leading-relaxed">Senior PM defense deck and stakeholder alignment.</p>
+              </div>
+              <span class="text-[11px] text-slate-400 mt-4 pt-3 border-t border-slate-200">Capstone Defense</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Deadlines and Practice -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start pb-6">
+          <div class="lg:col-span-7 bg-white rounded-2xl border border-[#e2e8f0] p-6 shadow-xs flex flex-col gap-4">
+            <h3 class="font-bold text-base text-slate-900">Upcoming Deadlines & Live Cohorts</h3>
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-4">
+              <div>
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="font-bold text-sm text-slate-900">Sprint Assignment: Discovery Deck</span>
+                  <span class="bg-red-100 text-red-700 text-[11px] font-bold px-2 py-0.5 rounded-full">Due Tomorrow</span>
+                </div>
+                <p class="text-xs text-slate-500">Submit raw transcripts & affinity clustering for review by Sarah Blake.</p>
+              </div>
+              <button class="px-4 py-2 bg-indigo-700 hover:bg-indigo-800 text-white rounded-xl text-xs font-semibold shrink-0">Upload Deck</button>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-4">
+              <div>
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="font-bold text-sm text-slate-900">Live Q&A: Metrics That Matter</span>
+                  <span class="bg-indigo-100 text-indigo-700 text-[11px] font-bold px-2 py-0.5 rounded-full">Thursday 2:00 PM</span>
+                </div>
+                <p class="text-xs text-slate-500">With Melissa Chen, VP of Product at FinScale.</p>
+              </div>
+              <button id="rsvp-btn" onclick="toggleRsvp()" class="px-4 py-2 bg-white border border-slate-300 hover:bg-slate-100 text-slate-800 rounded-xl text-xs font-semibold shrink-0">RSVP Seat</button>
+            </div>
+          </div>
+
+          <div class="lg:col-span-5 bg-white rounded-2xl border border-[#e2e8f0] p-6 shadow-xs flex flex-col gap-4">
+            <h3 class="font-bold text-base text-slate-900">Practice & Peer Labs</h3>
+            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between hover:bg-slate-100 transition-colors cursor-pointer">
+              <div>
+                <span class="font-bold text-sm text-slate-900 block">Product Analytics Rapid Quiz</span>
+                <span class="text-xs text-slate-500 block">Test North Star Metric knowledge • 10m</span>
+              </div>
+              <button class="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-700">▶</button>
+            </div>
+            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between hover:bg-slate-100 transition-colors cursor-pointer">
+              <div>
+                <span class="font-bold text-sm text-slate-900 block">PRD Teardown Peer Review</span>
+                <span class="text-xs text-slate-500 block">Review onboarding PRD rubric • 25m</span>
+              </div>
+              <button class="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-700">▶</button>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- SCREEN 2: COURSE CATALOG -->
+      <section id="screen-course-catalog" class="screen-view p-8 flex flex-col gap-6 hidden">
+        <div class="flex flex-col gap-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="text-xs uppercase font-bold text-indigo-700 tracking-wider">Enterprise Catalog • Spring 2025</span>
+              <h1 class="text-2xl font-bold text-slate-900">Explore Courses & Learning Paths</h1>
+              <p class="text-sm text-slate-600">Browse 250+ role-based courses and career tracks.</p>
+            </div>
+            <div class="px-4 py-2 rounded-xl bg-white border border-slate-200 text-xs font-semibold text-slate-700 flex items-center gap-2">
+              <span class="text-emerald-600">●</span> Enterprise License: <strong>Active</strong>
+            </div>
+          </div>
+
+          <!-- Search Hero Bar -->
+          <div class="bg-white p-4 rounded-2xl border border-[#e2e8f0] shadow-xs flex flex-col gap-3">
+            <div class="flex items-center gap-3">
+              <div class="flex-1 flex items-center gap-2 bg-slate-50 border border-slate-200 px-4 py-2.5 rounded-xl">
+                <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                <input id="catalog-input" oninput="filterCatalog()" type="text" placeholder="Search by competency, tool, mentor, or syllabus topics..." class="bg-transparent text-sm w-full outline-none text-slate-800 placeholder-slate-400"/>
+              </div>
+              <button class="bg-indigo-700 hover:bg-indigo-800 text-white font-semibold text-sm px-6 py-2.5 rounded-xl shadow-xs">Search</button>
+            </div>
+            <div class="flex items-center gap-2 text-xs text-slate-500">
+              <span class="font-bold text-slate-600">Quick Topics:</span>
+              <button onclick="setTopic('SQL')" class="px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 font-medium">SQL</button>
+              <button onclick="setTopic('Product Discovery')" class="px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-700 font-bold border border-indigo-100">Product Discovery</button>
+              <button onclick="setTopic('System Design')" class="px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 font-medium">System Design</button>
+              <button onclick="setTopic('UX Heuristics')" class="px-2.5 py-1 rounded-full bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 font-medium">UX Heuristics</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Role Tabs -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-1">
+          <button class="px-4 py-2 rounded-xl text-sm font-semibold bg-indigo-700 text-white shadow-xs">Product Management</button>
+          <button class="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-white bg-slate-50 border border-slate-200">Data & Analytics</button>
+          <button class="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-white bg-slate-50 border border-slate-200">UX/UI Design</button>
+          <button class="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-white bg-slate-50 border border-slate-200">Software Engineering</button>
+          <button class="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-white bg-slate-50 border border-slate-200">Leadership</button>
+        </div>
+
+        <!-- Grid with Filter Sidebar -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          <aside class="lg:col-span-3 bg-white p-5 rounded-2xl border border-[#e2e8f0] flex flex-col gap-4 text-sm">
+            <div class="flex justify-between items-center pb-2 border-b border-slate-100">
+              <span class="font-bold text-slate-900">Filters</span>
+              <span class="text-xs text-indigo-700 font-semibold cursor-pointer">Reset</span>
+            </div>
+            <div class="flex flex-col gap-2">
+              <span class="text-xs font-bold uppercase text-slate-400">Competency</span>
+              <label class="flex items-center justify-between text-xs cursor-pointer"><span class="flex items-center gap-2"><input type="checkbox" checked class="accent-indigo-700"/> Product Discovery</span><span class="text-slate-400">24</span></label>
+              <label class="flex items-center justify-between text-xs cursor-pointer"><span class="flex items-center gap-2"><input type="checkbox" class="accent-indigo-700"/> Wireframing</span><span class="text-slate-400">11</span></label>
+              <label class="flex items-center justify-between text-xs cursor-pointer"><span class="flex items-center gap-2"><input type="checkbox" class="accent-indigo-700"/> Python & SQL</span><span class="text-slate-400">19</span></label>
+              <label class="flex items-center justify-between text-xs cursor-pointer"><span class="flex items-center gap-2"><input type="checkbox" checked class="accent-indigo-700"/> A/B Testing</span><span class="text-slate-400">8</span></label>
+            </div>
+            <div class="h-px bg-slate-100"></div>
+            <div class="flex flex-col gap-2">
+              <span class="text-xs font-bold uppercase text-slate-400">Experience Level</span>
+              <label class="flex items-center justify-between text-xs cursor-pointer"><span class="flex items-center gap-2"><input type="checkbox" class="accent-indigo-700"/> Beginner</span><span class="text-slate-400">18</span></label>
+              <label class="flex items-center justify-between text-xs cursor-pointer"><span class="flex items-center gap-2"><input type="checkbox" checked class="accent-indigo-700"/> Intermediate</span><span class="text-slate-400">22</span></label>
+              <label class="flex items-center justify-between text-xs cursor-pointer"><span class="flex items-center gap-2"><input type="checkbox" class="accent-indigo-700"/> Advanced</span><span class="text-slate-400">8</span></label>
+            </div>
+          </aside>
+
+          <!-- Cards Grid -->
+          <div class="lg:col-span-9 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" id="courses-container">
+            <!-- Card 1 -->
+            <div class="course-card bg-white rounded-2xl border border-[#e2e8f0] overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between">
+              <div>
+                <div class="relative h-40 bg-slate-700 overflow-hidden">
+                  <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=500&fit=crop" alt="User Discovery"/>
+                  <span class="absolute top-3 left-3 bg-emerald-600 text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full">Enrolled • 72%</span>
+                </div>
+                <div class="p-4 flex flex-col gap-2">
+                  <div class="flex items-center justify-between text-xs">
+                    <span class="text-amber-600 font-bold">★ 4.9 <span class="text-slate-400 font-normal">(1,420)</span></span>
+                    <span class="text-slate-400">6.5 hrs</span>
+                  </div>
+                  <h3 class="font-bold text-sm text-slate-900 leading-snug">User Discovery & Qualitative Research</h3>
+                  <span class="text-xs text-slate-500">Sarah Jenkins • Staff PM at Figma</span>
+                </div>
+              </div>
+              <div class="p-4 pt-0">
+                <button class="w-full py-2 bg-indigo-700 hover:bg-indigo-800 text-white rounded-xl text-xs font-semibold">Resume Course</button>
+              </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="course-card bg-white rounded-2xl border border-[#e2e8f0] overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between">
+              <div>
+                <div class="relative h-40 bg-slate-700 overflow-hidden">
+                  <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500&fit=crop" alt="Product Analytics"/>
+                  <span class="absolute top-3 left-3 bg-indigo-100 text-indigo-700 text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-indigo-200">Path Core</span>
+                </div>
+                <div class="p-4 flex flex-col gap-2">
+                  <div class="flex items-center justify-between text-xs">
+                    <span class="text-amber-600 font-bold">★ 4.8 <span class="text-slate-400 font-normal">(980)</span></span>
+                    <span class="text-slate-400">8.0 hrs</span>
+                  </div>
+                  <h3 class="font-bold text-sm text-slate-900 leading-snug">Quantitative Product Analytics & A/B Testing</h3>
+                  <span class="text-xs text-slate-500">David Park • Principal Data Scientist</span>
+                </div>
+              </div>
+              <div class="p-4 pt-0">
+                <button class="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 rounded-xl text-xs font-semibold">Enroll (Included)</button>
+              </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="course-card bg-white rounded-2xl border border-[#e2e8f0] overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between">
+              <div>
+                <div class="relative h-40 bg-slate-700 overflow-hidden">
+                  <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=500&fit=crop" alt="Technical Architecture"/>
+                  <span class="absolute top-3 left-3 bg-slate-100 text-slate-800 text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-slate-200">Systems Lab</span>
+                </div>
+                <div class="p-4 flex flex-col gap-2">
+                  <div class="flex items-center justify-between text-xs">
+                    <span class="text-amber-600 font-bold">★ 4.9 <span class="text-slate-400 font-normal">(2,100)</span></span>
+                    <span class="text-slate-400">5.0 hrs</span>
+                  </div>
+                  <h3 class="font-bold text-sm text-slate-900 leading-snug">Technical Architecture for Product Managers</h3>
+                  <span class="text-xs text-slate-500">Alex Rivera • Head of Engineering</span>
+                </div>
+              </div>
+              <div class="p-4 pt-0">
+                <button class="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 rounded-xl text-xs font-semibold">Enroll (Included)</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 3: MY LEARNING PATH -->
+      <section id="screen-my-learning-path" class="screen-view p-8 flex flex-col gap-6 hidden">
+        <!-- Hero Header -->
+        <div class="bg-white rounded-2xl border border-[#e2e8f0] p-6 shadow-xs flex flex-col lg:flex-row justify-between gap-6">
+          <div class="max-w-3xl">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold border border-indigo-100">Curated Workforce Path</span>
+              <span class="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 text-xs font-semibold">Enterprise Endorsed</span>
+              <span class="text-xs text-slate-400">ID: PM-TRACK-2025</span>
+            </div>
+            <h1 class="text-2xl font-bold text-slate-900">Product Manager Career Path</h1>
+            <p class="text-sm text-slate-600 mt-1 leading-relaxed">
+              A curated 6-month industry path from Associate to Senior Product Manager, verified by industry mentors with real-world case simulations.
+            </p>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3 bg-slate-50 border border-slate-200 rounded-xl mt-4 text-xs">
+              <div><span class="text-slate-400 block">Target Role</span><strong class="text-slate-900">Product Manager</strong></div>
+              <div><span class="text-slate-400 block">Seniority</span><strong class="text-slate-900">Mid-Level</strong></div>
+              <div><span class="text-slate-400 block">Duration</span><strong class="text-slate-900">24 Wks (~120h)</strong></div>
+              <div><span class="text-slate-400 block">Velocity</span><strong class="text-emerald-700">⚡ On Track</strong></div>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-2 shrink-0 self-start">
+            <button class="px-5 py-2.5 bg-indigo-700 hover:bg-indigo-800 text-white rounded-xl text-sm font-semibold shadow-xs">Continue Active Course</button>
+            <div class="flex gap-2">
+              <button class="flex-1 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-xl text-xs font-semibold text-slate-700 border border-slate-200">Customize</button>
+              <button class="flex-1 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-xl text-xs font-semibold text-slate-700 border border-slate-200">Syllabus PDF</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Curriculum Progress Donut & Competencies -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          <!-- Donut Card (5 cols) -->
+          <div class="lg:col-span-5 bg-white rounded-2xl border border-[#e2e8f0] p-6 shadow-xs flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-center mb-3">
+                <h3 class="font-bold text-base text-slate-900">Curriculum Progress</h3>
+                <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">+14% this month</span>
+              </div>
+              <div class="flex items-center gap-5 my-4">
+                <div class="relative w-24 h-24 shrink-0 flex items-center justify-center">
+                  <svg class="w-full h-full -rotate-90" viewBox="0 0 96 96">
+                    <circle cx="48" cy="48" fill="transparent" r="40" stroke="#e2e8f0" stroke-width="8"></circle>
+                    <circle cx="48" cy="48" fill="transparent" r="40" stroke="#4338ca" stroke-dasharray="251.32" stroke-dashoffset="105.5" stroke-linecap="round" stroke-width="8"></circle>
+                  </svg>
+                  <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                    <span class="text-xl font-bold text-slate-900 leading-none">58%</span>
+                    <span class="text-[10px] text-slate-400 font-bold">TOTAL</span>
+                  </div>
+                </div>
+                <div>
+                  <div class="w-full h-2 rounded-full bg-slate-100 flex overflow-hidden mb-2">
+                    <div class="bg-emerald-600 h-full" style="width: 54%"></div>
+                    <div class="bg-indigo-700 h-full" style="width: 15%"></div>
+                  </div>
+                  <p class="text-xs text-slate-500">14 of 24 weeks elapsed. Estimated finish: May 18, 2025.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 pt-4 border-t border-slate-100 text-center">
+              <div class="p-2 rounded-xl bg-slate-50"><span class="text-lg font-bold text-emerald-700 block">7</span><span class="text-[10px] text-slate-500">Done</span></div>
+              <div class="p-2 rounded-xl bg-slate-50"><span class="text-lg font-bold text-indigo-700 block">2</span><span class="text-[10px] text-slate-500">Active</span></div>
+              <div class="p-2 rounded-xl bg-slate-50"><span class="text-lg font-bold text-slate-400 block">4</span><span class="text-[10px] text-slate-500">Upcoming</span></div>
+            </div>
+          </div>
+
+          <!-- Competencies Matrix (7 cols) -->
+          <div class="lg:col-span-7 bg-white rounded-2xl border border-[#e2e8f0] p-6 shadow-xs flex flex-col justify-between">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="font-bold text-base text-slate-900">Verified Competencies</h3>
+              <span class="text-xs text-indigo-700 font-bold cursor-pointer hover:underline">Assessment Radar</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+              <div>
+                <div class="flex justify-between mb-1"><span class="font-semibold text-slate-800">Agile Execution</span><span class="font-bold text-emerald-700">90%</span></div>
+                <div class="w-full h-1.5 rounded-full bg-slate-100 overflow-hidden"><div class="bg-emerald-600 h-full rounded-full" style="width: 90%"></div></div>
+                <span class="text-[10px] text-slate-400 mt-1 block">Backlog grooming, PRDs</span>
+              </div>
+
+              <div>
+                <div class="flex justify-between mb-1"><span class="font-semibold text-slate-800">User Research</span><span class="font-bold text-emerald-700">85%</span></div>
+                <div class="w-full h-1.5 rounded-full bg-slate-100 overflow-hidden"><div class="bg-emerald-600 h-full rounded-full" style="width: 85%"></div></div>
+                <span class="text-[10px] text-slate-400 mt-1 block">Discovery, persona validation</span>
+              </div>
+
+              <div>
+                <div class="flex justify-between mb-1"><span class="font-semibold text-slate-800">Product Strategy</span><span class="font-bold text-indigo-700">70%</span></div>
+                <div class="w-full h-1.5 rounded-full bg-slate-100 overflow-hidden"><div class="bg-indigo-700 h-full rounded-full" style="width: 70%"></div></div>
+                <span class="text-[10px] text-slate-400 mt-1 block">TAM sizing, positioning</span>
+              </div>
+
+              <div>
+                <div class="flex justify-between mb-1"><span class="font-semibold text-slate-800">Data Analysis & SQL</span><span class="font-bold text-indigo-700">60%</span></div>
+                <div class="w-full h-1.5 rounded-full bg-slate-100 overflow-hidden"><div class="bg-indigo-700 h-full rounded-full" style="width: 60%"></div></div>
+                <span class="text-[10px] text-slate-400 mt-1 block">Funnel metrics, A/B tests</span>
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-slate-100 mt-4 text-xs text-slate-500 flex justify-between">
+              <span>✓ 3 of 5 thresholds unlocked</span>
+              <strong class="text-slate-800">Target: 80% Min for Placement</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phases Roadmap -->
+        <div class="flex flex-col gap-4">
+          <!-- Phase 1 -->
+          <div class="bg-white rounded-2xl border border-[#e2e8f0] p-6 shadow-xs">
+            <div class="flex justify-between items-center pb-3 border-b border-slate-100">
+              <div>
+                <span class="text-xs font-bold text-emerald-700 uppercase">Phase 1 • 100% Complete</span>
+                <h4 class="font-bold text-base text-slate-900">Foundations of Product Management</h4>
+              </div>
+              <span class="text-xs text-slate-500">Weeks 1 – 8 (40h)</span>
+            </div>
+            <div class="mt-4 flex flex-col gap-3">
+              <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 flex justify-between items-center text-xs">
+                <div>
+                  <span class="font-bold text-slate-900 block">Course 1: Product Sense & Core Frameworks</span>
+                  <span class="text-slate-500">First-principles product intuition, Kano models, CIRCLES.</span>
+                </div>
+                <span class="font-bold text-emerald-700">Score 98%</span>
+              </div>
+              <div class="p-3 bg-emerald-50/50 rounded-xl border border-emerald-200 text-xs">
+                <span class="font-bold text-emerald-800 block mb-1">Capstone Graded: 96 / 100 • Evaluated by Marcus Chen</span>
+                <p class="text-emerald-700 italic">“Exceptional edge-case analysis in section 3.2. User story dependencies demonstrate senior-level foresight.”</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Phase 2 Active -->
+          <div class="bg-white rounded-2xl border-2 border-indigo-600 p-6 shadow-xs">
+            <div class="flex justify-between items-center pb-3 border-b border-slate-100">
+              <div>
+                <span class="text-xs font-bold text-indigo-700 uppercase">Phase 2 • 68% In Progress</span>
+                <h4 class="font-bold text-base text-slate-900">Discovery, Validation & Quantitative Analytics</h4>
+              </div>
+              <span class="text-xs text-slate-500">Weeks 9 – 16 (44h)</span>
+            </div>
+            <div class="mt-4 flex flex-col gap-3">
+              <div class="p-3 bg-indigo-50/40 rounded-xl border border-indigo-200 flex justify-between items-center text-xs">
+                <div>
+                  <span class="font-bold text-indigo-900 block">Course 3: User Discovery & Qualitative Research</span>
+                  <span class="text-slate-600">Active sprint: Synthesizing Interview Insights & Affinity Mapping.</span>
+                </div>
+                <button class="bg-indigo-700 text-white px-3 py-1 rounded font-semibold text-xs">Resume</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </div>
+
+  <script>
+    function switchTab(tabId) {
+      document.querySelectorAll('.screen-view').forEach(el => el.classList.add('hidden'));
+      const activeScreen = document.getElementById('screen-' + tabId);
+      if (activeScreen) {
+        activeScreen.classList.remove('hidden');
+      }
+
+      // Update sidebar styles
+      document.querySelectorAll('.nav-item').forEach(btn => {
+        btn.classList.remove('bg-indigo-700', 'text-white', 'shadow-sm');
+        btn.classList.add('text-slate-600', 'hover:bg-slate-100', 'hover:text-slate-900');
+      });
+      const activeNav = document.getElementById('nav-' + tabId);
+      if (activeNav) {
+        activeNav.classList.remove('text-slate-600', 'hover:bg-slate-100', 'hover:text-slate-900');
+        activeNav.classList.add('bg-indigo-700', 'text-white', 'shadow-sm');
+      }
+
+      // Update breadcrumb
+      const titles = {
+        'dashboard': 'Overview',
+        'my-learning-path': 'Career Path Roadmap',
+        'course-catalog': 'Course Catalog'
+      };
+      document.getElementById('breadcrumb-title').innerText = titles[tabId] || 'Overview';
+    }
+
+    function toggleRsvp() {
+      const btn = document.getElementById('rsvp-btn');
+      if (btn.innerText.includes('Confirmed')) {
+        btn.innerText = 'RSVP Seat';
+        btn.className = 'px-4 py-2 bg-white border border-slate-300 hover:bg-slate-100 text-slate-800 rounded-xl text-xs font-semibold shrink-0';
+      } else {
+        btn.innerText = '✓ RSVP Confirmed';
+        btn.className = 'px-4 py-2 bg-emerald-100 border border-emerald-300 text-emerald-800 rounded-xl text-xs font-semibold shrink-0';
+      }
+    }
+
+    function setTopic(topic) {
+      const input = document.getElementById('catalog-input');
+      input.value = topic;
+      filterCatalog();
+    }
+
+    function filterCatalog() {
+      const q = document.getElementById('catalog-input').value.toLowerCase();
+      document.querySelectorAll('.course-card').forEach(card => {
+        const text = card.innerText.toLowerCase();
+        if (!q || text.includes(q)) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
+  </script>
+</body>
+</html>
