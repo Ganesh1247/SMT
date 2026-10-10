@@ -4,6 +4,7 @@ One line per memory. Find with `python platform/scripts/memory.py search <terms>
 
 ## decision
 - connectors-installed - Which connectors are installed and which agents may use them (least privilege)
+- contracts-v01-drafted - Three draft contract schemas (EvidenceEvent, ShareGrant, SharedEvidence) validated against examples
 - curated-approach-crucible - Proposed curated solution 'Crucible' for Part A: probes + self-auditing assessor + uncertainty band; pending Founder approval
 - delivery-plan-draft-v01 - Draft G4 delivery plan: 21 slices, walking skeleton first, cut line, risk register; provisional REQ IDs
 - pathway-part-a-selected - Founder chose Part A (Nyeras/NxtMove Proof-of-Skill Sandbox) of SAMARTHA 02 Innovation in Education; Part B and combined excluded

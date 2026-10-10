@@ -1,0 +1,169 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smt.local/contracts/evidence-event.schema.json",
+  "title": "EvidenceEvent",
+  "description": "One immutable fact about a learner's assessment. Sent by the Sandbox (or by Trust for review decisions) to the Trust ledger. Trust adds the ledger block; senders never set it. DRAFT 0.1.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "idempotency_key",
+    "source_system",
+    "event_type",
+    "learner_id",
+    "competency_id",
+    "level",
+    "method",
+    "outcome",
+    "task_id",
+    "task_version",
+    "rubric_id",
+    "rubric_version",
+    "seed_id",
+    "occurred_at"
+  ],
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "event_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Assigned by Trust on append. Senders omit it."
+    },
+    "idempotency_key": {
+      "type": "string",
+      "minLength": 16,
+      "maxLength": 128,
+      "description": "Sender-generated; the same key is never stored twice (outbox retries are safe)."
+    },
+    "source_system": { "enum": ["sandbox", "trust"] },
+    "event_type": {
+      "enum": [
+        "criterion_result",
+        "probe_result",
+        "level_outcome",
+        "integrity_flag",
+        "appeal_filed",
+        "review_decision"
+      ]
+    },
+    "learner_id": {
+      "type": "string",
+      "pattern": "^lrn_[a-f0-9]{16}$",
+      "description": "Pseudonymous. No names, emails or phone numbers anywhere in an event."
+    },
+    "competency_id": { "type": "string", "pattern": "^cmp_[a-z0-9_]{3,40}$" },
+    "level": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 4,
+      "description": "1 Conceptual, 2 Debugging, 3 Applied, 4 Live screening."
+    },
+    "criterion_id": { "type": "string", "pattern": "^crt_[a-z0-9_]{3,40}$" },
+    "method": {
+      "enum": [
+        "deterministic_test",
+        "probe",
+        "ai_judged",
+        "live_screening",
+        "human_review"
+      ],
+      "description": "How this result was produced. Shown to recruiters as an evidence label."
+    },
+    "outcome": { "enum": ["pass", "fail", "partial", "inconclusive"] },
+    "score": { "type": "number", "minimum": 0, "maximum": 1 },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Required for ai_judged and live_screening. Low confidence routes to review."
+    },
+    "ai_disclosure": {
+      "type": "boolean",
+      "description": "True when any AI produced or influenced the result. Must be true for ai_judged."
+    },
+    "understanding_status": {
+      "enum": ["confirmed", "unconfirmed", "not_attempted"],
+      "description": "Separate from outcome: a correct answer can have unconfirmed understanding."
+    },
+    "task_id": { "type": "string", "pattern": "^tsk_[a-z0-9_]{3,40}$" },
+    "task_version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "rubric_id": { "type": "string", "pattern": "^rbr_[a-z0-9_]{3,40}$" },
+    "rubric_version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "seed_id": {
+      "type": "string",
+      "pattern": "^sd_[a-f0-9]{12}$",
+      "description": "Identifies the learner's seeded dataset without revealing it."
+    },
+    "submission_ref": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$",
+      "description": "Hash of the stored submission. The ledger holds the hash, never the content."
+    },
+    "rationale": {
+      "type": "string",
+      "maxLength": 1000,
+      "description": "Short, criterion-level reason. Must not contain personal data."
+    },
+    "flags": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "injection_attempt",
+          "cross_seed_match",
+          "low_confidence",
+          "method_conflict",
+          "probe_failed"
+        ]
+      },
+      "description": "Review flags. A flag never lowers an output score by itself."
+    },
+    "model_ref": {
+      "type": "string",
+      "maxLength": 80,
+      "description": "Pinned AI model identifier when ai_disclosure is true."
+    },
+    "occurred_at": { "type": "string", "format": "date-time" },
+    "ledger": {
+      "type": "object",
+      "readOnly": true,
+      "description": "Added by Trust. Senders must not supply it.",
+      "additionalProperties": false,
+      "required": ["sequence", "prev_hash", "hash", "recorded_at"],
+      "properties": {
+        "sequence": { "type": "integer", "minimum": 1 },
+        "prev_hash": { "type": "string", "pattern": "^(sha256:[a-f0-9]{64}|genesis)$" },
+        "hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+        "recorded_at": { "type": "string", "format": "date-time" }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "method": { "const": "ai_judged" } }, "required": ["method"] },
+      "then": {
+        "required": ["confidence", "ai_disclosure", "model_ref"],
+        "properties": { "ai_disclosure": { "const": true } }
+      }
+    },
+    {
+      "if": { "properties": { "method": { "const": "live_screening" } }, "required": ["method"] },
+      "then": { "required": ["confidence", "ai_disclosure"] }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "criterion_result" } }, "required": ["event_type"] },
+      "then": { "required": ["criterion_id", "submission_ref"] }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "probe_result" } }, "required": ["event_type"] },
+      "then": { "required": ["understanding_status", "submission_ref"] }
+    },
+    {
+      "if": { "properties": { "event_type": { "const": "review_decision" } }, "required": ["event_type"] },
+      "then": {
+        "required": ["rationale"],
+        "properties": { "method": { "const": "human_review" }, "source_system": { "const": "trust" } }
+      }
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "schema_version": "0.1",
+  "candidate_ref": "cnd_5e4d3c2b1a099887",
+  "grant_id": "7b0b2c1e-3a54-4b7f-9d0a-1f2e3d4c5b6a",
+  "competency_id": "cmp_data_analysis",
+  "proficiency": {
+    "estimate": 0.64,
+    "lower": 0.48,
+    "upper": 0.8,
+    "scale": "0-1",
+    "as_of": "2026-10-10T11:00:00Z"
+  },
+  "levels_passed": [
+    1,
+    2
+  ],
+  "method_counts": {
+    "deterministic_test": 3,
+    "probe": 1,
+    "ai_judged": 1,
+    "live_screening": 0,
+    "human_review": 0
+  },
+  "understanding_status": "unconfirmed",
+  "evidence_items": [
+    {
+      "event_id": "0f1e2d3c-4b5a-4968-8776-655443322110",
+      "criterion_id": "crt_join_logic",
+      "method": "deterministic_test",
+      "outcome": "pass",
+      "occurred_at": "2026-10-10T09:15:00Z",
+      "task_version": "1.0.0",
+      "rubric_version": "1.0.0",
+      "receipt_hash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "ai_disclosure": false
+    }
+  ],
+  "last_evidence_at": "2026-10-10T09:30:00Z",
+  "assessor_report_ref": "asr_rubric_1_0_0",
+  "ledger_proof": {
+    "head_hash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "head_sequence": 5
+  },
+  "labels": {
+    "experimental": true,
+    "ai_used": true
+  },
+  "overall_score": 82
+}

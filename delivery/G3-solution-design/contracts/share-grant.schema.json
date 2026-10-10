@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smt.local/contracts/share-grant.schema.json",
+  "title": "ShareGrant",
+  "description": "A learner's consent for one recipient to see specific evidence. Created and revoked only by the learner through Trust. With no active grant, the HR portal receives nothing. DRAFT 0.1.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "learner_id",
+    "recipient_id",
+    "competencies",
+    "scope",
+    "created_at",
+    "expires_at",
+    "consent_text_version"
+  ],
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "grant_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Assigned by Trust on creation."
+    },
+    "learner_id": { "type": "string", "pattern": "^lrn_[a-f0-9]{16}$" },
+    "recipient_id": {
+      "type": "string",
+      "pattern": "^org_[a-z0-9_]{3,40}$",
+      "description": "The recruiter organisation. A grant is per recipient, never public."
+    },
+    "role_ref": {
+      "type": "string",
+      "pattern": "^role_[a-z0-9_]{3,40}$",
+      "description": "Optional: the role this share is for. Limits use to that role."
+    },
+    "competencies": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^cmp_[a-z0-9_]{3,40}$" }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["include"],
+      "properties": {
+        "include": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "estimate_band",
+              "method_labels",
+              "understanding_status",
+              "evidence_summary",
+              "raw_submission"
+            ]
+          },
+          "description": "raw_submission is never included unless the learner explicitly selects it."
+        }
+      }
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Required. Open-ended consent is not allowed (data minimisation)."
+    },
+    "revoked_at": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "Set by the learner. Takes effect on the next query."
+    },
+    "consent_text_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+$",
+      "description": "Version of the consent wording the learner saw."
+    },
+    "status": {
+      "enum": ["active", "revoked", "expired"],
+      "readOnly": true,
+      "description": "Derived by Trust from revoked_at and expires_at."
+    }
+  }
+}

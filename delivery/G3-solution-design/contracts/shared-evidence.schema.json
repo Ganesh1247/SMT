@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://smt.local/contracts/shared-evidence.schema.json",
+  "title": "SharedEvidence",
+  "description": "What Trust returns to the HR portal for one competency of one consenting learner. Built only from an active ShareGrant. It carries no aggregate score and no hire or rank field. DRAFT 0.1.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "candidate_ref",
+    "grant_id",
+    "competency_id",
+    "proficiency",
+    "levels_passed",
+    "method_counts",
+    "understanding_status",
+    "evidence_items",
+    "last_evidence_at",
+    "ledger_proof",
+    "labels"
+  ],
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "candidate_ref": {
+      "type": "string",
+      "pattern": "^cnd_[a-f0-9]{16}$",
+      "description": "Alias that is different per recipient, so two recruiters cannot link the same learner."
+    },
+    "grant_id": { "type": "string", "format": "uuid" },
+    "competency_id": { "type": "string", "pattern": "^cmp_[a-z0-9_]{3,40}$" },
+    "proficiency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["estimate", "lower", "upper", "scale", "as_of"],
+      "properties": {
+        "estimate": { "type": "number", "minimum": 0, "maximum": 1 },
+        "lower": { "type": "number", "minimum": 0, "maximum": 1 },
+        "upper": { "type": "number", "minimum": 0, "maximum": 1 },
+        "scale": { "const": "0-1" },
+        "as_of": { "type": "string", "format": "date-time" }
+      },
+      "description": "A band, not a bare number. The band widens with time since last evidence."
+    },
+    "levels_passed": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "integer", "minimum": 1, "maximum": 4 }
+    },
+    "method_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["deterministic_test", "probe", "ai_judged", "live_screening", "human_review"],
+      "properties": {
+        "deterministic_test": { "type": "integer", "minimum": 0 },
+        "probe": { "type": "integer", "minimum": 0 },
+        "ai_judged": { "type": "integer", "minimum": 0 },
+        "live_screening": { "type": "integer", "minimum": 0 },
+        "human_review": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "understanding_status": { "enum": ["confirmed", "unconfirmed", "not_attempted"] },
+    "evidence_items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "event_id",
+          "method",
+          "outcome",
+          "occurred_at",
+          "task_version",
+          "rubric_version",
+          "receipt_hash"
+        ],
+        "properties": {
+          "event_id": { "type": "string", "format": "uuid" },
+          "criterion_id": { "type": "string", "pattern": "^crt_[a-z0-9_]{3,40}$" },
+          "method": {
+            "enum": ["deterministic_test", "probe", "ai_judged", "live_screening", "human_review"]
+          },
+          "outcome": { "enum": ["pass", "fail", "partial", "inconclusive"] },
+          "understanding_status": { "enum": ["confirmed", "unconfirmed", "not_attempted"] },
+          "occurred_at": { "type": "string", "format": "date-time" },
+          "task_version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+          "rubric_version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+          "receipt_hash": {
+            "type": "string",
+            "pattern": "^sha256:[a-f0-9]{64}$",
+            "description": "The ledger hash of the source event. Lets the recruiter verify it."
+          },
+          "ai_disclosure": { "type": "boolean" },
+          "submission_excerpt": {
+            "type": "string",
+            "maxLength": 2000,
+            "description": "Present only when the grant scope includes raw_submission."
+          }
+        }
+      }
+    },
+    "last_evidence_at": { "type": "string", "format": "date-time" },
+    "assessor_report_ref": {
+      "type": "string",
+      "pattern": "^asr_[a-z0-9_]{3,40}$",
+      "description": "Health report for the rubric version used."
+    },
+    "ledger_proof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["head_hash", "head_sequence"],
+      "properties": {
+        "head_hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+        "head_sequence": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "labels": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["experimental", "ai_used"],
+      "properties": {
+        "experimental": {
+          "const": true,
+          "description": "Always true. Scores are not validated hiring predictors."
+        },
+        "ai_used": { "type": "boolean" }
+      }
+    }
+  },
+  "not": {
+    "anyOf": [
+      { "required": ["overall_score"] },
+      { "required": ["rank"] },
+      { "required": ["hire_recommendation"] }
+    ]
+  }
+}

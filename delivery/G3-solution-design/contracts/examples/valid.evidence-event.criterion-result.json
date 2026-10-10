@@ -1,0 +1,21 @@
+{
+  "schema_version": "0.1",
+  "idempotency_key": "evt-0001-lrn_0a1b2c3d4e5f6071-crt_join_logic",
+  "source_system": "sandbox",
+  "event_type": "criterion_result",
+  "learner_id": "lrn_0a1b2c3d4e5f6071",
+  "competency_id": "cmp_data_analysis",
+  "level": 2,
+  "criterion_id": "crt_join_logic",
+  "method": "deterministic_test",
+  "outcome": "pass",
+  "score": 1,
+  "task_id": "tsk_sales_dedupe",
+  "task_version": "1.0.0",
+  "rubric_id": "rbr_data_analysis",
+  "rubric_version": "1.0.0",
+  "seed_id": "sd_9f8e7d6c5b4a",
+  "submission_ref": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "rationale": "Result set matched the hidden check on all seeded rows.",
+  "occurred_at": "2026-10-10T09:15:00Z"
+}
